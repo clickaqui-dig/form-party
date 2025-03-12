@@ -29,7 +29,10 @@ const navItems: NavItem[] = [
   {
     icon: <UserCircleIcon />,
     name: "Clientes",
-    path: "/customers",
+    subItems: [
+      { name: "Novo Cliente", path: "/new-customer", pro: false },
+      { name: "Pesquisar Cliente", path: "/search-customer", pro: false }
+    ]
   },
   {
     icon: <DocsIcon />,

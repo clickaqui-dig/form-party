@@ -12,6 +12,7 @@ import {
 } from "@fullcalendar/core";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
+import axios from "axios";
 
 interface CalendarEvent extends EventInput {
   extendedProps: {
@@ -40,6 +41,18 @@ const Calendar: React.FC = () => {
 
   useEffect(() => {
     // Initialize with some events
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/schedule`);
+        console.log("teste schedule ===>>", res)
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+
+      }
+    };
+
+    fetchData();
+
     setEvents([
       {
         id: "1",

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function FormElements() {
   return (
     <div>
-      <PageBreadcrumb pageTitle="From Elements" />
+      <PageBreadcrumb pageTitle="Novo Cliente" />
         <div >
           <DefaultInputs />
       </div>

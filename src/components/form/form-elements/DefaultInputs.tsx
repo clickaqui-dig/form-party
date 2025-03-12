@@ -5,6 +5,7 @@ import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
 import { CalenderIcon, ChevronDownIcon, EyeCloseIcon, EyeIcon, TimeIcon } from "../../../icons";
+import PhoneInput from "../group-input/PhoneInput";
 
 export default function DefaultInputs() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,18 @@ export default function DefaultInputs() {
   const handleSelectChange = (value: string) => {
     console.log("Selected value:", value);
   };
+
+  const countries = [
+    { code: "US", label: "+1" },
+    { code: "GB", label: "+44" },
+    { code: "CA", label: "+1" },
+    { code: "AU", label: "+61" },
+  ];
+  
+  const handlePhoneNumberChange = (phoneNumber: string) => {
+    console.log("Updated phone number:", phoneNumber);
+  };
+
   return (
     <ComponentCard title="Default Inputs">
       <div className="space-y-6">
@@ -23,6 +36,15 @@ export default function DefaultInputs() {
           <Label>Input</Label>
           <Input type="text" />
         </div>
+        <div>
+          <Label>Phone</Label>
+          <PhoneInput
+            selectPosition="start"
+            countries={countries}
+            placeholder="+1 (555) 000-0000"
+            onChange={handlePhoneNumberChange}
+          />
+        </div>{" "}
         <div>
           <Label>Input with Placeholder</Label>
           <Input type="text" placeholder="info@gmail.com" />
