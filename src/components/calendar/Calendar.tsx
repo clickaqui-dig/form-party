@@ -40,40 +40,28 @@ const Calendar: React.FC = () => {
   };
 
   useEffect(() => {
-    // Initialize with some events
     const fetchData = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/schedule`);
-        console.log("teste schedule ===>>", res)
+        if (res.status === 200) {
+          const reponse = res.data.map((item: any) => {
+            return {
+              id: item.id,
+              title: item.title,
+              start: item.start,
+              end: item.end,
+              extendedProps: { calendar: "Danger" },
+            }
+          })
+          setEvents(reponse)
+        }
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
-
       }
     };
 
     fetchData();
 
-    setEvents([
-      {
-        id: "1",
-        title: "Event Conf.",
-        start: new Date().toISOString().split("T")[0],
-        extendedProps: { calendar: "Danger" },
-      },
-      {
-        id: "2",
-        title: "Meeting",
-        start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Success" },
-      },
-      {
-        id: "3",
-        title: "Workshop",
-        start: new Date(Date.now() + 172800000).toISOString().split("T")[0],
-        end: new Date(Date.now() + 259200000).toISOString().split("T")[0],
-        extendedProps: { calendar: "Primary" },
-      },
-    ]);
   }, []);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
