@@ -10,6 +10,7 @@ import {
   HorizontaLDots,
   ListIcon,
   UserCircleIcon,
+  DocsIcon
 } from "../icons/index";
 
 type NavItem = {
@@ -31,9 +32,12 @@ const navItems: NavItem[] = [
     path: "/customers",
   },
   {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+    icon: <DocsIcon />,
+    name: "Contratos",
+    subItems: [
+      { name: "Novo Contrato", path: "/new-contract", pro: false },
+      { name: "Pesquisar contrato", path: "/search-contract", pro: false }
+    ]
   },
 ];
 
