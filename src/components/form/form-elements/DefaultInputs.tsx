@@ -10,132 +10,95 @@ import PhoneInput from "../group-input/PhoneInput";
 export default function DefaultInputs() {
   const [showPassword, setShowPassword] = useState(false);
   const options = [
-    { value: "marketing", label: "Marketing" },
-    { value: "template", label: "Template" },
-    { value: "development", label: "Development" },
+    { value: "sp", label: "São Paulo" },
+    { value: "mg", label: "Minas Gerais" },
+    { value: "rj", label: "Rio de Janeiro" },
   ];
   const handleSelectChange = (value: string) => {
     console.log("Selected value:", value);
   };
 
   const countries = [
-    { code: "US", label: "+1" },
+    { code: "BR", label: "+55" },
     { code: "GB", label: "+44" },
-    { code: "CA", label: "+1" },
-    { code: "AU", label: "+61" },
+    // { code: "CA", label: "+1" },
+    // { code: "AU", label: "+61" },
   ];
-  
+
   const handlePhoneNumberChange = (phoneNumber: string) => {
     console.log("Updated phone number:", phoneNumber);
   };
 
   return (
-    <ComponentCard title="Default Inputs">
+    <ComponentCard title="Formulário">
       <div className="space-y-6">
-        <div>
-          <Label>Input</Label>
-          <Input type="text" />
-        </div>
-        <div>
-          <Label>Phone</Label>
-          <PhoneInput
-            selectPosition="start"
-            countries={countries}
-            placeholder="+1 (555) 000-0000"
-            onChange={handlePhoneNumberChange}
-          />
-        </div>{" "}
-        <div>
-          <Label>Input with Placeholder</Label>
-          <Input type="text" placeholder="info@gmail.com" />
-        </div>
-        <div>
-          <Label>Select Input</Label>
-          <div className="relative">
-            <Select
-            options={options}
-            placeholder="Select an option"
-            onChange={handleSelectChange}
-            className="dark:bg-dark-900"
-          />
-             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <ChevronDownIcon/>
-            </span>
+        {/* Primeira linha (Nome, Email, Celular, CPF/CNPJ) */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div>
+            <Label>Nome ou Razão Social</Label>
+            <Input type="text" />
           </div>
-        </div>
-        <div>
-          <Label>Password Input</Label>
-          <div className="relative">
-            <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
+          <div>
+            <Label>E-mail</Label>
+            <Input type="text" placeholder="info@gmail.com" />
+          </div>
+          <div>
+            <Label>Celular</Label>
+            <PhoneInput
+              selectPosition="start"
+              countries={countries}
+              placeholder="+55 (11) 0000-0000"
+              onChange={handlePhoneNumberChange}
             />
-            <button
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-            >
-              {showPassword ? (
-                <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-              ) : (
-                <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-              )}
-            </button>
+          </div>
+          <div>
+            <Label>CPF ou CNPJ</Label>
+            <Input type="text" />
           </div>
         </div>
-        <div>
-          <Label htmlFor="datePicker">Date Picker Input</Label>
-          <div className="relative">
-            <Input
-              type="date"
-              id="datePicker"
-              name="datePicker"
-              onChange={(e) => console.log(e.target.value)}
-            />
-            <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <CalenderIcon />
-            </span>
+
+        {/* Segunda linha (CEP, Endereço, Número, Complemento, Cidade, UF) */}
+        <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
+          <div>
+            <Label>CEP</Label>
+            <Input type="text" />
+          </div>
+          <div className="col-span-2">
+            <Label>Endereço</Label>
+            <Input type="text" />
+          </div>
+          <div>
+            <Label>Número</Label>
+            <Input type="text" />
+          </div>
+          <div>
+            <Label>Cidade</Label>
+            <Input type="text" />
+          </div>
+          <div>
+            <Label>UF</Label>
+            <div className="relative">
+              <Select
+                options={options}
+                placeholder="Estado"
+                onChange={handleSelectChange}
+                className="dark:bg-dark-900"
+              />
+              <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+                <ChevronDownIcon />
+              </span>
+            </div>
           </div>
         </div>
-        <div>
-          <Label htmlFor="tm">Date Picker Input</Label>
-          <div className="relative">
-            <Input
-              type="time"
-              id="tm"
-              name="tm"
-              onChange={(e) => console.log(e.target.value)}
-            />
-            <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <TimeIcon />
-            </span>
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="tm">Input with Payment</Label>
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Card number"
-              className="pl-[62px]"
-            />
-            <span className="absolute left-0 top-1/2 flex h-11 w-[46px] -translate-y-1/2 items-center justify-center border-r border-gray-200 dark:border-gray-800">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="6.25" cy="10" r="5.625" fill="#E80B26" />
-                <circle cx="13.75" cy="10" r="5.625" fill="#F59D31" />
-                <path
-                  d="M10 14.1924C11.1508 13.1625 11.875 11.6657 11.875 9.99979C11.875 8.33383 11.1508 6.8371 10 5.80713C8.84918 6.8371 8.125 8.33383 8.125 9.99979C8.125 11.6657 8.84918 13.1625 10 14.1924Z"
-                  fill="#FC6020"
-                />
-              </svg>
-            </span>
-          </div>
-        </div>
+
+        {/* Botão de salvar */}
+        <button
+          onClick={() => {}}
+          type="button"
+          className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+        >
+          Salvar
+        </button>
       </div>
     </ComponentCard>
   );
