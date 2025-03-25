@@ -1,6 +1,7 @@
+import { Modal } from "@/components/ui/modal";
 import React, { useState } from "react";
 
-export default function PaymentModal({ isOpen, onClose, onAddPayment }) {
+export default function PaymentModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     valor: '',
     meioPagamento: '',
@@ -21,7 +22,6 @@ export default function PaymentModal({ isOpen, onClose, onAddPayment }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddPayment(formData);
     setFormData({
       valor: '',
       meioPagamento: '',
@@ -32,7 +32,12 @@ export default function PaymentModal({ isOpen, onClose, onAddPayment }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <Modal
+    isOpen={isOpen}
+    onClose={onClose}
+    className="max-w-[700px] p-6 lg:p-10"
+  >
+    {/* // <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"> */}
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
         <div className="flex items-center justify-between px-4 py-2 border-b">
           <h2 className="text-xl font-bold">Adicionar pagamento</h2>
@@ -113,7 +118,7 @@ export default function PaymentModal({ isOpen, onClose, onAddPayment }) {
               onChange={handleChange}
               placeholder="Observações"
               className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
-              rows="3"
+              rows={3}
             ></textarea>
           </div>
 
@@ -136,6 +141,7 @@ export default function PaymentModal({ isOpen, onClose, onAddPayment }) {
           </div>
         </form>
       </div>
-    </div>
+    {/* // </div> */}
+    </Modal>
   );
 }

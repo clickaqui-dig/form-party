@@ -2,6 +2,8 @@ import { useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import ContractTab from "./ContractTab";
 import PaymentModal from "./PaymentModal";
+import FormInModal from "@/components/example/ModalExample/FormInModal";
+import { useModal } from "@/hooks/useModal";
 
 export default function TabsComponent() {
     const [activeTab, setActiveTab] = useState("itensContrato");
@@ -199,7 +201,6 @@ export default function TabsComponent() {
                             <ContractTab />
                         </div>
                     )}
-
                     <PaymentModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
                 </div>
             </div>
