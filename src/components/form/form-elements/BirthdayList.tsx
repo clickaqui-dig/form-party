@@ -5,7 +5,7 @@ import ComponentCard from "../../common/ComponentCard";
 const BirthdayList = () => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newBirthday, setNewBirthday] = useState({ name: "", date: "" });
+  const [newBirthday, setNewBirthday] = useState({ name: "", date: "", tema:""});
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
 
@@ -23,7 +23,7 @@ const BirthdayList = () => {
       };
 
       setBirthdays((prev) => [...prev, newEntry]);
-      setNewBirthday({ name: "", date: "" });
+      setNewBirthday({ name: "", date: "", tema:""});
       setIsModalOpen(false);
     } else {
       alert("Preencha todos os campos!");
@@ -53,7 +53,7 @@ const BirthdayList = () => {
 
   return (
     <ComponentCard title="Aniversariantes">
-      <div className="space-y-4">
+      <div className="space-y-6">
         {/* Botões de ação e campo de busca */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
           <div className="flex flex-wrap gap-2">
@@ -70,35 +70,31 @@ const BirthdayList = () => {
               ➕ Adicionar
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="Pesquisar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="border border-gray-300 focus:ring-2 focus:ring-blue-500 rounded-lg px-3 py-1 text-sm w-full sm:w-64"
-          />
         </div>
 
         {/* Tabela responsiva */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-100">
+        <div className="overflow-x-auto ">
+          <table className="min-w-full border-collapse">
+            <thead className="dar">
               <tr>
-                <th className="border border-gray-300 px-2 py-1 text-left font-medium text-sm">
+                <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
                   Sel
                 </th>
-                <th className="border border-gray-300 px-2 py-1 text-left font-medium text-sm">
+                <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
                   Nome
                 </th>
-                <th className="border border-gray-300 px-2 py-1 text-left font-medium text-sm">
+                <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
                   Nasc.
                 </th>
-                <th className="border border-gray-300 px-2 py-1 text-left font-medium text-sm">
+                <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
                   Idade
                 </th>
-                <th className="border border-gray-300 px-2 py-1 text-left font-medium text-sm">
+                <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
                   Idade Evento
                 </th>
+                <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
+                  Tema
+                </th> 
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -116,24 +112,28 @@ const BirthdayList = () => {
                           onChange={() => handleSelectBirthday(birthday.id)}
                         />
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="dark:text-gray-200 border border-gray-300 px-2 py-1">
                         {birthday.name}
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="dark:text-gray-200 border border-gray-300 px-2 py-1">
                         {birthday.date}
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="dark:text-gray-200 border border-gray-300 px-2 py-1">
                         {birthday.age}
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="dark:text-gray-200 border border-gray-300 px-2 py-1">
                         {birthday.ageAtEvent}
+                      </td>
+
+                      <td className="dark:text-gray-200 border border-gray-300 px-2 py-1">
+                        {birthday.tema}
                       </td>
                     </tr>
                   ))
               ) : (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center py-4 text-gray-500 border border-gray-300"
                   >
                     Nenhum registro encontrado
@@ -172,6 +172,20 @@ const BirthdayList = () => {
                   value={newBirthday.date}
                   onChange={(e) =>
                     setNewBirthday({ ...newBirthday, date: e.target.value })
+                  }
+                  className="border border-gray-300 rounded-lg px-3 py-2 w-full"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tema
+                </label>
+                <input
+                  type="text"
+                  value={newBirthday.tema}
+                  onChange={(e) =>
+                    setNewBirthday({ ...newBirthday, tema: e.target.value })
                   }
                   className="border border-gray-300 rounded-lg px-3 py-2 w-full"
                 />

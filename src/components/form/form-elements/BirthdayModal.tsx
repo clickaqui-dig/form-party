@@ -1,5 +1,5 @@
 import { Modal } from "@/components/ui/modal";
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
@@ -10,13 +10,7 @@ const options = [
   { value: "Pix", label: "Pix" },
 ];
 
-interface PaymentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAddItem: (item: { valor: string; meioPagamento: string, dataPagamentos : string, recebido : boolean, observacoes : string }) => void;
-}
-
-const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem }) => {
+export default function BithdayModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     valor: '',
     meioPagamento: '',
@@ -27,7 +21,7 @@ const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem }) => 
 
   if (!isOpen) return null;
 
-  const handleChange = (e:any) => {
+  const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -37,13 +31,6 @@ const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem }) => 
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
-    onAddItem({
-      valor: formData.valor,
-      meioPagamento: formData.meioPagamento,
-      dataPagamentos:formData.dataPagamento,
-      recebido: formData.recebido,
-      observacoes: formData.observacoes
-    });
     setFormData({
       valor: '',
       meioPagamento: '',
@@ -174,5 +161,3 @@ const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem }) => 
     </Modal>
   );
 }
-
-export default PaymentModal;
