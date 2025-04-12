@@ -1,14 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
+import { useFormikContext } from "formik";
 
 const BirthdayList = () => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newBirthday, setNewBirthday] = useState({ name: "", date: "", tema:""});
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
+  const { setFieldValue } = useFormikContext();
 
+  useEffect(() => {
+    setFieldValue("birthdayList",birthdays)
+  },[birthdays])
   const handleAddBirthday = () => {
     if (newBirthday.name && newBirthday.date) {
       const currentYear = new Date().getFullYear();
@@ -20,9 +24,9 @@ const BirthdayList = () => {
         id: Date.now(),
         age: idade,
         ageAtEvent: idade + 1,
-      };
-
+      }
       setBirthdays((prev) => [...prev, newEntry]);
+     
       setNewBirthday({ name: "", date: "", tema:""});
       setIsModalOpen(false);
     } else {
@@ -39,6 +43,7 @@ const BirthdayList = () => {
     const updatedBirthdays = birthdays.filter(
       (birthday) => !selectedBirthdays.includes(birthday.id)
     );
+
     setBirthdays(updatedBirthdays);
     setSelectedBirthdays([]);
   };
@@ -75,7 +80,7 @@ const BirthdayList = () => {
         {/* Tabela responsiva */}
         <div className="overflow-x-auto ">
           <table className="min-w-full border-collapse">
-            <thead className="dar">
+            <thead className="">
               <tr>
                 <th className="dark:text-white border border-gray-300 px-2 py-1 text-left font-medium text-sm">
                   Sel
@@ -100,9 +105,6 @@ const BirthdayList = () => {
             <tbody className="text-sm">
               {birthdays.length > 0 ? (
                 birthdays
-                  .filter((b) =>
-                    b.name.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
                   .map((birthday) => (
                     <tr key={birthday.id}>
                       <td className="border border-gray-300 px-2 py-1">

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import Input from '@/components/form/input/InputField';
 import Label from '@/components/form/Label';
 import Select from '@/components/form/Select';
@@ -52,7 +51,7 @@ export const FormCustomer = () => {
     const handleChangeCep = (e: any) => {
         const maskedValue = maskCEP(e.target.value);
         setFieldValue("cep", maskedValue);
-        if (maskedValue.length === 9 ) {
+        if (maskedValue.length === 9) {
             searchCepApi(maskedValue);
         }
     }
@@ -74,18 +73,18 @@ export const FormCustomer = () => {
     }
 
     return (
-        <div className = "space-y-6">
+        <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div>
                     <Label htmlFor="name">Nome ou Razão Social</Label>
-                    <Field id="name" name="name" 
+                    <Field id="name" name="name"
                         render={({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                             />
                         )} />
-                    <ErrorMessage name="name" component="div"  />
+                    <ErrorMessage name="name" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="email">E-mail</Label>
@@ -117,7 +116,7 @@ export const FormCustomer = () => {
                 </div>
                 <div>
                     <Label htmlFor="document">CPF ou CNPJ</Label>
-                    <Field id="document" name="document" 
+                    <Field id="document" name="document"
                         render={({ field }: FieldProps) => (
                             <Input
                                 {...field}
@@ -191,9 +190,7 @@ export const FormCustomer = () => {
                         </span>
                     </div>
                 </div>
-               
             </div>
         </div>
-  
-)
+    )
 }

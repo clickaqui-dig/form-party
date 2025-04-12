@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import ContractTab from "./ContractTab";
 import PaymentModal from "./PaymentModal";
@@ -6,6 +6,7 @@ import Label from "../Label";
 import Select from "../Select";
 import { ChevronDownIcon } from "@/icons";
 import ContractModal from "./ContractModal";
+import { useFormikContext } from "formik";
 
 const typeDiscount = [
     { value: "fechado", label: "Fechado" },
@@ -13,17 +14,18 @@ const typeDiscount = [
 ];
 
 interface ContractItem {
-  descricao: string;
-  valor: number;
+    descricao: string;
+    valor: number;
 }
 
-interface PaymentItem {
-    valor: string; 
-    meioPagamento: string, 
-    dataPagamentos : string, 
-    recebido : boolean, 
-    observacoes : string
-  }
+export interface PaymentItem {
+    id: number;
+    valor: string;
+    meioPagamento: string,
+    dataPagamentos: string,
+    recebido: boolean,
+    observacoes: string
+}
 
 export default function TabsComponent() {
     const [activeTab, setActiveTab] = useState("itensContrato");
@@ -31,22 +33,60 @@ export default function TabsComponent() {
     const [isModalOpen, setModalOpen] = useState(false);
     const [isModalPaymentOpen, setModalPaymentOpen] = useState(false);
     const [contractItems, setContractItems] = useState<ContractItem[]>([]);
-    const [paymenteItems, setPaymentsItems] = useState<PaymentItem[]>([]);
-    setModalPaymentOpen
+    const [paymentsItems, setPaymentsItems] = useState<PaymentItem[]>([]);
+    const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
+    const { setFieldValue } = useFormikContext();
+
+     useEffect(() => {
+        setFieldValue("itemsContract",contractItems)
+        // setFieldValue("payments",paymentsItems)
+      },[contractItems])
 
     const handleSelectChange = (value: string) => {
         setUseDiscount(value)
     };
 
-    const handleAddContractItem = (newItem : ContractItem)=>{
+    const handleAddContractItem = (newItem: ContractItem) => {
         setContractItems(prevItems => [...prevItems, newItem]);
+        
         setModalOpen(false);
     }
 
-    const handleAddPaymentItem = (newItem : PaymentItem)=>{
-        setPaymentsItems(prevItems => [...prevItems, newItem]);
+    const handleAddPaymentItem = (newItem: PaymentItem) => {
+        const newEntry = {
+            ...paymentsItems,
+            id:newItem.id,
+            valor: newItem.valor,
+            meioPagamento: newItem.meioPagamento,
+            dataPagamentos: newItem.dataPagamentos,
+            recebido: newItem.recebido,
+            observacoes: newItem.observacoes
+          };
+
+        setPaymentsItems(prevItems => [...prevItems, newEntry]);
         setModalOpen(false);
     }
+
+    const handleSelectPayments = (id :any) => {
+        setSelectedPayments((prev) =>
+          prev.includes(id)
+            ? prev.filter((selectedId) => selectedId !== id)
+            : [...prev, id]
+        );
+    };
+
+    const handleRemoveBirthday = () => {
+        if (selectedPayments.length === 0) {
+          alert("Selecione pelo menos um aniversariante para remover.");
+          return;
+        }
+    
+        const updatedBirthdays = paymentsItems.filter(
+          (payment) => !selectedPayments.includes(payment.id)
+        );
+        setPaymentsItems(updatedBirthdays);
+        setSelectedPayments([]);
+      };
 
     return (
         <ComponentCard title="Contratos e Pagamentos">
@@ -115,7 +155,7 @@ export default function TabsComponent() {
                                 </thead>
                                 <tbody>
                                     {contractItems.length > 0 ? (
-                                        contractItems.map((item,index)=>(
+                                        contractItems.map((item, index) => (
                                             <tr key={index} className="bg-white">
                                                 <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {item.descricao}
@@ -125,7 +165,7 @@ export default function TabsComponent() {
                                                 </td>
                                             </tr>
                                         ))
-                                      
+
                                     ) : (
                                         <tr className="bg-white">
                                             <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500" colSpan={2}>
@@ -140,7 +180,7 @@ export default function TabsComponent() {
                                             Total dos itens
                                         </td>
                                         <td className="px-6 py-4 text-sm font-medium text-gray-900 text-right">
-                                            {contractItems.reduce((total,item)=> total + item.valor,0).toFixed(2)}
+                                            {contractItems.reduce((total, item) => total + item.valor, 0).toFixed(2)}
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -170,20 +210,20 @@ export default function TabsComponent() {
                         <div className="flex flex-wrap gap-4">
                             {/* Campo Desconto */}
                             <div className="w-full md:w-1/3">
-                                <Label>Desconto {useDiscount === "fechado" ? "(R$)" :"(%)"}</Label>
+                                <Label>Desconto {useDiscount === "fechado" ? "(R$)" : "(%)"}</Label>
                                 <div className="relative">
                                     <input
                                         type="number"
                                         placeholder="Informe o desconto"
                                         className="dark:text-white w-full px-3 py-2 border rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-                                        // onChange={}
+                                    // onChange={}
                                     />
                                 </div>
                             </div>
 
                             {/* Campo Acréscimo */}
                             <div className="w-full md:w-1/3">
-                                <Label>Acréscimo {useDiscount === "fechado" ? "(R$)" :"(%)"}</Label>
+                                <Label>Acréscimo {useDiscount === "fechado" ? "(R$)" : "(%)"}</Label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -202,7 +242,7 @@ export default function TabsComponent() {
 
                         {/* Botões de Remover e Adicionar Pagamento */}
                         <div className="flex flex-wrap items-center gap-4 mt-4">
-                            <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition">
+                            <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition" onClick={handleRemoveBirthday}>
                                 ✖ Remover
                             </button>
                             <button className="flex items-center bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition"
@@ -217,38 +257,73 @@ export default function TabsComponent() {
                             <table className="min-w-full border divide-y divide-gray-200 rounded-lg overflow-hidden">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            <input type="checkbox" />
+                                        <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
+                                            Sel
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                                             Valor (R$)
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-10 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                                             Data Pagamento
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-10 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                                             Recebido?
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-10 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                                             Observações
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-10 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                                             Meio de Pagamento
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {/** Conteudo real */}
+                                    {
+                                        paymentsItems.length > 0 ? (
+                                            paymentsItems.map((item, index) => (
+                                                <tr key={index} className="bg-white">
+                                                    <td className="px-10 py-3">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedPayments.includes(item.id)}
+                                                            onChange={() => handleSelectPayments(item.id)}
+                                                        />
+                                                    </td>
+
+                                                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                                                        {item.valor}
+                                                    </td>
+                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                                                        {item.dataPagamentos}
+                                                    </td>
+                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                                                        {item.recebido === true ? "Sim" : "Não"}
+                                                    </td>
+                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                                                        {item.observacoes}
+                                                    </td>
+                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                                                        {item.meioPagamento}
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td className="px-6 py-4 text-sm text-gray-500 text-center" colSpan={6}>
+                                                    Nenhum registro encontrado
+                                                </td>
+                                            </tr>
+                                        )
+                                    }
+
                                     {/* Nenhum registro encontrado */}
-                                    <tr>
-                                        <td className="px-6 py-4 text-sm text-gray-500 text-center" colSpan={6}>
-                                            Nenhum registro encontrado
-                                        </td>
-                                    </tr>
+
                                 </tbody>
                                 <tfoot className="bg-gray-50">
                                     <tr>
                                         <td className="px-6 py-4 text-sm font-medium text-right" colSpan={6}>
-                                            Total: R$ 0,00
+                                            Total: {paymentsItems.reduce((total, item) => total + Number(item.valor), 0).toFixed(2)}
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -262,8 +337,8 @@ export default function TabsComponent() {
                         <ContractTab />
                     </div>
                 )}
-                <PaymentModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem}/>
-                <ContractModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddItem={handleAddContractItem}/>
+                <PaymentModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem} paymentsExists={paymentsItems} />
+                <ContractModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddItem={handleAddContractItem} />
             </div>
         </ComponentCard>
     );
