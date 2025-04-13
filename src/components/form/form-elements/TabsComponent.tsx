@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import ContractTab from "./ContractTab";
-import PaymentModal from "./PaymentModal";
+import PaymentModal from "../modals/PaymentModal";
 import Label from "../Label";
 import Select from "../Select";
 import { ChevronDownIcon } from "@/icons";
-import ContractModal from "./ContractModal";
+import ContractModal from "../modals/ContractModal";
 import { useFormikContext } from "formik";
 
 const typeDiscount = [
@@ -37,10 +37,10 @@ export default function TabsComponent() {
     const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
     const { setFieldValue } = useFormikContext();
 
-     useEffect(() => {
-        setFieldValue("itemsContract",contractItems)
-        // setFieldValue("payments",paymentsItems)
-      },[contractItems])
+    useEffect(() => {
+        console.log("formok payments")
+        setFieldValue("itemsContract", paymentsItems)
+    }, [paymentsItems])
 
     const handleSelectChange = (value: string) => {
         setUseDiscount(value)
@@ -48,45 +48,45 @@ export default function TabsComponent() {
 
     const handleAddContractItem = (newItem: ContractItem) => {
         setContractItems(prevItems => [...prevItems, newItem]);
-        
+
         setModalOpen(false);
     }
 
     const handleAddPaymentItem = (newItem: PaymentItem) => {
         const newEntry = {
             ...paymentsItems,
-            id:newItem.id,
+            id: newItem.id,
             valor: newItem.valor,
             meioPagamento: newItem.meioPagamento,
             dataPagamentos: newItem.dataPagamentos,
             recebido: newItem.recebido,
             observacoes: newItem.observacoes
-          };
+        };
 
         setPaymentsItems(prevItems => [...prevItems, newEntry]);
         setModalOpen(false);
     }
 
-    const handleSelectPayments = (id :any) => {
+    const handleSelectPayments = (id: any) => {
         setSelectedPayments((prev) =>
-          prev.includes(id)
-            ? prev.filter((selectedId) => selectedId !== id)
-            : [...prev, id]
+            prev.includes(id)
+                ? prev.filter((selectedId) => selectedId !== id)
+                : [...prev, id]
         );
     };
 
     const handleRemoveBirthday = () => {
         if (selectedPayments.length === 0) {
-          alert("Selecione pelo menos um aniversariante para remover.");
-          return;
+            alert("Selecione pelo menos um aniversariante para remover.");
+            return;
         }
-    
+
         const updatedBirthdays = paymentsItems.filter(
-          (payment) => !selectedPayments.includes(payment.id)
+            (payment) => !selectedPayments.includes(payment.id)
         );
         setPaymentsItems(updatedBirthdays);
         setSelectedPayments([]);
-      };
+    };
 
     return (
         <ComponentCard title="Contratos e Pagamentos">
@@ -129,7 +129,7 @@ export default function TabsComponent() {
                             <Label>
                                 Modelo de produtos e serviços
                             </Label>
-                            <select className="mt-1 block w-full dark:border-white dark:bg-gray- rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm">
+                            <select className="mt-1 block w-full dark:border-white dark:bg-gray- rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm dark:text-white">
                                 <option >Informe o modelo de produtos e serviços</option>
                             </select>
                         </div>
@@ -142,13 +142,13 @@ export default function TabsComponent() {
                                     Adicionar novo item
                                 </button>
                             </div>
-                            <table className="min-w-full divide-y divide-gray-200 border rounded">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border rounded dark:border-gray-700">
+                                <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                                             Descrição
                                         </th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                                             Valor (R$)
                                         </th>
                                     </tr>
@@ -156,30 +156,30 @@ export default function TabsComponent() {
                                 <tbody>
                                     {contractItems.length > 0 ? (
                                         contractItems.map((item, index) => (
-                                            <tr key={index} className="bg-white">
-                                                <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <tr key={index} className="bg-white dark:bg-gray-800">
+                                                <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80">
                                                     {item.descricao}
                                                 </td>
-                                                <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                                                <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80 text-right">
                                                     {item.valor}
                                                 </td>
                                             </tr>
                                         ))
 
                                     ) : (
-                                        <tr className="bg-white">
-                                            <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500" colSpan={2}>
+                                        <tr className="bg-white dark:bg-gray-800">
+                                            <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colSpan={2}>
                                                 Nenhum Registro encontrado
                                             </td>
                                         </tr>
                                     )}
                                 </tbody>
-                                <tfoot className="bg-gray-50">
+                                <tfoot className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                                             Total dos itens
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 text-right">
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 text-right dark:text-white">
                                             {contractItems.reduce((total, item) => total + item.valor, 0).toFixed(2)}
                                         </td>
                                     </tr>
@@ -254,8 +254,8 @@ export default function TabsComponent() {
 
                         {/* Tabela de pagamentos */}
                         <div className="mt-6 overflow-x-auto">
-                            <table className="min-w-full border divide-y divide-gray-200 rounded-lg overflow-hidden">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full border divide-y divide-gray-200 dark:divide-gray-700 rounded-lg overflow-hidden ">
+                                <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                                             Sel
@@ -278,51 +278,49 @@ export default function TabsComponent() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/** Conteudo real */}
-                                    {
-                                        paymentsItems.length > 0 ? (
-                                            paymentsItems.map((item, index) => (
-                                                <tr key={index} className="bg-white">
-                                                    <td className="px-10 py-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedPayments.includes(item.id)}
-                                                            onChange={() => handleSelectPayments(item.id)}
-                                                        />
-                                                    </td>
+                                    {paymentsItems.length > 0 ? (
+                                        paymentsItems.map((item, index) => (
+                                            <tr key={index} className="bg-white dark:bg-gray-800">
+                                                <td className="px-10 py-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedPayments.includes(item.id)}
+                                                        onChange={() => handleSelectPayments(item.id)}
+                                                    />
+                                                </td>
 
-                                                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                                                        {item.valor}
-                                                    </td>
-                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                                                        {item.dataPagamentos}
-                                                    </td>
-                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                                                        {item.recebido === true ? "Sim" : "Não"}
-                                                    </td>
-                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                                                        {item.observacoes}
-                                                    </td>
-                                                    <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                                                        {item.meioPagamento}
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td className="px-6 py-4 text-sm text-gray-500 text-center" colSpan={6}>
-                                                    Nenhum registro encontrado
+                                                <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
+                                                    {item.valor}
+                                                </td>
+                                                <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
+                                                    {item.dataPagamentos}
+                                                </td>
+                                                <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
+                                                    {item.recebido === true ? "Sim" : "Não"}
+                                                </td>
+                                                <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
+                                                    {item.observacoes}
+                                                </td>
+                                                <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
+                                                    {item.meioPagamento}
                                                 </td>
                                             </tr>
-                                        )
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td className="px-6 py-4 text-sm text-gray-500 text-center" colSpan={6}>
+                                                Nenhum registro encontrado
+                                            </td>
+                                        </tr>
+                                    )
                                     }
 
                                     {/* Nenhum registro encontrado */}
 
                                 </tbody>
-                                <tfoot className="bg-gray-50">
+                                <tfoot className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
-                                        <td className="px-6 py-4 text-sm font-medium text-right" colSpan={6}>
+                                        <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
                                             Total: {paymentsItems.reduce((total, item) => total + Number(item.valor), 0).toFixed(2)}
                                         </td>
                                     </tr>

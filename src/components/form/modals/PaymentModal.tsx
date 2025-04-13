@@ -1,17 +1,19 @@
 import { Modal } from "@/components/ui/modal";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
-import Select from "../Select";
+import { PaymentItem } from "../form-elements/TabsComponent";
 
-const options = [
-  { value: "Cartão", label: "Cartão" },
-  { value: "Boleto", label: "Boleto" },
-  { value: "Pix", label: "Pix" },
-];
+interface PaymentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddItem: (item: { id: number, valor: string; meioPagamento: string, dataPagamentos : string, recebido : boolean, observacoes : string }) => void;
+  paymentsExists : PaymentItem[];
+}
 
-export default function BithdayModal({ isOpen, onClose }) {
+const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem, paymentsExists}) => {
   const [formData, setFormData] = useState({
+    id:0,
     valor: '',
     meioPagamento: '',
     dataPagamento: '',
@@ -21,7 +23,7 @@ export default function BithdayModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     const { name, value, type, checked } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -31,7 +33,16 @@ export default function BithdayModal({ isOpen, onClose }) {
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
+    onAddItem({
+      id: Date.now(),
+      valor: formData.valor,
+      meioPagamento: formData.meioPagamento,
+      dataPagamentos:formData.dataPagamento,
+      recebido: formData.recebido,
+      observacoes: formData.observacoes
+    });
     setFormData({
+      id:0,
       valor: '',
       meioPagamento: '',
       dataPagamento: '',
@@ -55,36 +66,20 @@ export default function BithdayModal({ isOpen, onClose }) {
           <Label>
             Valor (R$) <span className="text-red-500">*</span>
           </Label>
-          {/* <input
-            type="number"
-            name="valor"
-            value={formData.valor}
-            onChange={handleChange}
-            placeholder="Valor da parcela"
-            className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
-            required
-          /> */}
 
           <Input type="number"
             name="valor"
-            // value={formData.valor}
+            value={formData.valor}
             onChange={handleChange}
             placeholder="Valor da parcela" 
             />
         </div>
 
         <div className="mb-4">
-          <Label>
+          <Label >
             Meio de pagamento <span className="text-red-500">*</span>
           </Label>
-
-          <Select
-                options={options}
-                placeholder="Selecione uma opção"
-                onChange={handleChange}
-                className="dark:text-gray-400"
-              />
-          {/* <select
+          <select
             name="meioPagamento"
             value={formData.meioPagamento}
             onChange={handleChange}
@@ -95,7 +90,7 @@ export default function BithdayModal({ isOpen, onClose }) {
             <option value="Cartão">Cartão</option>
             <option value="Boleto">Boleto</option>
             <option value="Pix">Pix</option>
-          </select> */}
+          </select>
         </div>
 
         <div className="mb-4">
@@ -161,3 +156,5 @@ export default function BithdayModal({ isOpen, onClose }) {
     </Modal>
   );
 }
+
+export default PaymentModal;

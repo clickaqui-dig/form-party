@@ -1,3 +1,3 @@
-import FormContract from './formContract'
+import {FormContract} from './formContract'
 
 export default FormContract;
