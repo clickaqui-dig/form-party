@@ -4,16 +4,10 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { PaginationCustomer } from "@/components/tables/customer";
 import TableCustomer from "@/components/tables/customer/TableCustomer";
+import { Customer } from "@/models/Customer";
 import { getCustomer } from "@/services/customer/getCustomer";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-
-export interface Customer {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  document: string;
-}
 
 interface CustomerState {
   data: Array<Customer>;
@@ -22,7 +16,7 @@ interface CustomerState {
   loading: boolean;
 }
 
-export default function BasicTables() {
+export default function PageSearchCustomer() {
   const [state, setState] = useState<CustomerState>({
     data: [],
     currentPage: 1,
@@ -32,9 +26,9 @@ export default function BasicTables() {
 
   useEffect(() => {
     fetchCustomer({ page: state.currentPage });
-  }, [])
+  }, [state.currentPage])
 
-  const fetchCustomer = async ({ page = 1}) => {
+  const fetchCustomer = async ({ page = 1 }) => {
     try {
       const response = await getCustomer({ page, limit: 5 });
       if (response) {
@@ -56,6 +50,7 @@ export default function BasicTables() {
       fetchCustomer({ page });
     }
   }
+
   return (
     <div>
       <PageBreadcrumb pageTitle="Clientes" />

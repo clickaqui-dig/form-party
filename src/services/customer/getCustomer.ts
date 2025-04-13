@@ -1,4 +1,4 @@
-import { Customer } from "@/app/(admin)/(others-pages)/(customers)/search-customer/page";
+import { Customer } from "@/models/Customer";
 import { buildQueryParams } from "@/utils/builders/buildQueryParams";
 import axios from "axios";
 
@@ -29,7 +29,7 @@ export const getCustomer = async(
 
         return response.data;
     } catch (error) {
-        console.log("Error ao buscar CEP: ", error);
+        console.log("Error ao buscar Clientes: ", error);
         return null;
     }
 }

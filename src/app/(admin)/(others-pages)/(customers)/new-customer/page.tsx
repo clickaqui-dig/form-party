@@ -1,10 +1,10 @@
 'use client';
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
-import FormCustomer from "./form";
+import FormCustomer from "@/components/form/customer";
 import { Formik, FormikHelpers } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
-import { validationSchema } from "./form/validation";
+import { validationSchema } from "@/components/form/customer/validation";
 
 const initialValues = {
   name: "",
@@ -19,7 +19,7 @@ const initialValues = {
   state: ""
 };
 
-export default function FormElements() {
+export default function PageNewCustomer() {
   const handleSubmit = async (
     values: typeof initialValues,
     formikHelpers: FormikHelpers<typeof initialValues>

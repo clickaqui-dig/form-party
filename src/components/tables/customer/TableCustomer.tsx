@@ -8,8 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
-import { Customer } from "@/app/(admin)/(others-pages)/(customers)/search-customer/page";
-import { CloseIcon } from "@/icons";
+import { PencilIcon } from "@/icons";
+import { Customer } from "@/models/Customer";
+import Link from "next/link";
 
 
 interface TableCustomerProps{
@@ -18,6 +19,7 @@ interface TableCustomerProps{
 
 
 export default function TableCustomer({ customers }: TableCustomerProps) {
+
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -69,7 +71,7 @@ export default function TableCustomer({ customers }: TableCustomerProps) {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {customers.map((customer) => (
                 <TableRow key={customer.id}>
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
+                  <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {customer.id}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -84,8 +86,10 @@ export default function TableCustomer({ customers }: TableCustomerProps) {
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {customer.document}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    <CloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-40 flex justify-stretch gap-4">
+                    <Link href={`/edit-customer/${customer.id}`} >
+                    <PencilIcon className="fill-gray-500 dark:fill-gray-400 hover:text-violet-600 text-[20px]" />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
