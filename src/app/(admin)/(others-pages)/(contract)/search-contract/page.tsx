@@ -55,7 +55,7 @@ export default function BasicTables() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  // Efeito para debounce da pesquisa
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -64,12 +64,12 @@ export default function BasicTables() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Efeito para buscar dados quando a página ou termo de pesquisa mudar
+  
   useEffect(() => {
     fetchContracts({ page: 1, search: debouncedSearchTerm });
   }, [debouncedSearchTerm]);
 
-  // Efeito para carregar dados iniciais
+  
   useEffect(() => {
     fetchContracts({ page: state.currentPage });
   }, []);
