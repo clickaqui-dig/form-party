@@ -7,22 +7,25 @@ const URL = 'http://localhost:3001';
 interface RequestContract {
     page: number,
     limit: number,
+    search?: string,
 }
 
 interface ResponseContract {
     total: number,
     page: number,
     limit: number,
-     data: Array<Contract>,
+    data: Array<Contract>,
 }
 
 export const getContract = async(
     {
-    page, limit
+    page, 
+    limit,
+    search = ""
 }: RequestContract
 ): Promise<ResponseContract | null> => {
     try {
-        const query = buildQueryParams({ page, limit });
+        const query = buildQueryParams({ page, limit, search });
 
         const response = await axios.get(`${URL}/contracts${query}`);
 

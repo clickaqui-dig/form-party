@@ -4,11 +4,8 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import SearchInput from "@/components/input/SearchInput";
 import { PaginationContract, TableContract } from "@/components/tables/contract";
-import { PaginationCustomer } from "@/components/tables/customer";
-import TableCustomer from "@/components/tables/customer/TableCustomer";
 import { getContract } from "@/services/contract/getContract";
-import { getCustomer } from "@/services/customer/getCustomer";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface guests {
   oi: number,
@@ -55,47 +52,80 @@ export default function BasicTables() {
     totalPages: 1,
     loading: false,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
+  // Efeito para debounce da pesquisa
   useEffect(() => {
-    fetchCustomer({ page: state.currentPage });
-  }, [])
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
 
-  const fetchCustomer = async ({ page = 1 }) => {
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // Efeito para buscar dados quando a página ou termo de pesquisa mudar
+  useEffect(() => {
+    fetchContracts({ page: 1, search: debouncedSearchTerm });
+  }, [debouncedSearchTerm]);
+
+  // Efeito para carregar dados iniciais
+  useEffect(() => {
+    fetchContracts({ page: state.currentPage });
+  }, []);
+
+  const fetchContracts = async ({ page = 1, search = "" }) => {
+    setState(prevState => ({ ...prevState, loading: true }));
     try {
-      const response = await getContract({ page, limit: 5 });
+      const response = await getContract({ page, limit: 5, search });
       if (response) {
         setState({
           data: response.data,
           currentPage: response.page,
           totalPages: Math.ceil(response.total / response.limit),
           loading: false,
-        })
+        });
       }
-
     } catch (error) {
       console.log(error);
+      setState(prevState => ({ ...prevState, loading: false }));
     }
-  }
+  };
 
   const handleChangePage = (page: number) => {
     if (page) {
-      fetchCustomer({ page });
+      fetchContracts({ page, search: debouncedSearchTerm });
     }
-  }
+  };
 
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setState(prevState => ({ ...prevState, currentPage: 1 }));
+  };
 
   return (
     <div>
       <PageBreadcrumb pageTitle="Contratos" />
       <div className="space-y-6">
         <ComponentCard title="Tabela de Contratos">
-          <SearchInput teste="teste"/>
-          <TableContract contract={state.data} />
-          <PaginationContract
-            currentPage={state.currentPage}
-            totalPages={state.totalPages}
-            onPageChange={handleChangePage}
+          <SearchInput 
+            onSearch={handleSearch} 
+            placeholder="Pesquisar por nome do cliente..."
           />
+          {state.loading ? (
+            <div className="py-10 text-center">Carregando...</div>
+          ) : (
+            <>
+              <TableContract contract={state.data} />
+              <div className="mt-6 flex justify-center">
+                <PaginationContract
+                  currentPage={state.currentPage}
+                  totalPages={state.totalPages}
+                  onPageChange={handleChangePage}
+                />
+              </div>
+            </>
+          )}
         </ComponentCard>
       </div>
     </div>
