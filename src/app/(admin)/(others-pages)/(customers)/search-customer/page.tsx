@@ -6,7 +6,6 @@ import { PaginationCustomer } from "@/components/tables/customer";
 import TableCustomer from "@/components/tables/customer/TableCustomer";
 import { Customer } from "@/models/Customer";
 import { getCustomer } from "@/services/customer/getCustomer";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 interface CustomerState {

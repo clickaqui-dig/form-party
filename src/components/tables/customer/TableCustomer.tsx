@@ -11,6 +11,7 @@ import {
 import { PencilIcon } from "@/icons";
 import { Customer } from "@/models/Customer";
 import Link from "next/link";
+import { maskCNPJ, maskCPF, maskPhone } from "@/utils/masks";
 
 
 interface TableCustomerProps{
@@ -78,13 +79,13 @@ export default function TableCustomer({ customers }: TableCustomerProps) {
                     {customer.name}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {customer.phone}
+                    {customer.phone? maskPhone(customer.phone) : ""}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {customer.email}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {customer.document}
+                    { customer.document.length == 11 ? maskCPF(customer.document) : maskCNPJ(customer.document) }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-40 flex justify-stretch gap-4">
                     <Link href={`/edit-customer/${customer.id}`} >

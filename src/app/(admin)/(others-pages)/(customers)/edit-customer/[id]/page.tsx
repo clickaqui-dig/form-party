@@ -6,7 +6,7 @@ import FormCustomer from "@/components/form/customer";
 import { validationSchema } from "@/components/form/customer/validation";
 import { Customer } from "@/models/Customer";
 import { getCustomerById } from "@/services/customer/getCustomerById";
-import { maskCEP, maskPhone } from "@/utils/masks";
+import { maskCEP, maskCNPJ, maskCPF, maskPhone } from "@/utils/masks";
 import { Formik, FormikHelpers } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -33,7 +33,6 @@ export default function PageEditCustomer() {
         if (id) {
             fetchCustomer(Number(id));
         }
-
     }, [id]);
 
       const fetchCustomer = async (id: number ) => {
@@ -44,7 +43,7 @@ export default function PageEditCustomer() {
                 setInitialValues({
                     ...response,
                     phone: response.phone ? maskPhone(response.phone) : "",
-                    document: response.document,
+                    document: response.document.length == 11 ? maskCPF(response.document) : maskCNPJ(response.document),
                     cep: response.cep?  maskCEP(response.cep) : "" ,
                     uf: response.uf?.toLowerCase(),
                 })
