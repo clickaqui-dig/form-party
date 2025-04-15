@@ -7,7 +7,7 @@ import { ChevronDownIcon } from '@/icons';
 import PhoneInput from "@/components/form/group-input/PhoneInput";
 import BirthdayList from "@/components/form/form-elements/BirthdayList";
 import TabsComponent from "@/components/form/form-elements/TabsComponent";
-import { useFormikContext } from "formik";
+import { ErrorMessage, Field, FieldProps, useFormikContext } from "formik";
 
 export const FormContract = () => {
     const { setFieldValue, setFieldError } = useFormikContext();
@@ -30,7 +30,7 @@ export const FormContract = () => {
         console.log("Selected value:", value);
     };
     const handleSelectChangeContract = (value: string) => {
-        setFieldValue("contractType", value)
+        setFieldValue("tiposDeContrato", value)
         console.log("Selected value:", value);
     };
 
@@ -40,7 +40,7 @@ export const FormContract = () => {
     ];
 
     const handlePhoneNumberChange = (phoneNumber: string) => {
-        setFieldValue("cellphone", phoneNumber)
+        setFieldValue("celularCliente", phoneNumber)
         console.log("Updated phone number:", phoneNumber);
     };
 
@@ -83,25 +83,31 @@ export const FormContract = () => {
             {/* Segunda linha (Cliente, E-mail, Celular, CPF/CNPJ) */}
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div>
-                    <Label htmlFor="client">Cliente</Label>
-                    <Input type="text"
-                        onChange={(event) => {
-                            setFieldValue("client", event.target.value)
-                        }}
-                    />
+                    <Label htmlFor="cliente">Cliente</Label>
+                    <Field id="cliente" name="cliente"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                            />
+                        )} />
+                    <ErrorMessage name="cliente" component="div" />
                 </div>
                 <div>
-                    <Label htmlFor="email">E-mail</Label>
-                    <Input
-                        type="text"
-                        placeholder="info@gmail.com"
-                        onChange={(event) => {
-                            setFieldValue("email", event.target.value)
-                        }}
+                    <Label htmlFor="emailCliente">E-mail</Label>
+                    <Field id="emailCliente" name="emailCliente"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                placeholder="info@gmail.com"
+                            />
+                        )}
                     />
+                    <ErrorMessage name="emailCliente" component="div" />
                 </div>
                 <div>
-                    <Label htmlFor="cellphone">Celular</Label>
+                    <Label htmlFor="celularCliente">Celular</Label>
                     <PhoneInput
                         selectPosition="start"
                         countries={countries}
@@ -110,11 +116,11 @@ export const FormContract = () => {
                     />
                 </div>
                 <div>
-                    <Label htmlFor="cpfCpj">CPF ou CNPJ</Label>
+                    <Label htmlFor="documento">CPF ou CNPJ</Label>
                     <Input
                         type="text"
                         onChange={(event) => {
-                            setFieldValue("cpfCpj", event.target.value)
+                            setFieldValue("documento", event.target.value)
                         }}
                     />
                 </div>
@@ -132,29 +138,29 @@ export const FormContract = () => {
                     />
                 </div>
                 <div className="col-span-2">
-                    <Label htmlFor="address">Endereço</Label>
+                    <Label htmlFor="endereco">Endereço</Label>
                     <Input
                         type="text"
                         onChange={(event) => {
-                            setFieldValue("address", event.target.value)
+                            setFieldValue("endereco", event.target.value)
                         }}
                     />
                 </div>
                 <div>
-                    <Label htmlFor="numberAddress">Número</Label>
+                    <Label htmlFor="numero">Número</Label>
                     <Input
                         type="text"
                         onChange={(event) => {
-                            setFieldValue("numberAddress", event.target.value)
+                            setFieldValue("numero", event.target.value)
                         }}
                     />
                 </div>
                 <div>
-                    <Label htmlFor="city">Cidade</Label>
+                    <Label htmlFor="cidade">Cidade</Label>
                     <Input
                         type="text"
                         onChange={(event) => {
-                            setFieldValue("city", event.target.value)
+                            setFieldValue("cidade", event.target.value)
                         }}
                     />
                 </div>
@@ -177,7 +183,7 @@ export const FormContract = () => {
             {/* quarta linha */}
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div>
-                    <Label htmlFor="contractType">Tipo de Contrato</Label>
+                    <Label htmlFor="tiposDeContrato">Tipo de Contrato</Label>
                     <div className="relative">
                         <Select
                             options={optionsContract}
@@ -191,27 +197,27 @@ export const FormContract = () => {
                     </div>
                 </div>
                 <div>
-                    <Label htmlFor="initialDate">Data Inicio</Label>
+                    <Label htmlFor="dataHoraInicial">Data Inicio</Label>
                     <div className="relative">
                         <Input
                             type="datetime-local"
-                            id="initialDate"
-                            name="initialDate"
+                            id="dataHoraInicial"
+                            name="dataHoraInicial"
                             onChange={(event) => {
-                                setFieldValue("initialDate", event.target.value)
+                                setFieldValue("dataHoraInicial", event.target.value)
                             }}
                         />
                     </div>
                 </div>
                 <div>
-                    <Label htmlFor="finalDate">Data Final</Label>
+                    <Label htmlFor="dataHoraFinal">Data Final</Label>
                     <div className="relative">
                         <Input
                             type="datetime-local"
-                            id="finalDate"
-                            name="finalDate"
+                            id="dataHoraFinal"
+                            name="dataHoraFinal"
                             onChange={(event) => {
-                                setFieldValue("finalDate", event.target.value)
+                                setFieldValue("dataHoraFinal", event.target.value)
                             }}
                         />
                     </div>
@@ -221,26 +227,30 @@ export const FormContract = () => {
                     <Label>10 horas</Label>
                 </div>
                 <div>
-                    <Label htmlFor="quantityGuest">Quant. de convidados</Label>
+                    <Label htmlFor="quantidadeConvidados">Quant. de convidados</Label>
                     <Input
                         type="text"
                         onChange={(event) => {
-                            setFieldValue("quantityGuest", event.target.value)
+                            setFieldValue("quantidadeConvidados", event.target.value)
                         }}
                     />
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div className="w-96">
-                    <Label htmlFor="quantityGuest"> Observações</Label>
+                    <Label htmlFor="observacoes"> Observações</Label>
                     <Input
                         type="text"
                         onChange={(event) => {
-                            setFieldValue("quantityGuest", event.target.value)
+                            setFieldValue("observacoes", event.target.value)
                         }}
                     />
                 </div>
             </div>
+
+
+
+
 
             <>
                 <BirthdayList />

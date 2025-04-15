@@ -2,6 +2,7 @@
 
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import SearchInput from "@/components/input/SearchInput";
 import { PaginationCustomer } from "@/components/tables/customer";
 import TableCustomer from "@/components/tables/customer/TableCustomer";
 import { Customer } from "@/models/Customer";
@@ -22,6 +23,21 @@ export default function PageSearchCustomer() {
     totalPages: 1,
     loading: false,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  // useEffect(() => {
+  //   fetchCustomer({ page: 1, search: debouncedSearchTerm });
+  // }, [debouncedSearchTerm]);
+
 
   useEffect(() => {
     fetchCustomer({ page: state.currentPage });
@@ -49,12 +65,21 @@ export default function PageSearchCustomer() {
       fetchCustomer({ page });
     }
   }
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setState(prevState => ({ ...prevState, currentPage: 1 }));
+  };
 
   return (
     <div>
       <PageBreadcrumb pageTitle="Clientes" />
       <div className="space-y-6">
+     
         <ComponentCard title="Tabela de Clientes">
+        <SearchInput
+            onSearch={handleSearch}
+            placeholder="Pesquisar por nome do cliente..."
+          />
           <TableCustomer customers={state.data} />
           <PaginationCustomer
             currentPage={state.currentPage}

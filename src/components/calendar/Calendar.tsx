@@ -42,7 +42,7 @@ const Calendar: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/schedule`);
+        const res = await axios.get(`http://192.168.0.7:3001/schedule`);
         if (res.status === 200) {
           const reponse = res.data.map((item: any) => {
             return {

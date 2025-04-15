@@ -39,7 +39,7 @@ export default function TabsComponent() {
 
     useEffect(() => {
         console.log("formok payments")
-        setFieldValue("itemsContract", paymentsItems)
+        setFieldValue("payments", paymentsItems)
     }, [paymentsItems])
 
     const handleSelectChange = (value: string) => {
