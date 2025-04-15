@@ -12,6 +12,7 @@ import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import axios from "axios";
 import Tooltip from "../form/Tooltip";
+import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 
 interface CalendarEvent extends EventInput {
   extendedProps: {
@@ -95,7 +96,6 @@ const Calendar: React.FC = () => {
         ),
       );
     } else {
-      // Add new event
       const newEvent: CalendarEvent = {
         id: Date.now().toString(),
         title: eventTitle,
@@ -130,6 +130,7 @@ const Calendar: React.FC = () => {
             center: "title",
             right: "",
           }}
+          locale={ptBrLocale}
           events={events}
           selectable={true}
           select={handleDateSelect}

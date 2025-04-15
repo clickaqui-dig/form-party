@@ -14,9 +14,9 @@ interface TooltipProps {
 
 const Tooltip: React.FC<TooltipProps> = ({ children, event }) => {
     return (
-        <div className="group relative flex max-w-max flex-col items-center">
+        <div className="group relative flex max-w-max flex-col items-center z-1000">
             <div className="
-            z-50
+            
         absolute 
         bottom-full
         left-1/2 
@@ -56,7 +56,7 @@ const Tooltip: React.FC<TooltipProps> = ({ children, event }) => {
                     <ul className="text-xs font-medium">
                         <li className="flex flex-row items-center justify-start">
                             <b className="mr-1">Código:</b>
-                            <p className="py-1">{event.id }</p>
+                            <p className="py-1">{event.id}</p>
                         </li>
                         <li className="flex flex-row items-center justify-start">
                             <b className="mr-1">Situação:</b>
