@@ -17,7 +17,7 @@ const BirthdayList = () => {
   const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
-    setFieldValue("birthdayList", birthdays)
+    setFieldValue("listaAniversariantes", birthdays)
   }, [birthdays]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {

@@ -8,9 +8,28 @@ import { getContract } from "@/services/contract/getContract";
 import React, { useEffect, useState } from "react";
 
 interface guests {
-  oi: number,
+  id: number,
   titulo: string,
   data: string,
+}
+
+interface BirthdayList{
+  nome:string,
+  dataNas: string;
+  tema:string;
+}
+
+interface ItensContract{
+  desc:string;
+  valor:number;
+}
+
+interface ItensPayments{
+  valor:number;
+  meioPagamento :string;
+  dataPagamento : string;
+  recebido : boolean;
+  obs?: string;
 }
 
 export interface Contract {
@@ -35,7 +54,15 @@ export interface Contract {
   dataHoraInicial: string,
   dataHoraFinal: string,
   duracao: number,
-  convidados: guests[]
+  convidados?: guests[],
+  quantidadeConvidados?: number;
+  observacoes?: string;
+  listaAniversariantes?: BirthdayList[];
+  itemContrato?: ItensContract[];
+  tipoPagemento?: string;
+  desconto?: number;
+  acrescimo?:number
+  payments?: ItensPayments[];
 }
 
 interface ContractState {
@@ -55,7 +82,6 @@ export default function BasicTables() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -64,12 +90,11 @@ export default function BasicTables() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  
   useEffect(() => {
     fetchContracts({ page: 1, search: debouncedSearchTerm });
   }, [debouncedSearchTerm]);
 
-  
+
   useEffect(() => {
     fetchContracts({ page: state.currentPage });
   }, []);
@@ -108,8 +133,8 @@ export default function BasicTables() {
       <PageBreadcrumb pageTitle="Contratos" />
       <div className="space-y-6">
         <ComponentCard title="Tabela de Contratos">
-          <SearchInput 
-            onSearch={handleSearch} 
+          <SearchInput
+            onSearch={handleSearch}
             placeholder="Pesquisar por nome do cliente..."
           />
           {state.loading ? (
@@ -117,13 +142,12 @@ export default function BasicTables() {
           ) : (
             <>
               <TableContract contract={state.data} />
-              <div className="mt-6 flex justify-center">
-                <PaginationContract
-                  currentPage={state.currentPage}
-                  totalPages={state.totalPages}
-                  onPageChange={handleChangePage}
-                />
-              </div>
+              <PaginationContract
+                currentPage={state.currentPage}
+                totalPages={state.totalPages}
+                onPageChange={handleChangePage}
+              />
+
             </>
           )}
         </ComponentCard>
