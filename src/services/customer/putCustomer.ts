@@ -9,7 +9,7 @@ interface RequestCustomer {
 }
 
 export const putCustomer = async ({ id, body }: RequestCustomer): Promise<boolean> => {
-            try {
+    try {
         await axios.put(`${URL}/customers/${id}`, body);
 
         return true;

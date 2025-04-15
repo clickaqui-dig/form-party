@@ -1,7 +1,7 @@
 import { Customer } from "@/models/Customer";
 import axios from "axios";
 
-const URL = 'http://192.168.0.7:3001';
+const URL = 'http://localhost:3001';
 
 interface RequestCustomer {
     id: number,

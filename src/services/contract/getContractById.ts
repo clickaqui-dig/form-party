@@ -1,7 +1,7 @@
 import { Contract } from "@/app/(admin)/(others-pages)/(contract)/search-contract/page";
 import axios from "axios";
 
-const URL = 'http://192.168.0.7:3001';
+const URL = 'http://localhost:3001';
 
 interface RequestContract {
     id: number,
