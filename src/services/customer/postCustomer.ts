@@ -1,11 +1,11 @@
 import { Customer } from "@/models/Customer";
-import axios from "axios";
+import api from '@/config/apiConfig';
 
 const URL = 'http://localhost:3001';
 
 export const postCustomer = async (body: Customer): Promise<boolean> => {
         try {
-        await axios.post(`${URL}/customers`, body);
+        await api.post(`${URL}/customers`, body);
 
         return true;
     } catch (error) {
