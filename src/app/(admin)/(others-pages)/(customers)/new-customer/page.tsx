@@ -24,7 +24,7 @@ export default function PageNewCustomer() {
     values: typeof initialValues,
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
-    console.log(values)
+    console.log("customer ===>>", values)
     
   }
   return (

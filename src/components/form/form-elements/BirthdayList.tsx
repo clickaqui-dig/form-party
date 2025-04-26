@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import { useFormikContext } from "formik";
 import BithdayModal from "../modals/BirthdayModal";
+import { Contract } from "@/app/(admin)/(others-pages)/(contract)/search-contract/page";
 
 export interface BirthDayItem {
   name: string,
@@ -14,7 +15,11 @@ const BirthdayList = () => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, values} = useFormikContext<Contract>();
+
+  useEffect(() => {
+    console.log("teste BithdayList ===>>>", values.cliente)
+  }, [birthdays]);
 
   useEffect(() => {
     setFieldValue("listaAniversariantes", birthdays)

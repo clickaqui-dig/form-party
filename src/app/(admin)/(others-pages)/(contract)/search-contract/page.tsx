@@ -17,6 +17,7 @@ interface BirthdayList{
   nome:string,
   dataNas: string;
   tema:string;
+  foto?: any;
 }
 
 interface ItensContract{

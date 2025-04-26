@@ -39,11 +39,6 @@ export const FormContract = () => {
         { code: "GB", label: "+44" },
     ];
 
-    const handlePhoneNumberChange = (phoneNumber: string) => {
-        setFieldValue("celularCliente", phoneNumber)
-        console.log("Updated phone number:", phoneNumber);
-    };
-
     return (
         <div className="space-y-6">
 
@@ -108,21 +103,37 @@ export const FormContract = () => {
                 </div>
                 <div>
                     <Label htmlFor="celularCliente">Celular</Label>
-                    <PhoneInput
-                        selectPosition="start"
-                        countries={countries}
-                        placeholder="+55 (11) 0000-0000"
-                        onChange={handlePhoneNumberChange}
-                    />
+
+
+                    <Field id="celularCliente" name="celularCliente" selectPosition="start" countries={countries}
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                placeholder="(11) 00000-0000"
+                                onChange={(event) => {
+                                    setFieldValue("celularCliente", event.target.value)
+                                    console.log("Updated phone number:", event.target.value);
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="celularCliente" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="documento">CPF ou CNPJ</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("documento", event.target.value)
-                        }}
-                    />
+
+
+                    <Field id="documento" name="documento"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("documento", event.target.value)
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="documento" component="div" />
                 </div>
             </div>
 
@@ -130,49 +141,78 @@ export const FormContract = () => {
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div>
                     <Label htmlFor="cep">CEP</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("cep", event.target.value)
-                        }}
-                    />
+
+                    <Field id="cep" name="cep"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("cep", event.target.value)
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="cep" component="div" />
                 </div>
                 <div className="col-span-2">
                     <Label htmlFor="endereco">Endereço</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("endereco", event.target.value)
-                        }}
-                    />
+
+                    <Field id="endereco" name="endereco"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("endereco", event.target.value)
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="endereco" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="numero">Número</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("numero", event.target.value)
-                        }}
-                    />
+                    <Field id="numero" name="numero"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("numero", event.target.value)
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="numero" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="cidade">Cidade</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("cidade", event.target.value)
-                        }}
-                    />
+                    <Field id="cidade" name="cidade"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                {...field}
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("cidade", event.target.value)
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="cidade" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="uf">UF</Label>
                     <div className="relative">
-                        <Select
-                            options={options}
-                            placeholder="Estado"
-                            onChange={handleSelectChange}
-                            className="dark:bg-dark-900"
-                        />
+                        <Field id="uf" name="uf"
+                            render={({ field }: FieldProps) => (
+                                <Select
+                                    {...field}
+                                    options={options}
+                                    placeholder="Estado"
+                                    onChange={(event)=>{
+                                        console.log("uf ====",event)
+                                        setFieldValue("uf", event)
+                                    }}
+                                    className="dark:bg-dark-900"
+                                />
+                            )} />
                         <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                             <ChevronDownIcon />
                         </span>
@@ -185,11 +225,16 @@ export const FormContract = () => {
                 <div>
                     <Label htmlFor="tiposDeContrato">Tipo de Contrato</Label>
                     <div className="relative">
-                        <Select
-                            options={optionsContract}
-                            placeholder="Tipo"
-                            onChange={handleSelectChangeContract}
-                            className="dark:bg-dark-700"
+                        <Field id="uf" name="uf"
+                            render={({ field }: FieldProps) => (
+                                <Select
+                                    {...field}
+                                    options={optionsContract}
+                                    placeholder="Tipo"
+                                    onChange={handleSelectChangeContract}
+                                    className="dark:bg-dark-700"
+                                />
+                            )}
                         />
                         <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                             <ChevronDownIcon />
@@ -199,27 +244,35 @@ export const FormContract = () => {
                 <div>
                     <Label htmlFor="dataHoraInicial">Data Inicio</Label>
                     <div className="relative">
-                        <Input
-                            type="datetime-local"
-                            id="dataHoraInicial"
-                            name="dataHoraInicial"
-                            onChange={(event) => {
-                                setFieldValue("dataHoraInicial", event.target.value)
-                            }}
-                        />
+                        <Field id="city" name="city"
+                            render={({ field }: FieldProps) => (
+                                <Input
+                                    type="datetime-local"
+                                    id="dataHoraInicial"
+                                    name="dataHoraInicial"
+                                    onChange={(event) => {
+                                        setFieldValue("dataHoraInicial", event.target.value)
+                                    }}
+                                />
+                            )} />
+                        <ErrorMessage name="city" component="div" />
                     </div>
                 </div>
                 <div>
                     <Label htmlFor="dataHoraFinal">Data Final</Label>
                     <div className="relative">
-                        <Input
-                            type="datetime-local"
-                            id="dataHoraFinal"
-                            name="dataHoraFinal"
-                            onChange={(event) => {
-                                setFieldValue("dataHoraFinal", event.target.value)
-                            }}
-                        />
+                        <Field id="city" name="city"
+                            render={({ field }: FieldProps) => (
+                                <Input
+                                    type="datetime-local"
+                                    id="dataHoraFinal"
+                                    name="dataHoraFinal"
+                                    onChange={(event) => {
+                                        setFieldValue("dataHoraFinal", event.target.value)
+                                    }}
+                                />
+                            )} />
+                        <ErrorMessage name="dataHoraFinal" component="div" />
                     </div>
                 </div>
                 <div>
@@ -228,29 +281,36 @@ export const FormContract = () => {
                 </div>
                 <div>
                     <Label htmlFor="quantidadeConvidados">Quant. de convidados</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("quantidadeConvidados", event.target.value)
-                        }}
-                    />
+                    <Field id="quantidadeConvidados" name="quantidadeConvidados"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("quantidadeConvidados", event.target.value)
+                                }}
+                            />
+                        )} />
+                    <ErrorMessage name="quantidadeConvidados" component="div" />
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div className="w-96">
                     <Label htmlFor="observacoes"> Observações</Label>
-                    <Input
-                        type="text"
-                        onChange={(event) => {
-                            setFieldValue("observacoes", event.target.value)
-                        }}
+
+                    <Field id="observacoes" name="observacoes"
+                        render={({ field }: FieldProps) => (
+                            <Input
+                                type="text"
+                                onChange={(event) => {
+                                    setFieldValue("observacoes", event.target.value)
+                                }}
+                            />
+
+                        )}
                     />
+                    <ErrorMessage name="quantidadeConvidados" component="div" />
                 </div>
             </div>
-
-
-
-
 
             <>
                 <BirthdayList />

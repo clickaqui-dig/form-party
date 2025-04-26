@@ -2,16 +2,14 @@ import { Modal } from "@/components/ui/modal";
 import React, { FC, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
-import { PaymentItem } from "../form-elements/TabsComponent";
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddItem: (item: { id: number, valor: string; meioPagamento: string, dataPagamentos : string, recebido : boolean, observacoes : string }) => void;
-  paymentsExists : PaymentItem[];
 }
 
-const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem, paymentsExists}) => {
+const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem}) => {
   const [formData, setFormData] = useState({
     id:0,
     valor: '',
@@ -49,6 +47,7 @@ const PaymentModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem, payme
       recebido: false,
       observacoes: ''
     });
+    onClose();
   };
 
   return (

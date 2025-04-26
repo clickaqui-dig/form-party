@@ -38,16 +38,18 @@ export default function TabsComponent() {
     const { setFieldValue } = useFormikContext();
 
     useEffect(() => {
-        console.log("formok payments")
         setFieldValue("payments", paymentsItems)
-    }, [paymentsItems])
-
-    const handleSelectChange = (value: string) => {
-        setUseDiscount(value)
-    };
+        setFieldValue("itemContrato", contractItems)
+    }, [paymentsItems, contractItems]);
 
     const handleAddContractItem = (newItem: ContractItem) => {
-        setContractItems(prevItems => [...prevItems, newItem]);
+
+        const newEntry = {
+            ...contractItems,
+            descricao: newItem.descricao,
+            valor: newItem.valor,
+        };
+        setContractItems(prevItems => [...prevItems, newEntry]);
 
         setModalOpen(false);
     }
@@ -61,10 +63,11 @@ export default function TabsComponent() {
             dataPagamentos: newItem.dataPagamentos,
             recebido: newItem.recebido,
             observacoes: newItem.observacoes
+            
         };
 
         setPaymentsItems(prevItems => [...prevItems, newEntry]);
-        setModalOpen(false);
+        setModalPaymentOpen(false);
     }
 
     const handleSelectPayments = (id: any) => {
@@ -198,7 +201,10 @@ export default function TabsComponent() {
                                 <Select
                                     options={typeDiscount}
                                     placeholder="Tipo"
-                                    onChange={handleSelectChange}
+                                    onChange={(event)=>{
+                                        setUseDiscount(event)
+                                        setFieldValue("tipoPagamento", event)
+                                    }}
                                     className="dark:bg-dark-700"
                                 />
                                 <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
@@ -216,7 +222,7 @@ export default function TabsComponent() {
                                         type="number"
                                         placeholder="Informe o desconto"
                                         className="dark:text-white w-full px-3 py-2 border rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-                                    // onChange={}
+
                                     />
                                 </div>
                             </div>
@@ -335,7 +341,7 @@ export default function TabsComponent() {
                         <ContractTab />
                     </div>
                 )}
-                <PaymentModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem} paymentsExists={paymentsItems} />
+                <PaymentModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem}/>
                 <ContractModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddItem={handleAddContractItem} />
             </div>
         </ComponentCard>

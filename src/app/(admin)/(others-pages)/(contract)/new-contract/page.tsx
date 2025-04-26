@@ -8,7 +8,6 @@ import { FormContract } from "./form/formContract";
 const initialValues = {
   id: 0,
   codigo: "",
-  complemento:"",
   bairro:"",
   situacao: "",
   valorRecebido: 0,
@@ -32,10 +31,8 @@ const initialValues = {
   listaAniversariantes: [],
   itemContrato:[],
   payments:[],
-  tipoPagemento: "",
   desconto: 0,
   acrescimo:0,
-  convidados:[],
 };
 
 export default function FormElements() {
@@ -43,7 +40,7 @@ export default function FormElements() {
       values: typeof initialValues,
       formikHelpers: FormikHelpers<typeof initialValues>
     ) => {
-      console.log(values)
+      console.log("new contract", values)
       
     }
   return (

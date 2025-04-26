@@ -36,7 +36,7 @@ export default function PageEditCustomer() {
         dataHoraInicial:"",
         dataHoraFinal:"",
         duracao:0,
-        quantidadeConvidados:0,
+        quantidadeConvidados:0, 
         observacoes:"",
         listaAniversariantes: [],
         itemContrato:[],
@@ -59,9 +59,13 @@ export default function PageEditCustomer() {
             const response = await getContractById({ id });
 
             if (response) {
-                console.log("retornoouu", response);
                 setInitialValues({
                     ...response,
+                    listaAniversariantes:[{
+                        nome:"teste", 
+                        dataNas:"teste",
+                        tema:"tema"
+                    }]
                 })
             }
         } catch (error) {
@@ -77,14 +81,10 @@ export default function PageEditCustomer() {
 
     }
 
-    useEffect(()=>{
-        console.log("initialValues == >",initialValues)
-    },[initialValues])
-
     return (
         <div>
             <PageBreadcrumb pageTitle="Edição Contrato" />
-            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
                 {({ handleSubmit, isValid, dirty }) => {
                     return (
                         <ComponentCard title="Formulário">
