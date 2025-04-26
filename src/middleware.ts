@@ -3,25 +3,20 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get('token')?.value;
-  const isProtectedRoute =
-    req.nextUrl.pathname.startsWith('/(admin)')
+  const { pathname } = req.nextUrl;
 
-    if (isProtectedRoute) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/signin', req.url))
-    }
-
-    try {
-      return NextResponse.next()
-    } catch (e) {
-      console.log(e)
-      return NextResponse.redirect(new URL('/signin', req.url))
-    }
+  // Evitar redirecionar /signin para ele mesmo
+  if (pathname.startsWith('/signin')) {
+    return NextResponse.next();
   }
 
-  return NextResponse.next()
+  if (!token) {
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!login|customers|contract).*)'],
+  matcher: ['/((?!_next|favicon.ico).*)'], // Protege tudo, exceto assets internos
 }
