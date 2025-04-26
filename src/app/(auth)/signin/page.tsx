@@ -21,29 +21,27 @@ export default function SignIn() {
   const router = useRouter();
 
 
-    const handleSubmit = async (
-      values: typeof initialValues,
-      formikHelpers: FormikHelpers<typeof initialValues>
-    ) => {
-      try {
-        const response = await handleLogin(values);
-        const token = response.data.token
-
-        if (isChecked) {
-          Cookies.set('token', token, { expires: 1 }) // 1 dia
-        } else {
-          Cookies.set('token', token) 
-        }
-
-        router.push('/calendar')
-
-      } catch (error) {
-        console.log(error)
+  const handleSubmit = async (
+    values: typeof initialValues,
+    formikHelpers: FormikHelpers<typeof initialValues>
+  ) => {
+    try {
+      const response = await handleLogin(values);
+      const token = response.data
+      console.log("token ==>>", token)
+      if (isChecked) {
+        Cookies.set('authToken', token, { expires: 1 }) // 1 dia
+      } else {
+        Cookies.set('authToken', token)
       }
 
-      
+      router.push('/calendar')
+
+    } catch (error) {
+      console.log(error)
     }
-  
+  }
+
   return (<div className="flex flex-col flex-1 lg:w-1/2 w-full">
     <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
       <div>
@@ -56,34 +54,34 @@ export default function SignIn() {
           </p>
         </div>
         <div>
-             <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} >
+          <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} >
             {({ handleSubmit, isValid, dirty }) => {
               return (
-            <div className="space-y-6">
-              <FormSignin/>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Checkbox checked={isChecked} onChange={setIsChecked} />
-                  <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                    Keep me logged in
-                  </span>
-                </div>
-                <Link
-                  href="/reset-password"
-                  className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div>
+                <div className="space-y-6">
+                  <FormSignin />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Checkbox checked={isChecked} onChange={setIsChecked} />
+                      <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
+                        Keep me logged in
+                      </span>
+                    </div>
+                    <Link
+                      href="/reset-password"
+                      className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div>
                     <Button type="submit" onClick={() => handleSubmit()} className="w-full" size="sm" disabled={!(isValid && dirty)}>
-                  Sign in
-                </Button>
-              </div>
-            </div>
-                )
-                   }}
-                </Formik>
+                      Sign in
+                    </Button>
+                  </div>
+                </div>
+              )
+            }}
+          </Formik>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from "axios";
+import api from '../../config/apiConfig';
 
 const URL = 'http://localhost:8080/auth';
 
@@ -14,7 +14,7 @@ interface LoginResponse {
 
 export const handleLogin = async (body: LoginRequest): Promise<LoginResponse| any> => {
     try {
-        const response =   await axios.post(`${URL}/login`, body);
+        const response = await api.post(`${URL}/login`, body);
 
         return response;
     } catch (error) {
