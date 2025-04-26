@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import api from '../../config/apiConfig';
+import api from '@/config/apiConfig';
 
 const URL = 'http://localhost:8080/auth';
 
