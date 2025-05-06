@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from '@/config/apiConfig';
 
 interface RequestCustomer {
     id: number,
@@ -6,7 +6,7 @@ interface RequestCustomer {
 
 export const deleteCustomer = async ({ id }: RequestCustomer): Promise<boolean> => {
     try {
-        await axios.delete(`${URL}/customers/${id}`);
+        await api.delete(`${URL}/customers/${id}`);
 
         return true;
     } catch (error) {

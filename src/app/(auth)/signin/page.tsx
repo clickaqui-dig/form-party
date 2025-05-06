@@ -27,8 +27,8 @@ export default function SignIn() {
   ) => {
     try {
       const response = await handleLogin(values);
-      const token = response.data
-      console.log("token ==>>", token)
+      const token = response.data;
+      
       if (isChecked) {
         Cookies.set('authToken', token, { expires: 1 }) // 1 dia
       } else {

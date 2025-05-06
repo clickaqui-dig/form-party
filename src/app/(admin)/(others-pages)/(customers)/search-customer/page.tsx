@@ -46,7 +46,6 @@ export default function PageSearchCustomer() {
   const fetchCustomer = async ({ page = 1 }) => {
     try {
       const response = await getCustomer({ page, limit: 5 });
-      console.log(response)
       if (response) {
         setState({
           data: response,

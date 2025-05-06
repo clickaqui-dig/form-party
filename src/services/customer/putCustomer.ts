@@ -1,5 +1,5 @@
 import { Customer } from "@/models/Customer";
-import axios from "axios";
+import api from '@/config/apiConfig';
 
 const URL = 'http://localhost:3001';
 
@@ -10,7 +10,7 @@ interface RequestCustomer {
 
 export const putCustomer = async ({ id, body }: RequestCustomer): Promise<boolean> => {
     try {
-        await axios.put(`${URL}/customers/${id}`, body);
+        await api.put(`${URL}/customers/${id}`, body);
 
         return true;
     } catch (error) {
