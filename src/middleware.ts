@@ -5,7 +5,6 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get('authToken')?.value;
   const { pathname } = req.nextUrl;
 
-  // Evitar redirecionar /signin para ele mesmo
   if (pathname.startsWith('/signin')) {
     return NextResponse.next();
   }

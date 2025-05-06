@@ -1,7 +1,5 @@
+import api from "@/config/apiConfig";
 import { Customer } from "@/models/Customer";
-import axios from "axios";
-
-const URL = 'http://localhost:3001';
 
 interface RequestCustomer {
     id: number,
@@ -13,7 +11,7 @@ export const getCustomerById = async(
         : RequestCustomer): Promise<Customer | null> => {
         try {
 
-        const response = await axios.get(`${URL}/customers/${id}`);
+        const response = await api.get(`/cliente/${id}`);
 
         return response.data;
     } catch (error) {

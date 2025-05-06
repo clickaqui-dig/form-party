@@ -11,7 +11,10 @@ api.interceptors.request.use(
         const token = Cookies.get('authToken');
 
         if(token){
-            config.headers.Authorization = `Bearer ${token}`
+            config.headers.Authorization = `Bearer ${token}`;
+            config.withCredentials = true; 
+            config.headers.Accept = 'application/json';
+            config.headers['Content-Type'] = 'application/json';
         }
 
         return config;

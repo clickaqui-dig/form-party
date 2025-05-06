@@ -76,16 +76,16 @@ export default function TableCustomer({ customers }: TableCustomerProps) {
                     {customer.id}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {customer.name}
+                    {customer.nome}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {customer.phone? maskPhone(customer.phone) : ""}
+                    {customer.celular ? maskPhone(customer.celular) : ""}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {customer.email}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    { customer.document.length == 11 ? maskCPF(customer.document) : maskCNPJ(customer.document) }
+                    {customer.documento.length == 11 ? maskCPF(customer.documento) : maskCNPJ(customer.documento) }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-40 flex justify-stretch gap-4">
                     <Link href={`/edit-customer/${customer.id}`} >

@@ -1,8 +1,7 @@
-import { Customer } from "@/models/Customer";
-import { buildQueryParams } from "@/utils/builders/buildQueryParams";
-import axios from "axios";
+import { buildQueryParams } from '@/utils/builders/buildQueryParams';
+import api from '../../config/apiConfig';
+import { Customer } from '@/models/Customer';
 
-const URL = 'http://localhost:3001';
 
 interface RequestCustomer {
     page: number,
@@ -25,7 +24,7 @@ export const getCustomer = async(
     try {
         const query = buildQueryParams({ page, limit });
 
-        const response = await axios.get(`${URL}/customers${query}`);
+        const response = await api.get(`/cliente`);
 
         return response.data;
     } catch (error) {
