@@ -26,13 +26,21 @@ export default function SignIn() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      const response = await handleLogin(values);
-      const token = response.data;
-      
-      if (isChecked) {
-        Cookies.set('authToken', token, { expires: 1 }) // 1 dia
-      } else {
-        Cookies.set('authToken', token)
+      const token = Cookies.get('authToken');
+      if (!token) {
+        const response = await handleLogin(values);
+        const newToken = response.data;
+        console.log(newToken)
+        if (!newToken) {
+          throw new Error('');
+        }
+
+        if (isChecked) {
+          Cookies.set('authToken', newToken, { expires: 1 })
+        } else {
+          Cookies.set('authToken', newToken)
+        }
+  
       }
 
       router.push('/calendar')

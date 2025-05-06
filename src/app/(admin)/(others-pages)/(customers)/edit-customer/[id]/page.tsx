@@ -6,8 +6,8 @@ import FormCustomer from "@/components/form/customer";
 import { validationSchema } from "@/components/form/customer/validation";
 import { Customer } from "@/models/Customer";
 import { getCustomerById } from "@/services/customer/getCustomerById";
-import { maskCEP, maskCNPJ, maskCPF, maskPhone } from "@/utils/masks";
-import { Formik, FormikHelpers } from "formik";
+import { maskCEP, maskPhone } from "@/utils/masks";
+import { Formik } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -17,23 +17,26 @@ export default function PageEditCustomer() {
     const id = params.id;
     const [initialValues, setInitialValues] = useState<Customer>({
         id: 0,
-        name: "",
+        nome: "",
+        celular: "",
         email: "",
-        phone: "",
-        document: "",
+        dataCadastro: "",
+        documento: "",
         cep: "",
-        address: "",
-        number: "",
-        city: "",
+        endereco: "",
+        numero: "",
+        complemento: "",
+        bairro: "",
+        cidade: "",
         uf: "",
-        state: ""
+        status: true
     });
 
     useEffect(() => {
         if (id) {
             fetchCustomer(Number(id));
         }
-    }, [id]);
+    }, []);
 
       const fetchCustomer = async (id: number ) => {
         try {
@@ -42,22 +45,19 @@ export default function PageEditCustomer() {
             if (response) {
                 setInitialValues({
                     ...response,
-                    phone: response.phone ? maskPhone(response.phone) : "",
-                    document: response.document.length == 11 ? maskCPF(response.document) : maskCNPJ(response.document),
+                    celular: response.celular ? maskPhone(response.celular) : "",
+                    documento: response.documento,
                     cep: response.cep?  maskCEP(response.cep) : "" ,
                     uf: response.uf?.toLowerCase(),
                 })
             }
-       
-    
         } catch (error) {
           console.log(error);
         }
       }
 
     const handleSubmit = async (
-        values: typeof initialValues,
-        formikHelpers: FormikHelpers<typeof initialValues>
+        values: typeof initialValues
     ) => {
         console.log(values)
 
@@ -67,18 +67,19 @@ export default function PageEditCustomer() {
         <div>
             <PageBreadcrumb pageTitle="Edição Cliente" />
             <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} enableReinitialize>
-                {({ handleSubmit, isValid, dirty }) => {
+                {({ handleSubmit, isValid }) => {
                     return (
                         <ComponentCard title="Formulário">
                             <FormCustomer />
                             <button
-                                onClick={() => handleSubmit()}
+                                onClick={() => handleSubmit}
                                 type="button"
-                                disabled={!(isValid && dirty)}
+                                disabled={isValid}
                                 className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
                             >
                                 Salvar
                             </button>
+                          
                         </ComponentCard>
                     )
                 }}

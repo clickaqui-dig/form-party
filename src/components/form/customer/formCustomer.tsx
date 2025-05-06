@@ -45,7 +45,7 @@ export const FormCustomer = () => {
     const handleChangeDocument = (e: any) => {
         const rawValue = e.target.value.replace(/\D/g, "");
         const maskedValue = rawValue.length <= 11 ? maskCPF(e.target.value) : maskCNPJ(e.target.value);
-        setFieldValue("document", maskedValue);
+        setFieldValue("documento", maskedValue);
     };
 
     const handleChangeCep = (e: any) => {
@@ -76,114 +76,125 @@ export const FormCustomer = () => {
         <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div>
-                    <Label htmlFor="name">Nome ou Razão Social</Label>
-                    <Field id="name" name="name"
-                        render={({ field }: FieldProps) => (
+                    <Label htmlFor="nome">Nome ou Razão Social</Label>
+                    <Field id="nome" name="nome">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                             />
-                        )} />
-                    <ErrorMessage name="name" component="div" />
+                        )}
+                        </Field>
+                    <ErrorMessage name="nome" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="email">E-mail</Label>
-                    <Field id="email" name="email"
-                        render={({ field }: FieldProps) => (
+                    <Field id="email" name="email">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                                 placeholder="info@gmail.com"
                             />
-                        )} />
+                        )}
+                      </Field>
                     <ErrorMessage name="email" component="div" />
                 </div>
                 <div>
-                    <Label htmlFor="phone">Celular</Label>
-                    <Field id="phone" name="phone" selectPosition="start" countries={countries}
-                        render={({ field }: FieldProps) => (
+                    <Label htmlFor="celular">Celular</Label>
+                    <Field id="celular" name="celular" selectPosition="start" countries={countries}>
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                                 placeholder="(11) 00000-0000"
                                 onChange={(event: any) => {
                                     const phone = maskPhone(event.target.value);
-                                    setFieldValue("phone", phone);
+                                    setFieldValue("celular", phone);
                                 }}
                             />
-                        )} />
-                    <ErrorMessage name="phone" component="div" />
+                        )}    
+                    </Field>
+                    <ErrorMessage name="celular" component="div" />
                 </div>
                 <div>
-                    <Label htmlFor="document">CPF ou CNPJ</Label>
-                    <Field id="document" name="document"
-                        render={({ field }: FieldProps) => (
+                    <Label htmlFor="documento">CPF ou CNPJ</Label>
+                    <Field id="documento" name="documento">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                                 onChange={handleChangeDocument}
                             />
-                        )} />
-                    <ErrorMessage name="document" component="div" />
+                        )}
+                        </Field>
+                    <ErrorMessage name="documento" component="div" />
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div>
                     <Label htmlFor="cep">CEP</Label>
-                    <Field id="cep" name="cep"
-                        render={({ field }: FieldProps) => (
+                    <Field id="cep" name="cep">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                                 onChange={handleChangeCep}
                             />
-                        )} />
+                        )}
+                        </Field>
                     <ErrorMessage name="cep" component="div" />
                 </div>
                 <div className="col-span-2">
-                    <Label htmlFor="address">Endereço</Label>
-                    <Field id="address" name="address"
-                        render={({ field }: FieldProps) => (
+                    <Label htmlFor="endereco">Endereço</Label>
+                    <Field id="endereco" name="endereco">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                             />
-                        )} />
-                    <ErrorMessage name="address" component="div" />
+                        )}    
+                    </Field>
+                    <ErrorMessage name="endereco" component="div" />
                 </div>
                 <div>
-                    <Label htmlFor="number">Número</Label>
-                    <Field id="number" name="number"
-                        render={({ field }: FieldProps) => (
+                    <Label htmlFor="numero">Número</Label>
+                    <Field id="numero" name="numero">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                             />
-                        )} />
-                    <ErrorMessage name="number" component="div" />
+                        )}    
+                    </Field>
+                    <ErrorMessage name="numero" component="div" />
                 </div>
                 <div>
-                    <Label htmlFor="city">Cidade</Label>
-                    <Field id="city" name="city"
-                        render={({ field }: FieldProps) => (
+                    <Label htmlFor="cidade">Cidade</Label>
+                    <Field id="cidade" name="cidade">
+                        {({ field }: FieldProps) => (
                             <Input
                                 {...field}
                                 type="text"
                             />
-                        )} />
-                    <ErrorMessage name="city" component="div" />
+                        )}    
+                    </Field>
+                    <ErrorMessage name="cidade" component="div" />
                 </div>
                 <div>
                     <Label htmlFor="uf">UF</Label>
-                    <Field id="uf" name="uf"
-                        render={({ field }: FieldProps) => (
+                    <Field id="uf" name="uf">
+                        {({ field, form }: FieldProps) => (
                             <Select
                                 {...field}
                                 options={options}
                                 placeholder="Estado"
                                 className="dark:bg-dark-900"
+                                defaultValue={field.value}
+                                onChange={(value) => form.setFieldValue(field.name, value)}
                             />
-                        )} />
+                        )}
+                    </Field>
                     <div className='relative'>
                         <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 bottom-1/2 dark:text-gray-400">
                             <ChevronDownIcon />

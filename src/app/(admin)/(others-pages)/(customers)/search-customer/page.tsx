@@ -24,33 +24,20 @@ export default function PageSearchCustomer() {
     loading: false,
   });
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
-
-  // useEffect(() => {
-  //   fetchCustomer({ page: 1, search: debouncedSearchTerm });
-  // }, [debouncedSearchTerm]);
-
 
   useEffect(() => {
     fetchCustomer({ page: state.currentPage });
-  }, [state.currentPage])
+  }, [])
 
-  const fetchCustomer = async ({ page = 1 }) => {
+  const fetchCustomer = async ({ page = 0 }) => {
     try {
-      const response = await getCustomer({ page, limit: 5 });
+      const response = await getCustomer({ page: page - 1 , size: 5 });
       if (response) {
+        const { pageNumber } = response.pageable;
         setState({
-          data: response,
-          currentPage: response.page,
-          totalPages: Math.ceil(response.total / response.limit),
+          data: response.content ? response.content : [],
+          currentPage: pageNumber + 1,
+          totalPages: response.totalPages ? response.totalPages : 1,
           loading: false,
         })
       }

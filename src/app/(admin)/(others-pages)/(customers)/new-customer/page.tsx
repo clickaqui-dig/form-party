@@ -7,14 +7,17 @@ import ComponentCard from "@/components/common/ComponentCard";
 import { validationSchema } from "@/components/form/customer/validation";
 
 const initialValues = {
-  name: "",
+  nome: "",
+  celular: "",
   email: "",
-  phone: "",
-  document: "",
+  dataCadastro: "",
+  documento: "",
   cep: "",
-  address: "",
-  number: "",
-  city: "",
+  endereco: "",
+  numero: "",
+  complemento: "",
+  bairro: "",
+  cidade: "",
   uf: "",
   state: ""
 };
@@ -25,7 +28,6 @@ export default function PageNewCustomer() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     console.log("customer ===>>", values)
-    
   }
   return (
     <div>
