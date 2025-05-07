@@ -1,7 +1,7 @@
 import { Customer } from "@/models/Customer";
 import api from '@/config/apiConfig';
 
-const URL = 'http://localhost:3001';
+const URL = 'http://localhost:8080';
 
 interface RequestCustomer {
     id: number,
@@ -10,7 +10,7 @@ interface RequestCustomer {
 
 export const putCustomer = async ({ id, body }: RequestCustomer): Promise<boolean> => {
     try {
-        await api.put(`${URL}/customers/${id}`, body);
+        await api.put(`${URL}/cliente/${id}`, body);
 
         return true;
     } catch (error) {

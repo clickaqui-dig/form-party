@@ -7,7 +7,7 @@ import { PaginationCustomer } from "@/components/tables/customer";
 import TableCustomer from "@/components/tables/customer/TableCustomer";
 import { Customer } from "@/models/Customer";
 import { getCustomer } from "@/services/customer/getCustomer";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface CustomerState {
   data: Array<Customer>;
@@ -25,36 +25,47 @@ export default function PageSearchCustomer() {
   });
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetchCustomer({ page: state.currentPage });
-  }, [])
+  const fetchCustomer = useCallback(
+    async (page = 0) => {
+      try {
+        const response = await getCustomer({
+          page: page - 1,
+          size: 5,
+          nome: searchTerm,
+        });
 
-  const fetchCustomer = async ({ page = 0 }) => {
-    try {
-      const response = await getCustomer({ page: page - 1 , size: 5 });
-      if (response) {
-        const { pageNumber } = response.pageable;
-        setState({
-          data: response.content ? response.content : [],
-          currentPage: pageNumber + 1,
-          totalPages: response.totalPages ? response.totalPages : 1,
-          loading: false,
-        })
+        if (response) {
+          const { pageNumber } = response.pageable;
+
+          setState((prev) => ({
+            ...prev,
+            data: response.content ?? [],
+            currentPage: pageNumber + 1,
+            totalPages: response.totalPages ?? 1,
+            loading: false,
+          }));
+        }
+      } catch (error) {
+        console.error(error);
       }
+    },
+    [searchTerm]
+  );
 
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  useEffect(() => {
+    fetchCustomer(state.currentPage);
+  }, [state.currentPage, fetchCustomer]);
 
   const handleChangePage = (page: number) => {
     if (page) {
-      fetchCustomer({ page });
+      fetchCustomer(page);
     }
   }
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setState(prevState => ({ ...prevState, currentPage: 1 }));
+    if (term.length > 3) {
+      setState(prevState => ({ ...prevState, currentPage: 1 }));
+    }
   };
 
   return (

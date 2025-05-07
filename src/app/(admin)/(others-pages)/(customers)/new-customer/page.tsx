@@ -2,11 +2,15 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 import FormCustomer from "@/components/form/customer";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
 import { validationSchema } from "@/components/form/customer/validation";
+import { postCustomer } from "@/services/customer/postCustomer";
+import { useRouter } from "next/navigation";
+import { Customer } from "@/models/Customer";
 
 const initialValues = {
+  id: 0,
   nome: "",
   celular: "",
   email: "",
@@ -19,15 +23,19 @@ const initialValues = {
   bairro: "",
   cidade: "",
   uf: "",
-  state: ""
+  state: true
 };
 
 export default function PageNewCustomer() {
+  const router = useRouter();
   const handleSubmit = async (
-    values: typeof initialValues,
-    formikHelpers: FormikHelpers<typeof initialValues>
+    values: typeof initialValues
   ) => {
-    console.log("customer ===>>", values)
+    const body = values as unknown as Customer;
+    const response = await postCustomer(body);
+    if (response === true) {
+      router.push('/search-customer')
+    }
   }
   return (
     <div>
@@ -36,7 +44,7 @@ export default function PageNewCustomer() {
         {({ handleSubmit, isValid, dirty }) => {
           return (
             <ComponentCard title="Formulário">
-              <FormCustomer/>
+              <FormCustomer />
               <button
                 onClick={() => handleSubmit()}
                 type="button"
@@ -47,9 +55,9 @@ export default function PageNewCustomer() {
               </button>
             </ComponentCard>
           )
-         }}
+        }}
       </Formik>
-     
+
     </div>
   );
 }

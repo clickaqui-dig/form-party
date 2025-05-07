@@ -7,6 +7,7 @@ const URL = 'http://localhost:8080';
 interface RequestCustomer {
     page: number,
     size: number,
+    nome: string,
 }
 
 export interface Sort {
@@ -34,12 +35,12 @@ interface ResponseCustomer {
 
 export const getCustomer = async(
     {
-    page, size
+    page, size, nome
 }: RequestCustomer
 ): Promise<ResponseCustomer
     | null> => {
     try {
-        const query = buildQueryParams({ page, size });
+        const query = buildQueryParams({ page, size, nome });
 
         const response = await api.get(`${URL}/cliente${query}`);
 
