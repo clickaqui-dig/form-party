@@ -14,6 +14,7 @@ interface LoginResponse {
 
 export const handleLogin = async (body: LoginRequest): Promise<LoginResponse| any> => {
     try {
+        console.log("login ===>>", body)
         const response = await api.post(`${URL}/login`, body);
 
         return response;

@@ -21,7 +21,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   }
 
   const handleSignin = () => {
-    Cookies.remove('token')
+    Cookies.remove('authToken')
   }
   return (
     <div className="relative">

@@ -4,32 +4,21 @@ import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { Formik, FormikHelpers } from "formik";
 import { FormContract } from "./form/formContract";
+import { postContract } from "@/services/contract/postContract";
 
 const initialValues = {
-  id: 0,
-  codigo: "",
-  bairro:"",
-  situacao: "",
+  cliente: 0,
   valorRecebido: 0,
   valorPendente: 0,
   valorTotal: 0,
-  cliente: "",
-  emailCliente: "",
-  celularCliente: "",
-  documento: "",
-  cep:"",
-  endereco:"",
-  numero:"",
-  cidade:"",
-  uf:"",
-  tiposDeContrato:"",
+  tipoDoContrato:"",
   dataHoraInicial:"",
   dataHoraFinal:"",
   duracao:0,
   quantidadeConvidados:0,
   observacoes:"",
   listaAniversariantes: [],
-  itemContrato:[],
+  itensContrato:[],
   payments:[],
   desconto: 0,
   acrescimo:0,
@@ -40,7 +29,13 @@ export default function FormElements() {
       values: typeof initialValues,
       formikHelpers: FormikHelpers<typeof initialValues>
     ) => {
-      console.log("new contract", values)
+      console.log("contrato campos ===>>", values)
+      try {
+        const response = await postContract(values);
+  
+      } catch (error) {
+        console.log(error)
+      }
       
     }
   return (

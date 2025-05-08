@@ -6,7 +6,8 @@ import Label from "../Label";
 import Select from "../Select";
 import { ChevronDownIcon } from "@/icons";
 import ContractModal from "../modals/ContractModal";
-import { useFormikContext } from "formik";
+import { Field, FieldProps, useFormikContext } from "formik";
+import Input from "../input/InputField";
 
 const typeDiscount = [
     { value: "fechado", label: "Fechado" },
@@ -63,7 +64,7 @@ export default function TabsComponent() {
             dataPagamentos: newItem.dataPagamentos,
             recebido: newItem.recebido,
             observacoes: newItem.observacoes
-            
+
         };
 
         setPaymentsItems(prevItems => [...prevItems, newEntry]);
@@ -201,7 +202,7 @@ export default function TabsComponent() {
                                 <Select
                                     options={typeDiscount}
                                     placeholder="Tipo"
-                                    onChange={(event)=>{
+                                    onChange={(event) => {
                                         setUseDiscount(event)
                                         setFieldValue("tipoPagamento", event)
                                     }}
@@ -217,26 +218,31 @@ export default function TabsComponent() {
                             {/* Campo Desconto */}
                             <div className="w-full md:w-1/3">
                                 <Label>Desconto {useDiscount === "fechado" ? "(R$)" : "(%)"}</Label>
-                                <div className="relative">
-                                    <input
-                                        type="number"
-                                        placeholder="Informe o desconto"
-                                        className="dark:text-white w-full px-3 py-2 border rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-
-                                    />
-                                </div>
+                                <Field id="desconto" name="desconto"
+                                    render={({ field }: FieldProps) => (
+                                        <Input
+                                            type="number"
+                                            onChange={(event) => {
+                                                setFieldValue("desconto", event.target.value)
+                                            }}
+                                        />
+                                    )}
+                                />
                             </div>
 
                             {/* Campo Acréscimo */}
                             <div className="w-full md:w-1/3">
                                 <Label>Acréscimo {useDiscount === "fechado" ? "(R$)" : "(%)"}</Label>
-                                <div className="relative">
-                                    <input
-                                        type="number"
-                                        placeholder="Informe o acréscimo"
-                                        className="dark:text-white w-full px-3 py-2 border rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-                                    />
-                                </div>
+                                <Field id="acrescimo" name="acrescimo"
+                                    render={({ field }: FieldProps) => (
+                                        <Input
+                                            type="number"
+                                            onChange={(event) => {
+                                                setFieldValue("acrescimo", event.target.value)
+                                            }}
+                                        />
+                                    )}
+                                />
                             </div>
 
                             {/* Valor Total */}
@@ -341,7 +347,7 @@ export default function TabsComponent() {
                         <ContractTab />
                     </div>
                 )}
-                <PaymentModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem}/>
+                <PaymentModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem} />
                 <ContractModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddItem={handleAddContractItem} />
             </div>
         </ComponentCard>
