@@ -49,6 +49,7 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Novo Tema", path: "/new-theme", pro: false },
       { name: "Novo Aniversariante", path: "/new-birthday-person", pro: false },
+      { name: "Novo Item Contrato", path: "/new-item-contract", pro: false },
     ]
   },
 ];
