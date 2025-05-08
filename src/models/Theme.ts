@@ -1,6 +1,5 @@
 export interface Theme {
-    id?: number;
-    descricao: string;
-    observacoes: string;
-
-  }
+  id?: number;
+  descricao: string;
+  observacoes: string;
+}

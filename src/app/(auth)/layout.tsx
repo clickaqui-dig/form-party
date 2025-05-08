@@ -17,7 +17,7 @@ export default function AuthLayout({
             <div className="relative items-center justify-center  flex z-1">
               {/* <!-- ===== Common Grid Shape Start ===== --> */}
               <div className="flex flex-col items-center max-w-xs">
-                <Link href="/" className="block mb-4">
+                <Link href="/calendar" className="block mb-4">
                   <Image
                     width={231}
                     height={48}

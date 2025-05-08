@@ -12,7 +12,7 @@ const initialValues = {
   dataNascimento: "",
   idade: 0,
   idadeNoEvento: 0,
-  temas:[]
+  tema:0
 };
 
 export default function PageNewBithdayPerson() {
@@ -22,7 +22,7 @@ export default function PageNewBithdayPerson() {
   ) => {
     try {
       console.log("theme ===>>", values)
-       await postBirthDayPerson(values)
+      await postBirthDayPerson(values)
     } catch (error) {
       
     }

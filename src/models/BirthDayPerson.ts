@@ -3,5 +3,5 @@ export interface BirthDayPerson {
     dataNascimento: string;
     idade: number;
     idadeNoEvento: number;
-    temas: number[];
+    tema: number;
   }

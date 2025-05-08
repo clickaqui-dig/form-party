@@ -1,100 +1,170 @@
 import { Modal } from "@/components/ui/modal";
-import React, { ChangeEvent, FC, FormEvent, useState } from "react";
+import React, { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
 import { BirthDayItem } from "../form-elements/BirthdayList";
-
-const options = [
-  { value: "Cartão", label: "Cartão" },
-  { value: "Boleto", label: "Boleto" },
-  { value: "Pix", label: "Pix" },
-];
+import debounce from "lodash.debounce";
+import { getBithDayPersonbyName } from "@/services/birthday-person/getBithdayPerson";
 
 interface BirthDayProps {
   isOpen: boolean;
   onClose: () => void;
   onAddItem: (item: BirthDayItem) => void;
 }
+
 const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   const [formData, setFormData] = useState<BirthDayItem>({
-    name: '',
-    date: '',
-    tema: '',
+    id:0,
+    nome: "",
+    dataNascimento: "",
+    tema: "",
+    idade: 0,
+    idadeNoEvento: 0 
   });
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
 
-  if (!isOpen) return null;
+  // Debounced fetch for autocomplete
+  const fetchPersons = debounce(async (query: string) => {
+    if (query.length >= 2) {
+      setIsLoading(true);
+      try {
+        const response = await getBithDayPersonbyName(query);
+        setSuggestions(response || []);
+      } catch (error) {
+        console.error("Erro ao buscar aniversariante:", error);
+        setSuggestions([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  }, 300);
 
-const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
+  useEffect(() => {
+    if (inputValue) fetchPersons(inputValue);
+    else setSuggestions([]);
+    if (!isOpen) setSuggestions([]);
+  }, [inputValue, isOpen]);
+
+  // Fecha sugestões ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target as Node)) {
+        setSuggestions([]);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isOpen]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      name: e.target.value,
     }));
+  };
+
+  const handleSuggestionClick = (person: any) => {
+    setInputValue(person.nome); // ajusta se o nome for outro campo
+    console.log("person===>>", person)
+    setFormData({
+      id: person.id,
+      nome: person.nome,   
+      dataNascimento: person.dataNascimento || "",  
+      tema: person.tema.descricao || "" ,
+      idade: person.idade || "",
+      idadeNoEvento: person.idadeNoEvento || ""
+    });
+    setSuggestions([]);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    if (name === "name") setInputValue(value);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onAddItem({
-      name: formData.name,
-      date: formData.date,
-      tema: formData.tema,
-    });
+    onAddItem(formData);
     setFormData({
-      name: '',
-      date: '',
-      tema: '',
+      id:0,
+      nome: "",
+      dataNascimento: "",
+      tema: "",
+      idade: 0,
+      idadeNoEvento: 0 
     });
+    setInputValue("");
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      className="max-w-[700px] p-6 lg:p-5"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} className="max-w-lg p-6">
       <div className="flex items-center justify-between px-4 py-2 border-b">
-        <Label className="text-2xl" >Adicionar Aniversariante</Label>
+        <Label className="text-2xl">Adicionar Aniversariante</Label>
       </div>
-
-      <form onSubmit={handleSubmit} className="p-4">
-        <div className="mb-4">
-          <Label>
-            Nome
-          </Label>
-
-          <Input type="text"
+      <form onSubmit={handleSubmit} className="relative p-4">
+        {/* Campo nome com autocomplete */}
+        <div className="mb-6 relative" ref={autocompleteRef}>
+          <Label>Nome</Label>
+          <Input
+            type="text"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Nome"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Digite para buscar aniversariante..."
+            className="w-full"
           />
+          {isLoading && (
+            <div className="absolute left-0 top-full bg-white border border-gray-200 w-full p-2 rounded-b shadow z-20">
+              <span className="text-gray-600 text-sm">Carregando...</span>
+            </div>
+          )}
+          {!!suggestions.length && (
+            <ul className="absolute left-0 top-full w-full bg-white border border-gray-200 rounded-b shadow max-h-48 overflow-y-auto z-20">
+              {suggestions.map((person) => (
+                <li
+                  key={person.id}
+                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-sm transition"
+                  onClick={() => handleSuggestionClick(person)}
+                >
+                  {person.nome}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div className="mb-4">
-          <Label>
-            Data de nascimento
-            {/* <span className="text-red-500">*</span> */}
-          </Label>
-
-          <Input type="date"
+          <Label>Data de nascimento</Label>
+          <Input
+            type="date"
             name="date"
-            value={formData.date}
+            value={formData.dataNascimento}
             onChange={handleChange}
             placeholder="Data de Nascimento"
           />
-
         </div>
 
         <div className="mb-4">
-          <Label>
-            Tema
-          </Label>
-
-          <Input type="text"
+          <Label>Tema</Label>
+          <Input
+            type="text"
             name="tema"
             value={formData.tema}
-            onChange={handleChange}
             placeholder="Tema"
           />
         </div>
@@ -118,5 +188,5 @@ const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       </form>
     </Modal>
   );
-}
+};
 export default BithdayModal;

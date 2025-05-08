@@ -6,9 +6,12 @@ import BithdayModal from "../modals/BirthdayModal";
 import { Contract } from "@/app/(admin)/(others-pages)/(contract)/search-contract/page";
 
 export interface BirthDayItem {
-  name: string,
-  date: string;
+  id: number;
+  nome: string,
+  dataNascimento: string;
   tema: string
+  idade: number;
+  idadeNoEvento:number;
 }
 
 const BirthdayList = () => {
@@ -18,24 +21,17 @@ const BirthdayList = () => {
   const { setFieldValue, values} = useFormikContext<Contract>();
 
   useEffect(() => {
-    console.log("teste BithdayList ===>>>", values.cliente)
-  }, [birthdays]);
-
-  useEffect(() => {
     setFieldValue("listaAniversariantes", birthdays)
   }, [birthdays]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {
-    if (newItem.name && newItem.date) {
-      const currentYear = new Date().getFullYear();
-      const birthYear = new Date(newItem.date).getFullYear();
-      const idade = currentYear - birthYear;
+    if (newItem.nome && newItem.nome) {
 
       const newEntry = {
         ...newItem,
-        id: Date.now(),
-        age: idade,
-        ageAtEvent: idade + 1,
+        id: newItem.id,
+        idade: newItem.idade,
+        idadeNoEvento: newItem.idadeNoEvento,
       }
       setBirthdays((prev) => [...prev, newEntry]);
 
@@ -127,16 +123,16 @@ const BirthdayList = () => {
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.name}
+                        {birthday.nome}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.date}
+                        {birthday.dataNascimento}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.age}
+                        {birthday.idade}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.ageAtEvent}
+                        {birthday.idadeNoEvento}
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">

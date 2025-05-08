@@ -9,9 +9,10 @@ import TabsComponent from "@/components/form/form-elements/TabsComponent";
 import { ErrorMessage, Field, useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 import { getCustomerByName } from "@/services/customer/getCustomerbyName";
+import { Contract } from "@/models/Contract";
 
 export const FormContract = () => {
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, values } = useFormikContext<Contract>();
   const [clientSuggestions, setClientSuggestions] = useState<any[]>([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -55,19 +56,10 @@ export const FormContract = () => {
     setQuery(client.nome);
   };
 
-  const options = [
-    { value: "sp", label: "SP" },
-    { value: "rj", label: "RJ" },
-    { value: "mg", label: "MG" },
-  ];
 
   const optionsContract = [
     { value: "aniversario", label: "Aniversário" },
-    { value: "casamento", label: "Casamento" },
     { value: "confraternizacao", label: "Confraternização" },
-    { value: "corporativo", label: "Corporativo" },
-    { value: "formatura", label: "Formatura" },
-    { value: "outros", label: "Outros" },
   ];
 
   const handleSelectChangeContract = (value: string) => {
@@ -89,15 +81,15 @@ export const FormContract = () => {
         </div>
         <div>
           <Label htmlFor="receiveValue">Valor Recebido</Label>
-          <Label>R$1000,00</Label>
+          <Label>R${values.valorRecebido}</Label>
         </div>
         <div>
           <Label htmlFor="pendingValue">Valor Pendente</Label>
-          <Label>R$500,00</Label>
+          <Label>R${values.valorPendente}</Label>
         </div>
         <div>
           <Label htmlFor="totalValue">Valor Total</Label>
-          <Label>R$1500,00</Label>
+          <Label>R${values.valorTotal}</Label>
         </div>
         <div>
           <button

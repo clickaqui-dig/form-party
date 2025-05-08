@@ -8,7 +8,7 @@ const URL = 'http://localhost:8080';
  * @returns Lista de temas correspondentes
  */
 export const getThemesByDescription = async (descricao: string) => {
-    try {
+    try {   
         const response = await api.get(`${URL}/tema/descricao/${descricao}`);
         return response.data.content; 
     } catch (error) {

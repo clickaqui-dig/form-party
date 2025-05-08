@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import { getThemesByDescription } from '@/services/theme/getTheme';
 
 export const FormBirthDayPerson = () => {
-    const { setFieldValue, setFieldError } = useFormikContext();
+    const { setFieldValue } = useFormikContext();
     const [themeSuggestions, setThemeSuggestions] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
@@ -82,11 +82,11 @@ export const FormBirthDayPerson = () => {
 
                 {/* Campo Tema com autocomplete */}
                 <div>
-                    <Label htmlFor="temas">Tema</Label>
+                    <Label htmlFor="tema">Tema</Label>
                     <div className="relative">
                         <Input
-                            id="temas"
-                            name="temas"
+                            id="tema"
+                            name="tema"
                             type="text"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
@@ -100,7 +100,7 @@ export const FormBirthDayPerson = () => {
                                         key={theme.id}
                                         className="p-2 hover:bg-gray-200 cursor-pointer"
                                         onClick={() => {
-                                            setFieldValue('temas', theme.id); // Captura o ID do Tema
+                                            setFieldValue('tema', theme.id); // Captura o ID do Tema
                                             setInputValue(theme.descricao); // Mostra o texto do tema
                                             setThemeSuggestions([]); // Limpa a lista após seleção
                                         }}

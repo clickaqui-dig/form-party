@@ -17,6 +17,7 @@ export default function PageNewTheme() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
+      console.log("values them ===>>", values)
       await postTheme(values)
     } catch (error) {
       
