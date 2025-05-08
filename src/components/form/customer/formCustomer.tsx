@@ -62,15 +62,18 @@ export const FormCustomer = () => {
             if (response === null || response.erro === 'true') {
                 throw new Error('CEP não encontrado na API.')
             }
-            setFieldValue("address", `${response.logradouro}`);
+            setFieldValue("endereco", `${response.logradouro}`);
             setFieldValue("uf", response.uf.toLowerCase());
-            console.log(response.uf.toLowerCase())
-            setFieldValue("city", response.localidade);
+            setFieldValue("cidade", response.localidade);
         } catch (error) {
             setFieldError("cep", error ? String(error) : "")
             console.log(error);
         }
     }
+
+    const handleSelectChange = (value: string) => {
+        setFieldValue("uf", value)
+    };
 
     return (
         <div className="space-y-6">
@@ -184,14 +187,14 @@ export const FormCustomer = () => {
                 <div>
                     <Label htmlFor="uf">UF</Label>
                     <Field id="uf" name="uf">
-                        {({ field, form }: FieldProps) => (
+                        {({ field }: FieldProps) => (
                             <Select
                                 {...field}
+                                name='uf'
                                 options={options}
                                 placeholder="Estado"
                                 className="dark:bg-dark-900"
-                                defaultValue={field.value}
-                                onChange={(value) => form.setFieldValue(field.name, value)}
+                                onChange={handleSelectChange}
                             />
                         )}
                     </Field>
