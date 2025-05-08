@@ -24,7 +24,7 @@ export default function PageNewItemContract() {
   }
   return (
     <div>
-      <PageBreadcrumb pageTitle="Novo Tema" />
+      <PageBreadcrumb pageTitle="Novo Item" />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} >
         {({ handleSubmit, isValid, dirty }) => {
           return (
