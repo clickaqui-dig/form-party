@@ -1,13 +1,8 @@
-import { useState } from "react";
-import dynamic from "next/dynamic";
 import Label from "../Label";
 
-// Importa dinamicamente o Editor para evitar erros de renderização no Next.js
-// const RichTextEditor = dynamic(() => import("@mantine/rte"), { ssr: false });
+import ContractEditor from "@/components/editor/ContractEditor";
 
 export default function ContractTab() {
-  const [contractContent, setContractContent] = useState(""); // Estado para conteúdo do contrato
-
   return (
     <div className="mt-4">
       {/* Data de Geração */}
@@ -51,21 +46,7 @@ export default function ContractTab() {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Contrato
         </label>
-        {/* <RichTextEditor
-          value={contractContent}
-          onChange={setContractContent}
-          placeholder="Escreva o contrato aqui..."
-          controls={[
-            ["bold", "italic", "underline", "strike"],
-            ["link", "blockquote", "codeBlock"],
-            ["unorderedList", "orderedList"],
-            ["alignLeft", "alignCenter", "alignRight"],
-            ["sup", "sub"],
-            ["table"],
-            ["undo", "redo"],
-          ]}
-          className="border rounded-md"
-        /> */}
+        <ContractEditor />
       </div>
     </div>
   );
