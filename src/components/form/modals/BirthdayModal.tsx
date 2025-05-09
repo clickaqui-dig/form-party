@@ -4,7 +4,7 @@ import Label from "../Label";
 import Input from "../input/InputField";
 import { BirthDayItem } from "../form-elements/BirthdayList";
 import debounce from "lodash.debounce";
-import { getBithDayPersonbyName } from "@/services/birthday-person/getBithdayPerson";
+import { getBirthDayPersonbyName } from "@/services/birthday-person/getBithdayPerson";
 
 interface BirthDayProps {
   isOpen: boolean;
@@ -31,7 +31,7 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     if (query.length >= 2) {
       setIsLoading(true);
       try {
-        const response = await getBithDayPersonbyName(query);
+        const response = await getBirthDayPersonbyName(query);
         setSuggestions(response || []);
       } catch (error) {
         console.error("Erro ao buscar aniversariante:", error);
@@ -72,8 +72,7 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   };
 
   const handleSuggestionClick = (person: any) => {
-    setInputValue(person.nome); // ajusta se o nome for outro campo
-    console.log("person===>>", person)
+    setInputValue(person.nome);
     setFormData({
       id: person.id,
       nome: person.nome,   

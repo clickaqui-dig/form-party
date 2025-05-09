@@ -7,7 +7,7 @@ const URL = 'http://localhost:8080';
  * @param nome Texto a ser pesquisado
  * @returns Lista de temas correspondentes
  */
-export const getBithDayPersonbyName = async (nome: string) => {
+export const getBirthDayPersonbyName = async (nome: string) => {
     try {   
         const response = await api.get(`${URL}/aniversariante/nome/${nome}`);
         return response.data.content; 

@@ -4,15 +4,15 @@ const URL = 'http://localhost:8080';
 
 /**
  * Busca temas por descrição no backend
- * @param nome Texto a ser pesquisado
+ * @param descricao Texto a ser pesquisado
  * @returns Lista de temas correspondentes
  */
-export const getBithDayPersonbyName = async (nome: string) => {
+export const getItemContract = async (descricao: string) => {
     try {   
-        const response = await api.get(`${URL}/aniversariante/nome/${nome}`);
+        const response = await api.get(`${URL}/item-contrato/descricao/${descricao}`);
         return response.data.content; 
     } catch (error) {
-        console.error('Erro ao buscar Aniversariante:', error);
+        console.error('Erro ao buscar Item:', error);
         throw error;
     }
 };

@@ -15,6 +15,7 @@ const typeDiscount = [
 ];
 
 interface ContractItem {
+    id: number;
     descricao: string;
     valor: number;
 }
@@ -36,6 +37,7 @@ export default function TabsComponent() {
     const [contractItems, setContractItems] = useState<ContractItem[]>([]);
     const [paymentsItems, setPaymentsItems] = useState<PaymentItem[]>([]);
     const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
+    const [selectedItemContract, setSelectedItemContract] = useState<any[]>([]);
     const { setFieldValue } = useFormikContext();
 
     useEffect(() => {
@@ -47,6 +49,7 @@ export default function TabsComponent() {
 
         const newEntry = {
             ...contractItems,
+            id: newItem.id,
             descricao: newItem.descricao,
             valor: newItem.valor,
         };
@@ -79,6 +82,14 @@ export default function TabsComponent() {
         );
     };
 
+    const handleSelectItemContract = (id: any) => {
+        setSelectedItemContract((prev) =>
+            prev.includes(id)
+                ? prev.filter((selectedId) => selectedId !== id)
+                : [...prev, id]
+        );
+    };
+
     const handleRemoveBirthday = () => {
         if (selectedPayments.length === 0) {
             alert("Selecione pelo menos um aniversariante para remover.");
@@ -89,6 +100,19 @@ export default function TabsComponent() {
             (payment) => !selectedPayments.includes(payment.id)
         );
         setPaymentsItems(updatedBirthdays);
+        setSelectedPayments([]);
+    };
+
+    const handleRemoveItemContract = () => {
+        if (selectedItemContract.length === 0) {
+            alert("Selecione pelo menos um item para remover.");
+            return;
+        }
+
+        const updatedItemContract = contractItems.filter(
+            (payment) => !selectedItemContract.includes(payment.id)
+        );
+        setContractItems(updatedItemContract);
         setSelectedPayments([]);
     };
 
@@ -109,7 +133,7 @@ export default function TabsComponent() {
                         ? "border-b-2 border-green-600 text-green-600 dark:text-green-400 font-semibold"
                         : " text-gray-600 hover:text-green-600 dark:text-gray-200"
                         }`}
-                    onClick={() => setActiveTab("pagamentos")}
+                    onClick={() => alert("Finalize o cadastro do contrato primeiro.")}
                 >
                     Pagamentos
                 </button>
@@ -139,7 +163,7 @@ export default function TabsComponent() {
                         </div>
                         <div className="mt-4">
                             <div className="flex justify-between items-center mb-2">
-                                <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                                <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onClick={handleRemoveItemContract}>
                                     Remover
                                 </button>
                                 <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onClick={() => setModalOpen(true)}>
@@ -149,6 +173,9 @@ export default function TabsComponent() {
                             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border rounded dark:border-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+                                            Sel
+                                        </th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                                             Descrição
                                         </th>
@@ -161,6 +188,13 @@ export default function TabsComponent() {
                                     {contractItems.length > 0 ? (
                                         contractItems.map((item, index) => (
                                             <tr key={index} className="bg-white dark:bg-gray-800">
+                                                <td className="px-6 py-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedItemContract.includes(item.id)}
+                                                        onChange={() => handleSelectItemContract(item.id)}
+                                                    />
+                                                </td>
                                                 <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80">
                                                     {item.descricao}
                                                 </td>
@@ -180,11 +214,8 @@ export default function TabsComponent() {
                                 </tbody>
                                 <tfoot className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                            Total dos itens
-                                        </td>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 text-right dark:text-white">
-                                            {contractItems.reduce((total, item) => total + item.valor, 0).toFixed(2)}
+                                        <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
+                                            Total: {contractItems.reduce((total, item) => total + Number(item.valor), 0).toFixed(2)}
                                         </td>
                                     </tr>
                                 </tfoot>
