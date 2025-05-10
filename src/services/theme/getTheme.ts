@@ -18,7 +18,6 @@ export const getThemesByDescription = async (
     const response = await api.get(`${URL}/tema`, {
       params: { descricao, page, size }
     });
-    // O DTO da resposta geralmente tem {content, totalElements, totalPages, number, size}
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar temas:', error);

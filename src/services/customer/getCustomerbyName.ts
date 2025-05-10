@@ -11,7 +11,7 @@ export const getCustomerByName = async (
     const response = await api.get(`${URL}/cliente`, {
       params: { nome, page, size }
     });
-    return response.data; // Deve retornar objeto Page (content, totalElements, last, etc.)
+    return response.data;
   } catch (error) {
     console.error("Erro ao buscar cliente:", error);
     throw error;

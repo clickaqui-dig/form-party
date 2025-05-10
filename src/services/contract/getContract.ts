@@ -6,7 +6,7 @@ const URL = 'http://localhost:8080';
 interface RequestContract {
     page: number,
     limit: number,
-    search?: string, // termo para nome do cliente
+    search?: string,
 }
 
 interface ResponseContract {
@@ -25,10 +25,10 @@ export const getContract = async(
 ): Promise<ResponseContract | null> => {
     try {
         const params: any = {
-            page: (page > 0 ? page - 1 : 0), // backend espera 0-based
+            page: (page > 0 ? page - 1 : 0), 
             size: limit,
         };
-        if (search) params.nome = search; // <== backend espera nome, não search!
+        if (search) params.nome = search; 
 
         const response = await api.get(`${URL}/contrato`, { params });
 
@@ -36,7 +36,7 @@ export const getContract = async(
         const backend = response.data;
         return {
             total: backend.totalElements,
-            page: backend.number + 1,         // converter para base-1 no front
+            page: backend.number + 1,         
             limit: backend.size,
             data: backend.content,
         };

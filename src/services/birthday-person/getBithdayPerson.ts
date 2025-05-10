@@ -11,7 +11,7 @@ export const getBirthDayPersonbyName = async (
     const response = await api.get(`${URL}/aniversariante`, {
       params: { nome, page, size }
     });
-    return response.data; // padrão Page: {content, totalElements, totalPages, number, last...}
+    return response.data;
   } catch (error) {
     console.error('Erro ao buscar Aniversariante:', error);
     throw error;

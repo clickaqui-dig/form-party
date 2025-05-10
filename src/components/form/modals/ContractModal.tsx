@@ -14,7 +14,7 @@ interface ContractModalProps {
 interface FormData {
   id: number;
   descricao: string;
-  valor: string; // Mantém string para edição, converte ao salvar
+  valor: string; 
 }
 
 const ContractModal: FC<ContractModalProps> = ({ isOpen, onClose, onAddItem }) => {

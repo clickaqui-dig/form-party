@@ -15,7 +15,6 @@ import Tooltip from "../form/Tooltip";
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import api from "@/config/apiConfig";
 
-// Mapeamento entre situacao e cores (customize conforme deseja)
 const situacaoToCor = {
   PENDENTE: "Danger",
   PAGO: "Success",
@@ -47,14 +46,11 @@ const Calendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
 
-  // Para recarregar paginação se quiser implementar "carregar mais"
   const fetchData = async (page: number = 0, size: number = 50) => {
     try {
       const res = await api.get(`http://localhost:8080/contrato/calendario?page=${page}&size=${size}`);
-      console.log("res ===>>>", res)
       if (res.status === 200) {
         const paginated = res.data;
-        // Aqui o que interessa é paginated.content
         const responseEvents: CalendarEvent[] = paginated.content.map((item: any) => ({
           id: item.id,
           title: item.nomeCliente,
@@ -66,7 +62,7 @@ const Calendar: React.FC = () => {
             valorTotal: item.valorTotal,
             valorRecebido: item.valorRecebido,
             valorPendente: item.valorPendente,
-            calendar: situacaoToCor[item.situacao?.toUpperCase()] || "Primary",
+            calendar: handleSituation(item),
           },
         }));
         setEvents(responseEvents);
@@ -77,6 +73,18 @@ const Calendar: React.FC = () => {
       console.error("Erro ao buscar dados:", error);
     }
   };
+
+  const handleSituation = (item : any) =>{
+    console.log("item ====>>", item)
+    if(item.valorTotal === item.valorRecebido){
+      
+      return "Success"
+    } else if (item.valorRecebido === 0 && item.valorPendente === 0) {
+      return "Primary"
+    } else{
+      return "Danger"
+    }
+  }
 
   useEffect(() => {
     fetchData(0);

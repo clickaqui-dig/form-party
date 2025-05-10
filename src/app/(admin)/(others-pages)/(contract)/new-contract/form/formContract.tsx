@@ -9,6 +9,7 @@ import TabsComponent from "@/components/form/form-elements/TabsComponent";
 import { ErrorMessage, Field, useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 import { getCustomerByName } from "@/services/customer/getCustomerbyName";
+import { getContractByDate } from "@/services/contract/getContractByDate"; // ADICIONADO
 import { Contract } from "@/models/Contract";
 
 function calcularDuracaoHoras(inicio: string, fim: string): string {
@@ -32,6 +33,9 @@ export const FormContract = () => {
   const [hasMore, setHasMore] = useState(false);
   const [duracaoHoras, setDuracaoHoras] = useState('');
 
+  // novo: para avisar conflito
+  const [conflictInfo, setConflictInfo] = useState<{ exists: boolean, contract?: any }>({ exists: false });
+
   const pageSize = 10;
   const fetchIdRef = useRef(0);
 
@@ -47,7 +51,7 @@ export const FormContract = () => {
     const currentFetchId = ++fetchIdRef.current;
     try {
       const response = await getCustomerByName(search, pageNum, pageSize);
-      if (fetchIdRef.current !== currentFetchId) return; // Evita resposta desatualizada
+      if (fetchIdRef.current !== currentFetchId) return;
       if (reset) {
         setClientSuggestions(response.content ?? []);
       } else {
@@ -63,7 +67,6 @@ export const FormContract = () => {
     }
   }, 500);
 
-  // Atualiza sugestões ao digitar
   useEffect(() => {
     if (query.length >= 2) {
       setPage(0);
@@ -76,7 +79,6 @@ export const FormContract = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  // Carregar mais clientes (paginado)
   const handleLoadMore = () => {
     fetchClients(query, page, false);
   };
@@ -86,7 +88,7 @@ export const FormContract = () => {
     const dur = calcularDuracaoHoras(values.dataHoraInicial, values.dataHoraFinal);
     setDuracaoHoras(dur);
     setFieldValue("duracao", dur);
-  }, [values.dataHoraInicial, values.dataHoraFinal]);
+  }, [values.dataHoraInicial, values.dataHoraFinal, setFieldValue]);
 
   const handleClientSelect = (client: any) => {
     setFieldValue("cliente", client.id);
@@ -114,8 +116,44 @@ export const FormContract = () => {
     console.log("Selected value:", value);
   };
 
+  // CHECAGEM DE CONFLITO DE DATA/HORA INICIO
+  useEffect(() => {
+    if (!values.dataHoraInicial) {
+      setConflictInfo({ exists: false });
+      return;
+    }
+    let cancelled = false;
+
+    // Debounce pode ser adicionado se quiser evitar requisições a cada digito
+    const debouncedCheck = setTimeout(async () => {
+      const result = await getContractByDate(values.dataHoraInicial);
+      if (!cancelled) {
+        if (result && result.length > 0) {
+          setConflictInfo({ exists: true, contract: result[0] });
+        } else {
+          setConflictInfo({ exists: false });
+        }
+      }
+    }, 400);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(debouncedCheck);
+    };
+  }, [values.dataHoraFinal]);
+
   return (
     <div className="space-y-6">
+      {/* AVISO DE CONFLITO DE DATA */}
+      {conflictInfo.exists && (
+        <div className="bg-red-100 rounded p-2 mb-2 border border-red-300 text-red-700 text-sm">
+          Já existe um contrato cadastrado para o mesmo horário/dia:
+          <div className="mt-1 text-xs">
+            ID: {conflictInfo.contract.id} | Início: {conflictInfo.contract.dataHoraInicial}
+          </div>
+        </div>
+      )}
+
       {/* Primeira linha */}
       <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
         <div>
@@ -168,7 +206,6 @@ export const FormContract = () => {
                 value={query}
                 placeholder="Digite para buscar clientes..."
                 onChange={(e) => setQuery(e.target.value)}
-                // autoComplete="off"
               />
             )}
           </Field>
@@ -290,7 +327,7 @@ export const FormContract = () => {
                   name="dataHoraInicial"
                   value={field.value ?? ""}
                   onChange={(event) => {
-                    setFieldValue("dataHoraInicial", event.target.value)
+                    setFieldValue("dataHoraInicial", event.target.value);
                   }}
                 />
               )}

@@ -7,7 +7,6 @@ interface RequestContract {
     id: number,
 }
 
-
 export const getContractById = async ({ id }: RequestContract): Promise<Contract | null> => {
     try {
         const response = await axios.get(`${URL}/contracts/${id}`);
