@@ -8,8 +8,9 @@ export const postCustomer = async (body: Customer): Promise<boolean> => {
         await api.post(`${URL}/cliente`, body);
 
         return true;
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error ao criar Cliente: ", error);
+        alert(`${error.response.data}`)
         return false;
     }
 } 

@@ -12,42 +12,63 @@ interface BirthDayProps {
   onAddItem: (item: BirthDayItem) => void;
 }
 
-const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
+const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   const [formData, setFormData] = useState<BirthDayItem>({
-    id:0,
+    id: 0,
     nome: "",
     dataNascimento: "",
     tema: "",
     idade: 0,
-    idadeNoEvento: 0 
+    idadeNoEvento: 0
   });
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+  const pageSize = 10;
+  const fetchIdRef = useRef(0);
   const autocompleteRef = useRef<HTMLDivElement>(null);
 
-  // Debounced fetch for autocomplete
-  const fetchPersons = debounce(async (query: string) => {
-    if (query.length >= 2) {
-      setIsLoading(true);
-      try {
-        const response = await getBirthDayPersonbyName(query);
-        setSuggestions(response || []);
-      } catch (error) {
-        console.error("Erro ao buscar aniversariante:", error);
-        setSuggestions([]);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
+  // Debounced fetch for autocomplete paginado
+  const fetchPersons = debounce(async (query: string, pageNum: number = 0, reset: boolean = true) => {
+    if (query.length < 2) {
       setSuggestions([]);
+      setHasMore(false);
+      setPage(0);
+      return;
+    }
+    setIsLoading(true);
+    const currentFetchId = ++fetchIdRef.current;
+    try {
+      const response = await getBirthDayPersonbyName(query, pageNum, pageSize);
+      if (fetchIdRef.current !== currentFetchId) return; // descarta respostas antigas
+      if (response && response.content) {
+        if (reset) {
+          setSuggestions(response.content);
+        } else {
+          setSuggestions(prev => [...prev, ...response.content]);
+        }
+        setHasMore(!response.last);
+        setPage(response.number + 1);
+      } else {
+        setSuggestions([]);
+        setHasMore(false);
+      }
+    } catch (error) {
+      setSuggestions([]);
+      setHasMore(false);
+    } finally {
+      setIsLoading(false);
     }
   }, 300);
 
+  // Busca automática ao digitar
   useEffect(() => {
-    if (inputValue) fetchPersons(inputValue);
+    if (inputValue) fetchPersons(inputValue, 0, true);
     else setSuggestions([]);
     if (!isOpen) setSuggestions([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue, isOpen]);
 
   // Fecha sugestões ao clicar fora
@@ -67,21 +88,24 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     setInputValue(e.target.value);
     setFormData((prev) => ({
       ...prev,
-      name: e.target.value,
+      nome: e.target.value,
     }));
+    setPage(0);
   };
 
   const handleSuggestionClick = (person: any) => {
     setInputValue(person.nome);
+    console.log("person click ===>>", person)
     setFormData({
       id: person.id,
-      nome: person.nome,   
-      dataNascimento: person.dataNascimento || "",  
-      tema: person.tema.descricao || "" ,
-      idade: person.idade || "",
-      idadeNoEvento: person.idadeNoEvento || ""
+      nome: person.nome,
+      dataNascimento: person.dataNascimento || "",
+      tema: person.tema?.descricao || "",
+      idade: person.idade || 0,
+      idadeNoEvento: person.idadeNoEvento || 0
     });
     setSuggestions([]);
+    setHasMore(false);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -90,21 +114,27 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
       ...prev,
       [name]: value,
     }));
-    if (name === "name") setInputValue(value);
+    if (name === "nome") setInputValue(value);
+  };
+
+  const handleLoadMore = () => {
+    fetchPersons(inputValue, page, false);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onAddItem(formData);
     setFormData({
-      id:0,
+      id: 0,
       nome: "",
       dataNascimento: "",
       tema: "",
       idade: 0,
-      idadeNoEvento: 0 
+      idadeNoEvento: 0
     });
     setInputValue("");
+    setPage(0);
+    setSuggestions([]);
     onClose();
   };
 
@@ -121,7 +151,7 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           <Label>Nome</Label>
           <Input
             type="text"
-            name="name"
+            name="nome"
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Digite para buscar aniversariante..."
@@ -143,6 +173,14 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
                   {person.nome}
                 </li>
               ))}
+              {hasMore && (
+                <li
+                  className="py-2 text-center bg-gray-100 text-sm cursor-pointer hover:bg-gray-200"
+                  onClick={handleLoadMore}
+                >
+                  Carregar mais...
+                </li>
+              )}
             </ul>
           )}
         </div>
@@ -151,7 +189,7 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           <Label>Data de nascimento</Label>
           <Input
             type="date"
-            name="date"
+            name="dataNascimento"
             value={formData.dataNascimento}
             onChange={handleChange}
             placeholder="Data de Nascimento"
@@ -179,7 +217,6 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           <button
             type="submit"
             className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
-            onClick={() => { onAddItem }}
           >
             Adicionar
           </button>
@@ -188,4 +225,4 @@ const BithdayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     </Modal>
   );
 };
-export default BithdayModal;
+export default BirthDayModal;

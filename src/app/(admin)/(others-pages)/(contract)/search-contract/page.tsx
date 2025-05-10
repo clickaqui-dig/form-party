@@ -3,56 +3,29 @@
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import SearchInput from "@/components/input/SearchInput";
-import { PaginationContract, TableContract } from "@/components/tables/contract";
+import TableContract from "@/components/tables/contract/TableContract";
+import PaginationContract from "@/components/tables/contract/PaginationContract";
 import { getContract } from "@/services/contract/getContract";
 import React, { useEffect, useState } from "react";
 
-interface guests {
-  id: number,
-  titulo: string,
-  data: string,
-}
-
-interface BirthdayList{
-  nome:string,
-  dataNas: string;
-  tema:string;
-  foto?: any;
-}
-
-interface ItensContract{
-  desc:string;
-  valor:number;
-}
-
-interface ItensPayments{
-  valor:number;
-  meioPagamento :string;
-  dataPagamento : string;
-  recebido : boolean;
-  obs?: string;
-}
-
 export interface Contract {
   id: number,
-  codigoCliente: number,
-  situacao: string,
+  cliente: number,
   valorRecebido: number,
   valorPendente: number,
   valorTotal: number,
-  tiposDeContrato: string,
+  tipoDoContrato: string,
   dataHoraInicial: string,
   dataHoraFinal: string,
   duracao: number,
-  convidados?: guests[],
   quantidadeConvidados?: number;
   observacoes?: string;
-  listaAniversariantes?: BirthdayList[];
-  itemContrato?: ItensContract[];
+  listaAniversariantes?: any[];
+  itensContrato?: any[];
   tipoPagemento?: string;
   desconto?: number;
   acrescimo?:number
-  payments?: ItensPayments[];
+  pagamentos?: any[];
 }
 
 interface ContractState {
@@ -76,23 +49,27 @@ export default function BasicTables() {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
+  // Pesquisa ou busca inicial sempre que termo ou página muda
   useEffect(() => {
-    fetchContracts({ page: 1, search: debouncedSearchTerm });
+    fetchContracts(1, debouncedSearchTerm); // sempre página 1 na busca
+    setState(prev => ({ ...prev, currentPage: 1 }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
+  // Mudança de página
+  const handleChangePage = (page: number) => {
+    if (page) fetchContracts(page, debouncedSearchTerm);
+  };
 
-  useEffect(() => {
-    fetchContracts({ page: state.currentPage });
-  }, []);
-
-  const fetchContracts = async ({ page = 1, search = "" }) => {
-    setState(prevState => ({ ...prevState, loading: true }));
+  // Aciona a busca de fato
+  const fetchContracts = async (page: number = 1, nome: string = "") => {
+    setState(prev => ({ ...prev, loading: true }));
     try {
-      const response = await getContract({ page, limit: 5, search });
+      const response = await getContract({ page, limit: 5, search: nome });
+      console.log("response fetchContract ===>>>", response)
       if (response) {
         setState({
           data: response.data,
@@ -102,14 +79,7 @@ export default function BasicTables() {
         });
       }
     } catch (error) {
-      console.log(error);
-      setState(prevState => ({ ...prevState, loading: false }));
-    }
-  };
-
-  const handleChangePage = (page: number) => {
-    if (page) {
-      fetchContracts({ page, search: debouncedSearchTerm });
+      setState(prev => ({ ...prev, loading: false }));
     }
   };
 
@@ -132,12 +102,13 @@ export default function BasicTables() {
           ) : (
             <>
               <TableContract contract={state.data} />
-              <PaginationContract
-                currentPage={state.currentPage}
-                totalPages={state.totalPages}
-                onPageChange={handleChangePage}
-              />
-
+              <div className="mt-4 flex justify-center">
+                <PaginationContract
+                  currentPage={state.currentPage}
+                  totalPages={state.totalPages}
+                  onPageChange={handleChangePage}
+                />
+              </div>
             </>
           )}
         </ComponentCard>

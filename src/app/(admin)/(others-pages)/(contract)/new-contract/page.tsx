@@ -2,11 +2,13 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
-import { Formik, FormikHelpers } from "formik";
+import { Formik, FormikHelpers, useFormikContext } from "formik";
 import { FormContract } from "./form/formContract";
 import { postContract } from "@/services/contract/postContract";
+import { useRouter } from "next/navigation";
 
 const initialValues = {
+  idContrato: 0,
   cliente: 0,
   valorRecebido: 0,
   valorPendente: 0,
@@ -25,13 +27,32 @@ const initialValues = {
 };
 
 export default function FormElements() {
+    const router = useRouter();
     const handleSubmit = async (
       values: typeof initialValues,
       formikHelpers: FormikHelpers<typeof initialValues>
     ) => {
-      console.log("contrato campos ===>>", values)
       try {
-        const response = await postContract(values);
+        const response = await postContract({
+          cliente: values.cliente,
+          valorRecebido: values.valorRecebido,
+          valorPendente:values.valorPendente,
+          valorTotal:values.valorTotal,
+          tipoDoContrato:values.tipoDoContrato,
+          dataHoraInicial:values.dataHoraInicial,
+          dataHoraFinal:values.dataHoraFinal,
+          duracao:values.duracao,
+          quantidadeConvidados:values.quantidadeConvidados,
+          observacoes:values.observacoes,
+          desconto:0,
+          acrescimo:0,
+          itensContrato: values.itensContrato,
+          listaAniversariantes:values.listaAniversariantes
+        });
+
+        if (response) {
+          router.push('/search-contract')
+        }
   
       } catch (error) {
         console.log(error)

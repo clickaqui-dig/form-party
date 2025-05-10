@@ -1,35 +1,45 @@
 import { Contract } from "@/app/(admin)/(others-pages)/(contract)/search-contract/page";
-import { buildQueryParams } from "@/utils/builders/buildQueryParams";
-import axios from "axios";
+import api from "@/config/apiConfig";
 
-const URL = 'http://localhost:3001';
+const URL = 'http://localhost:8080';
 
 interface RequestContract {
     page: number,
     limit: number,
-    search?: string,
+    search?: string, // termo para nome do cliente
 }
 
 interface ResponseContract {
     total: number,
     page: number,
     limit: number,
-    data: Array<Contract>,
+    data: Array<any>,
 }
 
 export const getContract = async(
     {
-    page, 
-    limit,
-    search = ""
-}: RequestContract
+        page,
+        limit,
+        search = ""
+    }: RequestContract
 ): Promise<ResponseContract | null> => {
     try {
-        const query = buildQueryParams({ page, limit, search });
+        const params: any = {
+            page: (page > 0 ? page - 1 : 0), // backend espera 0-based
+            size: limit,
+        };
+        if (search) params.nome = search; // <== backend espera nome, não search!
 
-        const response = await axios.get(`${URL}/contracts${query}`);
+        const response = await api.get(`${URL}/contrato`, { params });
 
-        return response.data;
+        // Adaptar Page Spring para o front
+        const backend = response.data;
+        return {
+            total: backend.totalElements,
+            page: backend.number + 1,         // converter para base-1 no front
+            limit: backend.size,
+            data: backend.content,
+        };
     } catch (error) {
         console.log("Error ao buscar contratos: ", error);
         return null;

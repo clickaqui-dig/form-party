@@ -20,6 +20,11 @@ interface ContractItem {
     valor: number;
 }
 
+interface TypeSelectItemContract {
+    id: number;
+    index: number;
+}
+
 export interface PaymentItem {
     id: number;
     valor: string;
@@ -37,18 +42,17 @@ export default function TabsComponent() {
     const [contractItems, setContractItems] = useState<ContractItem[]>([]);
     const [paymentsItems, setPaymentsItems] = useState<PaymentItem[]>([]);
     const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
-    const [selectedItemContract, setSelectedItemContract] = useState<any[]>([]);
+    const [selectedItemContract, setSelectedItemContract] = useState<TypeSelectItemContract[]>([]);
     const { setFieldValue } = useFormikContext();
 
     useEffect(() => {
         setFieldValue("payments", paymentsItems)
-        setFieldValue("itemContrato", contractItems)
+        setFieldValue("itensContrato", contractItems.map(item => item.id))
     }, [paymentsItems, contractItems]);
 
     const handleAddContractItem = (newItem: ContractItem) => {
 
         const newEntry = {
-            ...contractItems,
             id: newItem.id,
             descricao: newItem.descricao,
             valor: newItem.valor,
@@ -74,7 +78,7 @@ export default function TabsComponent() {
         setModalPaymentOpen(false);
     }
 
-    const handleSelectPayments = (id: any) => {
+    const handleSelectPayments = (id: number) => {
         setSelectedPayments((prev) =>
             prev.includes(id)
                 ? prev.filter((selectedId) => selectedId !== id)
@@ -82,13 +86,19 @@ export default function TabsComponent() {
         );
     };
 
-    const handleSelectItemContract = (id: any) => {
-        setSelectedItemContract((prev) =>
-            prev.includes(id)
-                ? prev.filter((selectedId) => selectedId !== id)
-                : [...prev, id]
-        );
+    const handleSelectItemContract = (id: number, index: number) => {        
+        if(!handleFindItem(index)){
+            setSelectedItemContract((prev) => [...prev,{id,index}]);
+        } else{
+            setSelectedItemContract((prev) => prev.filter((selectedId) => selectedId.index !== index))
+        }
     };
+
+    const handleFindItem = (index: number) =>{
+        const existItem = selectedItemContract.find((item)=>item.index === index)
+
+        return existItem ? true : false;
+    }
 
     const handleRemoveBirthday = () => {
         if (selectedPayments.length === 0) {
@@ -108,10 +118,13 @@ export default function TabsComponent() {
             alert("Selecione pelo menos um item para remover.");
             return;
         }
+        
+        const selected = selectedItemContract.map((item)=> item.index)
 
         const updatedItemContract = contractItems.filter(
-            (payment) => !selectedItemContract.includes(payment.id)
+            (item,index) => !selected.includes(index)
         );
+
         setContractItems(updatedItemContract);
         setSelectedPayments([]);
     };
@@ -191,8 +204,8 @@ export default function TabsComponent() {
                                                 <td className="px-6 py-3">
                                                     <input
                                                         type="checkbox"
-                                                        checked={selectedItemContract.includes(item.id)}
-                                                        onChange={() => handleSelectItemContract(item.id)}
+                                                        checked={handleFindItem(index)}
+                                                        onChange={() => handleSelectItemContract(item.id,index)}
                                                     />
                                                 </td>
                                                 <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80">

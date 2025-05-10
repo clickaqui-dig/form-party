@@ -18,10 +18,10 @@ const BirthdayList = () => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
-  const { setFieldValue, values} = useFormikContext<Contract>();
+  const { setFieldValue, values} = useFormikContext<any>();
 
   useEffect(() => {
-    setFieldValue("listaAniversariantes", birthdays)
+    setFieldValue("listaAniversariantes", birthdays.map(item => item.id))
   }, [birthdays]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {

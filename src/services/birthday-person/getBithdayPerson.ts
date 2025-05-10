@@ -2,17 +2,18 @@ import api from '@/config/apiConfig';
 
 const URL = 'http://localhost:8080';
 
-/**
- * Busca temas por descrição no backend
- * @param nome Texto a ser pesquisado
- * @returns Lista de temas correspondentes
- */
-export const getBirthDayPersonbyName = async (nome: string) => {
-    try {   
-        const response = await api.get(`${URL}/aniversariante/nome/${nome}`);
-        return response.data.content; 
-    } catch (error) {
-        console.error('Erro ao buscar Aniversariante:', error);
-        throw error;
-    }
+export const getBirthDayPersonbyName = async (
+  nome: string,
+  page: number = 0,
+  size: number = 10
+) => {
+  try {
+    const response = await api.get(`${URL}/aniversariante`, {
+      params: { nome, page, size }
+    });
+    return response.data; // padrão Page: {content, totalElements, totalPages, number, last...}
+  } catch (error) {
+    console.error('Erro ao buscar Aniversariante:', error);
+    throw error;
+  }
 };

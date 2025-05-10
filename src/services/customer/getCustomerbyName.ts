@@ -2,10 +2,16 @@ import api from "@/config/apiConfig";
 
 const URL = 'http://localhost:8080';
 
-export const getCustomerByName = async ({ nome }: { nome: string }) => {
+export const getCustomerByName = async (
+  nome: string,
+  page: number = 0,
+  size: number = 10
+) => {
   try {
-    const response = await api.get(`${URL}/cliente/nome/${nome}`);
-    return response.data; // Supondo que o backend retorna os dados no padrão `Page`
+    const response = await api.get(`${URL}/cliente`, {
+      params: { nome, page, size }
+    });
+    return response.data; // Deve retornar objeto Page (content, totalElements, last, etc.)
   } catch (error) {
     console.error("Erro ao buscar cliente:", error);
     throw error;
