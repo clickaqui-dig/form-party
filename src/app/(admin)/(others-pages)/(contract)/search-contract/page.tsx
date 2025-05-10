@@ -18,6 +18,7 @@ export default function BasicTables() {
       <div className="space-y-6">
         <ComponentCard title="Basic Table 1">
           <BasicTableOne />
+          <></>
         </ComponentCard>
       </div>
     </div>
