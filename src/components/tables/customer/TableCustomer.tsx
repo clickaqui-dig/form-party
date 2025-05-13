@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import Link from "next/link";
 import { maskCNPJ, maskCPF, maskPhone } from "@/utils/masks";
 
 
-interface TableCustomerProps{
+interface TableCustomerProps {
   customers: Array<Customer>
 }
 
@@ -85,11 +85,11 @@ export default function TableCustomer({ customers }: TableCustomerProps) {
                     {customer.email}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {customer.documento.length == 11 ? maskCPF(customer.documento) : maskCNPJ(customer.documento) }
+                    {customer.documento.replace(/[.\-/]/g, "").length == 11 ? maskCPF(customer.documento) : maskCNPJ(customer.documento) }
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-40 flex justify-stretch gap-4">
                     <Link href={`/edit-customer/${customer.id}`} >
-                    <PencilIcon className="fill-gray-500 dark:fill-gray-400 hover:text-violet-600 text-[20px]" />
+                      <PencilIcon className="fill-gray-500 dark:fill-gray-400 hover:text-violet-600 text-[20px]" />
                     </Link>
                   </TableCell>
                 </TableRow>

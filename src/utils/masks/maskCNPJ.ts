@@ -1,5 +1,6 @@
 export const maskCNPJ = (value: string) => {
   return value
+    .replace(/[.\-/]/g, "")
     .replace(/\D/g, "")
     .slice(0, 14)
     .replace(/(\d{2})(\d)/, "$1.$2")
