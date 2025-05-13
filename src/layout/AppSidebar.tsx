@@ -24,21 +24,28 @@ const navItems: NavItem[] = [
   {
     icon: <CalenderIcon />,
     name: "Calendar",
-    path: "/",
+    path: "/calendar",
   },
   {
     icon: <UserCircleIcon />,
     name: "Clientes",
-    path: "/customers",
+    subItems: [
+      { name: "Novo Cliente", path: "/new-customer", pro: false },
+      { name: "Pesquisar Cliente", path: "/search-customer", pro: false }
+    ]
   },
   {
     icon: <DocsIcon />,
     name: "Contratos",
     subItems: [
       { name: "Novo Contrato", path: "/new-contract", pro: false },
-      { name: "Pesquisar contrato", path: "/search-contract", pro: false }
+      { name: "Pesquisar contrato", path: "/search-contract", pro: false },
+      { name: "Novo Tema", path: "/new-theme", pro: false },
+      { name: "Novo Aniversariante", path: "/new-birthday-person", pro: false },
+      { name: "Novo Item Contrato", path: "/new-item-contract", pro: false },
     ]
   },
+
 ];
 
 const AppSidebar: React.FC = () => {
@@ -255,27 +262,27 @@ const AppSidebar: React.FC = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link href="/">
+        <Link href="/calendar">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/images/logo/logo-horizontal.png"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={350}
+                height={80}
               />
               <Image
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/logo-horizontal.png"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={350}
+                height={80}
               />
             </>
           ) : (
             <Image
-              src="/images/logo/logo-icon.svg"
+              src="/images/logo/logo-horizontal.png"
               alt="Logo"
               width={32}
               height={32}
