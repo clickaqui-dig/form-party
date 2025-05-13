@@ -4,9 +4,8 @@ import { Contract } from '@/models/Contract';
 const URL = 'http://localhost:8080';
 
 export const postContract = async (body: Contract): Promise<any> => {
-        try {
-         console.log("postContract ===>>",body)   
-        
+    try {
+
         const teste = await api.post(`${URL}/contrato`, body);
 
         return teste;

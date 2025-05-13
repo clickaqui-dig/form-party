@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import { useFormikContext } from "formik";
 import BithdayModal from "../modals/BirthdayModal";
@@ -14,11 +14,19 @@ export interface BirthDayItem {
   idadeNoEvento:number;
 }
 
-const BirthdayList = () => {
+interface Props {
+  birthdayList : any[]
+}
+
+const BirthdayList: FC<Props> =({birthdayList}) => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
   const { setFieldValue, values} = useFormikContext<any>();
+
+  // useEffect(() => {
+  //   setFieldValue("birthdayList componente ====>>>", birthdayList)
+  // },[birthdayList]);
 
   useEffect(() => {
     setFieldValue("listaAniversariantes", birthdays.map(item => item.id))
@@ -112,7 +120,7 @@ const BirthdayList = () => {
             </thead>
             <tbody>
               {birthdays.length > 0 ? (
-                birthdays
+                birthdayList.length !==0 ? birthdayList:  birthdays
                   .map((birthday) => (
                     <tr key={birthday.id} className="bg-white dark:bg-gray-800">
                       <td className="px-10 py-3">

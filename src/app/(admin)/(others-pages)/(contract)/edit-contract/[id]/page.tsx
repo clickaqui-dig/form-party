@@ -1,50 +1,45 @@
 "use client"
-
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { validationSchema } from "@/components/form/customer/validation";
 import { Formik, FormikHelpers } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Contract } from "../../search-contract/page";
 import FormContract from "../../new-contract/form";
 import { getContractById } from "@/services/contract/getContractById";
+import { FormContractEdit } from "./form/formContractEdit";
 
 
 export default function PageEditCustomer() {
     const params = useParams();
     const id = params.id;
-    const [initialValues, setInitialValues] = useState<Contract>({
-        id: 0,
-        codigo: "",
-        complemento:"",
-        bairro:"",
+    const [initialValues, setInitialValues] = useState<any>({
+        idForm: 0,
         situacao: "",
+        nomeCliente: "",
+        celularCliente: "",
+        emailCliente: "",
+        documento: "",
+        cep: "",
+        endereco: "",
+        numero: "",
+        cidade: "",
+        uf: "",
+        status: false,
         valorRecebido: 0,
         valorPendente: 0,
         valorTotal: 0,
-        cliente: "",
-        emailCliente: "",
-        celularCliente: "",
-        documento: "",
-        cep:"",
-        endereco:"",
-        numero:"",
-        cidade:"",
-        uf:"",
-        tiposDeContrato:"",
-        dataHoraInicial:"",
-        dataHoraFinal:"",
-        duracao:0,
-        quantidadeConvidados:0, 
-        observacoes:"",
+        tipoDoContrato: "",
+        dataHoraInicial: "",
+        dataHoraFinal: "",
+        duracao: 0,
+        quantidadeConvidados: 0,
+        observacoes: "",
         listaAniversariantes: [],
-        itemContrato:[],
-        payments:[],
-        tipoPagemento: "",
+        itensContrato: [],
+        tipoPagemento: [],
         desconto: 0,
-        acrescimo:0,
-        convidados:[],
+        acrescimo: 0,
     });
 
     useEffect(() => {
@@ -54,24 +49,32 @@ export default function PageEditCustomer() {
 
     }, [id]);
 
-      const fetchCustomer = async (id: number ) => {
+    const fetchCustomer = async (id: number) => {
         try {
             const response = await getContractById({ id });
-
+            console.log("response ===>>>", response)
             if (response) {
                 setInitialValues({
                     ...response,
-                    listaAniversariantes:[{
-                        nome:"teste", 
-                        dataNas:"teste",
-                        tema:"tema"
-                    }]
+                    idForm: response.id,
+                    nomeCliente: response.cliente.nome,
+                    emailCliente: response.cliente.email,
+                    documento: response.cliente.documento,
+                    cep: response.cliente.cep,
+                    endereco: response.cliente.endereco,
+                    numero: response.cliente.numero,
+                    cidade: response.cliente.cidade,
+                    celularCliente: response.cliente.celular,
+                    uf: response.cliente.uf,
+                    tipoDoContrato:response.tipoDoContrato,
+                    listaAniversariantes: response.listaAniversariantes,
+                    itensContrato: response.itensContrato,
                 })
             }
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      }
+    }
 
     const handleSubmit = async (
         values: typeof initialValues,
@@ -87,8 +90,8 @@ export default function PageEditCustomer() {
             <Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
                 {({ handleSubmit, isValid, dirty }) => {
                     return (
-                        <ComponentCard title="Formulário">
-                            <FormContract />
+                        <ComponentCard title="Edição Contrato">
+                            <FormContractEdit />
                             <button
                                 onClick={() => handleSubmit()}
                                 type="button"

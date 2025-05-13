@@ -7,10 +7,11 @@ import TableContract from "@/components/tables/contract/TableContract";
 import PaginationContract from "@/components/tables/contract/PaginationContract";
 import { getContract } from "@/services/contract/getContract";
 import React, { useEffect, useState } from "react";
+import { Customer } from "@/models/Customer";
 
 export interface Contract {
   id: number,
-  cliente: number,
+  cliente: Customer,
   valorRecebido: number,
   valorPendente: number,
   valorTotal: number,
@@ -22,7 +23,7 @@ export interface Contract {
   observacoes?: string;
   listaAniversariantes?: any[];
   itensContrato?: any[];
-  tipoPagemento?: string;
+  tipoPagemento?: any[];
   desconto?: number;
   acrescimo?:number
   pagamentos?: any[];
@@ -69,7 +70,6 @@ export default function BasicTables() {
     setState(prev => ({ ...prev, loading: true }));
     try {
       const response = await getContract({ page, limit: 5, search: nome });
-      console.log("response fetchContract ===>>>", response)
       if (response) {
         setState({
           data: response.data,
@@ -102,7 +102,7 @@ export default function BasicTables() {
           ) : (
             <>
               <TableContract contract={state.data} />
-              <div className="mt-4 flex justify-center">
+              <div className="mt-4 flex left">
                 <PaginationContract
                   currentPage={state.currentPage}
                   totalPages={state.totalPages}

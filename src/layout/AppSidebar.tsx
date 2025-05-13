@@ -39,19 +39,13 @@ const navItems: NavItem[] = [
     name: "Contratos",
     subItems: [
       { name: "Novo Contrato", path: "/new-contract", pro: false },
-      { name: "Pesquisar contrato", path: "/search-contract", pro: false }
-    ]
-  },
-
-  {
-    icon: <DocsIcon />,
-    name: "Outros",
-    subItems: [
+      { name: "Pesquisar contrato", path: "/search-contract", pro: false },
       { name: "Novo Tema", path: "/new-theme", pro: false },
       { name: "Novo Aniversariante", path: "/new-birthday-person", pro: false },
       { name: "Novo Item Contrato", path: "/new-item-contract", pro: false },
     ]
   },
+
 ];
 
 const AppSidebar: React.FC = () => {

@@ -23,8 +23,8 @@ function calcularDuracaoHoras(inicio: string, fim: string): string {
   return diffHrs.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
-export const FormContract = () => {
-  const { setFieldValue, values } = useFormikContext<Contract>();
+export const FormContractEdit = () => {
+  const { setFieldValue, values } = useFormikContext<any>();
   const [clientSuggestions, setClientSuggestions] = useState<any[]>([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +38,10 @@ export const FormContract = () => {
 
   const pageSize = 10;
   const fetchIdRef = useRef(0);
+
+  // useEffect(() => {
+  //   console.log("values.birthdayList ====>>>>", values.listaAniversariantes)
+  // });
 
   // Função para buscar clientes paginada, com debounce
   const fetchClients = debounce(async (search: string, pageNum: number = 0, reset: boolean = true) => {
@@ -79,6 +83,8 @@ export const FormContract = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+
+
   const handleLoadMore = () => {
     fetchClients(query, page, false);
   };
@@ -112,8 +118,7 @@ export const FormContract = () => {
   ];
 
   const handleSelectChangeContract = (value: string) => {
-    setFieldValue("tipoDoContrato", value)
-    console.log("Selected value:", value);
+    setFieldValue("tipoDoContrato", values.tipoDoContrato)
   };
 
   // CHECAGEM DE CONFLITO DE DATA/HORA INICIO
@@ -145,14 +150,14 @@ export const FormContract = () => {
   return (
     <div className="space-y-6">
       {/* AVISO DE CONFLITO DE DATA */}
-      {conflictInfo.exists && (
+      {/* {conflictInfo.exists && (
         <div className="bg-red-100 rounded p-2 mb-2 border border-red-300 text-red-700 text-sm">
           Já existe um contrato cadastrado para o mesmo horário/dia:
           <div className="mt-1 text-xs">
             ID: {conflictInfo.contract.id} | Início: {conflictInfo.contract.dataHoraInicial}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Primeira linha */}
       <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
@@ -164,13 +169,12 @@ export const FormContract = () => {
                 {...field}
                 type="text"
                 value={field.value ?? ''}
-                disabled
               />
             )}
           </Field>
         </div>
         <div>
-          <Label htmlFor="situation">Situação</Label>
+          <Label htmlFor="situacao">Situação</Label>
           <Label>Criado</Label>
         </div>
         <div>
@@ -198,19 +202,19 @@ export const FormContract = () => {
       {/* Segunda linha (Cliente, E-mail, Celular, CPF/CNPJ) */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="relative">
-          <Label htmlFor="nome">Cliente</Label>
-          <Field id="nome" name="nome">
+          <Label htmlFor="nomeCliente">Cliente</Label>
+          <Field id="nomeCliente" name="nomeCliente">
             {({ field }: any) => (
               <Input
                 {...field}
                 type="text"
-                value={query}
+                value={values.nomeCliente}
                 placeholder="Digite para buscar clientes..."
                 onChange={(e) => setQuery(e.target.value)}
               />
             )}
           </Field>
-          <ErrorMessage name="cliente" component="div" />
+          <ErrorMessage name="nomeCliente" component="div" />
           {isLoading && <div className="absolute top-full bg-gray-100 p-2 z-20">Carregando...</div>}
           {clientSuggestions.length > 0 && (
             <ul className="absolute top-full z-10 bg-white border border-gray-300 rounded-md w-full max-h-48 overflow-y-auto">
@@ -237,7 +241,7 @@ export const FormContract = () => {
         <div>
           <Label htmlFor="emailCliente">E-mail</Label>
           <Field id="emailCliente" name="emailCliente">
-            {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
+            {({ field }: any) => <Input {...field} type="text" value={values.emailCliente} disabled />}
           </Field>
           <ErrorMessage name="emailCliente" component="div" />
         </div>
@@ -302,19 +306,8 @@ export const FormContract = () => {
           <Label htmlFor="tipoDoContrato">Tipo do Contrato</Label>
           <div className="relative">
             <Field id="tipoDoContrato" name="tipoDoContrato">
-              {({ field }: any) => (
-                <Select
-                  {...field}
-                  options={optionsContract}
-                  placeholder="tipoDoContrato"
-                  onChange={handleSelectChangeContract}
-                  className="dark:bg-dark-700"
-                />
-              )}
+              {({ field }: any) => <Input {...field} type="text" value={values.tipoDoContrato === "ANIVERSARIO" ? 'Aniversário' : ''} disabled />}
             </Field>
-            <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <ChevronDownIcon />
-            </span>
           </div>
         </div>
         <div>
@@ -395,7 +388,7 @@ export const FormContract = () => {
 
       {/* Resto do formulário */}
       <>
-        <BirthdayList birthdayList={[]}/>
+        <BirthdayList birthdayList={values.listaAniversariantes} />
       </>
       <>
         <TabsComponent />

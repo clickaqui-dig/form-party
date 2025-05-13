@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Input from '@/components/form/input/InputField';
 import Label from '@/components/form/Label';
 import { Field, ErrorMessage, FieldProps, useFormikContext } from 'formik';
 
 export const FormTheme = () => {
-    const { setFieldValue, setFieldError } = useFormikContext();
-
+    const formik = useFormikContext<{
+        descricao: string;
+        observacoes: string;
+    }>();
 
     return (
         <div className="space-y-6">
@@ -17,10 +18,11 @@ export const FormTheme = () => {
                             <Input
                                 {...field}
                                 type="text"
+                                value={field.value || ""}
                             />
                         )}
-                        </Field>
-                    <ErrorMessage name="descricao" component="div" />
+                    </Field>
+                    <ErrorMessage name="descricao" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
                 <div>
                     <Label htmlFor="observacoes">Observações</Label>
@@ -29,10 +31,11 @@ export const FormTheme = () => {
                             <Input
                                 {...field}
                                 type="text"
+                                value={field.value || ""}
                             />
                         )}
-                      </Field>
-                    <ErrorMessage name="observacoes" component="div" />
+                    </Field>
+                    <ErrorMessage name="observacoes" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
             </div>
         </div>

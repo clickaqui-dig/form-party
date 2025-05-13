@@ -16,6 +16,16 @@ interface TableContractProps {
   contract: Array<Contract>
 }
 
+function formatarData(dataIso :  string) {
+  const data = new Date(dataIso);
+  const dia = String(data.getDate()).padStart(2, '0');
+  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const ano = data.getFullYear();
+  const hora = String(data.getHours()).padStart(2, '0');
+  const minuto = String(data.getMinutes()).padStart(2, '0');
+  return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+}
+
 export default function TableContract({ contract }: TableContractProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -35,10 +45,10 @@ export default function TableContract({ contract }: TableContractProps) {
               {contract.map((contract) => (
                 <TableRow key={contract.id}>
                   <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">{contract.id}</TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{contract.dataHoraInicial}</TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{contract.dataHoraFinal}</TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{formatarData(contract.dataHoraInicial)}</TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{formatarData(contract.dataHoraFinal)}</TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {contract.cliente /* <- só ID! */}
+                    {contract.cliente.nome /* <- só ID! */}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-40 flex justify-stretch gap-4">
                     <Link href={`/edit-contract/${contract.id}`} >

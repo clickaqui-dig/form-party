@@ -95,7 +95,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
 
   const handleSuggestionClick = (person: any) => {
     setInputValue(person.nome);
-    console.log("person click ===>>", person)
     setFormData({
       id: person.id,
       nome: person.nome,

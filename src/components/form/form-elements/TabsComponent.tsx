@@ -43,11 +43,12 @@ export default function TabsComponent() {
     const [paymentsItems, setPaymentsItems] = useState<PaymentItem[]>([]);
     const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
     const [selectedItemContract, setSelectedItemContract] = useState<TypeSelectItemContract[]>([]);
-    const { setFieldValue } = useFormikContext();
+    const { values, setFieldValue } = useFormikContext<any>();
 
     useEffect(() => {
         setFieldValue("payments", paymentsItems)
         setFieldValue("itensContrato", contractItems.map(item => item.id))
+        setFieldValue("valorTotal", contractItems.reduce((total, item) => total + Number(item.valor), 0).toFixed(2))
     }, [paymentsItems, contractItems]);
 
     const handleAddContractItem = (newItem: ContractItem) => {
@@ -146,7 +147,7 @@ export default function TabsComponent() {
                         ? "border-b-2 border-green-600 text-green-600 dark:text-green-400 font-semibold"
                         : " text-gray-600 hover:text-green-600 dark:text-gray-200"
                         }`}
-                    onClick={() => alert("Finalize o cadastro do contrato primeiro.")}
+                    onClick={() => values.id === 0 ? alert("Finalize o cadastro do contrato primeiro."):setActiveTab("pagamentos") }
                 >
                     Pagamentos
                 </button>

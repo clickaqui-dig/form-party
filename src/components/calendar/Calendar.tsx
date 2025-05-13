@@ -75,9 +75,7 @@ const Calendar: React.FC = () => {
   };
 
   const handleSituation = (item : any) =>{
-    console.log("item ====>>", item)
     if(item.valorTotal === item.valorRecebido){
-      
       return "Success"
     } else if (item.valorRecebido === 0 && item.valorPendente === 0) {
       return "Primary"

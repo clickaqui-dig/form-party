@@ -59,10 +59,6 @@ const Tooltip: React.FC<TooltipProps> = ({ children, event }) => {
                             <p className="py-1">{event.id}</p>
                         </li>
                         <li className="flex flex-row items-center justify-start">
-                            <b className="mr-1">Situação:</b>
-                            <p className="py-1">{event.situation}</p>
-                        </li>
-                        <li className="flex flex-row items-center justify-start">
                             <b className="mr-1">Cliente:</b>
                             <p className="py-1">{event.title}</p>
                         </li>

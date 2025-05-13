@@ -29,7 +29,7 @@ export default function PageNewBithdayPerson() {
   }
   return (
     <div>
-      <PageBreadcrumb pageTitle="Novo Tema" />
+      <PageBreadcrumb pageTitle="Novo Aniversariante" />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} >
         {({ handleSubmit, isValid, dirty }) => {
           return (
