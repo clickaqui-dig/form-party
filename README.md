@@ -162,7 +162,7 @@ A major update focused on Next.js 15 implementation and comprehensive redesign.
 
 ## License
 
-TailAdmin Next.js Free Version is released under the MIT License.
+Version is released under the MIT License.
 
 ## Support
 

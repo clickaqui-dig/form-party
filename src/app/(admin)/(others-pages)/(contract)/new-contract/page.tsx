@@ -1,30 +1,83 @@
+"use client";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import CheckboxComponents from "@/components/form/form-elements/CheckboxComponents";
-import DefaultInputs from "@/components/form/form-elements/DefaultInputs";
-import DropzoneComponent from "@/components/form/form-elements/DropZone";
-import FileInputExample from "@/components/form/form-elements/FileInputExample";
-import InputGroup from "@/components/form/form-elements/InputGroup";
-import InputStates from "@/components/form/form-elements/InputStates";
-import RadioButtons from "@/components/form/form-elements/RadioButtons";
-import SelectInputs from "@/components/form/form-elements/SelectInputs";
-import TextAreaInput from "@/components/form/form-elements/TextAreaInput";
-import ToggleSwitch from "@/components/form/form-elements/ToggleSwitch";
-import { Metadata } from "next";
 import React from "react";
+import ComponentCard from "@/components/common/ComponentCard";
+import { Formik, FormikHelpers, useFormikContext } from "formik";
+import { FormContract } from "./form/formContract";
+import { postContract } from "@/services/contract/postContract";
+import { useRouter } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Form Elements page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+const initialValues = {
+  idContrato: 0,
+  cliente: 0,
+  valorRecebido: 0,
+  valorPendente: 0,
+  valorTotal: 0,
+  tipoDoContrato:"",
+  dataHoraInicial:"",
+  dataHoraFinal:"",
+  duracao:0,
+  quantidadeConvidados:0,
+  observacoes:"",
+  listaAniversariantes: [],
+  itensContrato:[],
+  payments:[],
+  desconto: 0,
+  acrescimo:0,
 };
 
 export default function FormElements() {
+    const router = useRouter();
+    const handleSubmit = async (
+      values: typeof initialValues,
+      formikHelpers: FormikHelpers<typeof initialValues>
+    ) => {
+      try {
+        const response = await postContract({
+          cliente: values.cliente,
+          valorRecebido: values.valorRecebido,
+          valorPendente:values.valorPendente,
+          valorTotal:values.valorTotal,
+          tipoDoContrato:values.tipoDoContrato,
+          dataHoraInicial:values.dataHoraInicial,
+          dataHoraFinal:values.dataHoraFinal,
+          duracao:values.duracao,
+          quantidadeConvidados:values.quantidadeConvidados,
+          observacoes:values.observacoes,
+          desconto:0,
+          acrescimo:0,
+          itensContrato: values.itensContrato,
+          listaAniversariantes:values.listaAniversariantes
+        });
+
+        if (response) {
+          router.push('/search-contract')
+        }
+  
+      } catch (error) {
+        console.log(error)
+      }
+      
+    }
   return (
     <div>
-      <PageBreadcrumb pageTitle="From Elements" />
-        <div >
-          <DefaultInputs />
-      </div>
+      <PageBreadcrumb pageTitle="Novo Contrato" />
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+          {({ handleSubmit, isValid, dirty }) => {
+            return (
+              <ComponentCard title="Formulário">
+                <FormContract/>
+                <button
+                      onClick={() => handleSubmit()}
+                      type="button"
+                      className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                  >
+                      Salvar
+                  </button>
+              </ComponentCard>
+            )
+          }}
+        </Formik>
     </div>
   );
 }
