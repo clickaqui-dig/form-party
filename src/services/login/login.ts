@@ -13,13 +13,5 @@ interface LoginResponse {
 }
 
 export const handleLogin = async (body: LoginRequest): Promise<LoginResponse| any> => {
-    try {
-        console.log("login ===>>", body)
-        const response = await api.post(`${URL}/login`, body);
-
-        return response;
-    } catch (error) {
-        console.log("Error ao realizar o login: ", error);
-        return error;
-    }
+    return await api.post(`${URL}/login`, body);
 }

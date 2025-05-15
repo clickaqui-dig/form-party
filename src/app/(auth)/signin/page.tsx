@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import Checkbox from "@/components/form/input/Checkbox";
 import FormSignin from "@/components/form/signin";
 import { validationSchema } from "@/components/form/signin/validation";
 import Button from "@/components/ui/button/Button";
 import { handleLogin } from "@/services/login/login";
 import { Formik, FormikHelpers } from "formik";
-import Link from "next/link";
 import { useState } from "react";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const initialValues = {
   email: "",
@@ -22,17 +22,16 @@ export default function SignIn() {
 
 
   const handleSubmit = async (
-    values: typeof initialValues,
-    formikHelpers: FormikHelpers<typeof initialValues>
+    values: typeof initialValues
   ) => {
     try {
       const token = Cookies.get('authToken');
       if (!token) {
         const response = await handleLogin(values);
         const newToken = response.data;
-        console.log(newToken)
+
         if (!newToken) {
-          throw new Error('');
+          throw new Error('Algo inesperado aconteceu em nosso sistema.');
         }
 
         if (isChecked) {
@@ -45,8 +44,9 @@ export default function SignIn() {
 
       router.push('/calendar')
 
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      const messageErro = error ? error.response.data.error : 'Algo inesperado aconteceu em nosso sistema.'
+      toast.error(messageErro)
     }
   }
 
