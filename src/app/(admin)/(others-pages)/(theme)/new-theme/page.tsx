@@ -5,6 +5,7 @@ import { Formik, FormikHelpers } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
 import { FormTheme } from "@/components/form/theme/formTheme";
 import { postTheme } from "@/services/theme/postTheme";
+import { validationSchema } from "@/components/form/theme/validation";
 
 const initialValues = {
   descricao: "",
@@ -17,20 +18,25 @@ export default function PageNewTheme() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      console.log("values them ===>>", values)
       await postTheme(values)
     } catch (error) {
-      
+
     }
   }
   return (
     <div>
       <PageBreadcrumb pageTitle="Novo Tema" />
-      <Formik initialValues={initialValues} onSubmit={handleSubmit} >
+      <Formik 
+        initialValues={initialValues} 
+        onSubmit={handleSubmit} 
+        validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
+        validateOnMount={false} >
         {({ handleSubmit, isValid, dirty }) => {
           return (
             <ComponentCard title="Formulário">
-              <FormTheme/>
+              <FormTheme />
               <button
                 onClick={() => handleSubmit()}
                 type="button"
@@ -41,9 +47,9 @@ export default function PageNewTheme() {
               </button>
             </ComponentCard>
           )
-         }}
+        }}
       </Formik>
-     
+
     </div>
   );
 }
