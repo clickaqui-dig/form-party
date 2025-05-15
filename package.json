@@ -9,11 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.15",
-    "@fullcalendar/daygrid": "^6.1.15",
-    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/interaction": "^6.1.17",
     "@fullcalendar/list": "^6.1.15",
-    "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/react": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.15",
     "@lexical/html": "^0.31.0",
     "@lexical/link": "^0.31.0",
@@ -48,6 +48,7 @@
     "react-input-mask": "^2.0.4",
     "swiper": "^11.2.0",
     "tailwind-merge": "^2.6.0",
+    "tippy.js": "^6.3.7",
     "yup": "^1.6.1"
   },
   "devDependencies": {

@@ -14,69 +14,44 @@ interface TooltipProps {
 
 const Tooltip: React.FC<TooltipProps> = ({ children, event }) => {
     return (
-        <div className="group relative flex max-w-max flex-col items-center z-1000">
-            <div className="
-            
-        absolute 
-        bottom-full
-        left-1/2 
-        mb-2 
-        min-w-max 
-        -translate-x-1/2 
-        scale-0 
-        transform 
-        rounded-lg 
-        px-3 
-        py-2 
-        text-xs 
-        font-medium 
-        transition-all 
-        duration-500 
-        group-hover:scale-100
-      ">
-                <div className="relative max-w-xs flex flex-col  rounded bg-gray-800 p-2 text-center text-white shadow-lg  w-64">
-
-                    <div className="
-  absolute 
-  top-full 
-  left-1/2 
-  h-0 
-  w-0 
-  -translate-x-1/2 
-  border-x-4 
-  border-b-4 
-  border-t-0 
-  border-transparent 
-  border-b-gray-800
-  transform 
-  rotate-45
-" />
+        <div className="group relative inline-block">
+            <div
+                className="
+            absolute top-full left-1/2 mt-2   /* ↓ muda de bottom-full p/ top-full */
+            -translate-x-1/2 scale-0 group-hover:scale-100
+            transition-transform duration-150 z-[9999]
+          "
+            >
+                <div className="relative w-64 rounded bg-gray-800 p-2 text-xs text-white shadow-lg">
+                    <div
+                        className="
+                absolute -top-1 left-1/2           /* posição acima do balão */
+                h-0 w-0 -translate-x-1/2 rotate-45
+                border-x-4 border-t-4 border-b-0   /* só borda-t colorida */
+                border-transparent border-t-gray-800
+              "
+                    />
 
                     <h2 className="mb-2 text-sm font-semibold">Dados do Evento</h2>
                     <ul className="text-xs font-medium">
-                        <li className="flex flex-row items-center justify-start">
-                            <b className="mr-1">Código:</b>
-                            <p className="py-1">{event.id}</p>
+                        <li className="flex items-center">
+                            <b className="mr-1">Código:</b> <span>{event.id}</span>
                         </li>
-                        <li className="flex flex-row items-center justify-start">
-                            <b className="mr-1">Cliente:</b>
-                            <p className="py-1">{event.title}</p>
+                        <li className="flex items-center">
+                            <b className="mr-1">Cliente:</b> <span>{event.title}</span>
                         </li>
-                        <li className="flex flex-row items-center justify-start">
-                            <b className="mr-1">Início:</b>
-                            <p className="py-1">{event.startTime}</p>
+                        <li className="flex items-center">
+                            <b className="mr-1">Início:</b> <span>{event.startTime}</span>
                         </li>
-                        <li className="flex flex-row items-center justify-start">
-                            <b className="mr-1">Fim:</b>
-                            <p className="py-1">{event.endTime}</p>
+                        <li className="flex items-center">
+                            <b className="mr-1">Fim:</b> <span>{event.endTime}</span>
                         </li>
                     </ul>
-
                 </div>
             </div>
 
+            {/* ALVO DO HOVER */}
             {children}
-
         </div>
     )
 }
