@@ -5,10 +5,10 @@ import Select from '@/components/form/Select';
 import { ChevronDownIcon } from '@/icons';
 import { searchCep } from '@/services/viaCep/searchCep';
 import { maskCEP, maskCNPJ, maskCPF, maskPhone } from '@/utils/masks';
-import { Field, ErrorMessage, FieldProps, useFormikContext } from 'formik';
+import { Field, FieldProps, useFormikContext } from 'formik';
 
 export const FormCustomer = () => {
-    const { setFieldValue, setFieldError } = useFormikContext();
+    const { setFieldValue, setFieldError, errors } = useFormikContext<any >();
     const countries = [
         { code: "BR", label: "+55" },
     ];
@@ -87,8 +87,10 @@ export const FormCustomer = () => {
                                 type="text"
                             />
                         )}
-                        </Field>
-                    <ErrorMessage name="nome" component="div" />
+                    </Field>
+                    {errors.nome && (
+                        <div className="text-red-500 text-sm mt-1">{errors.nome}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="email">E-mail</Label>
@@ -100,8 +102,10 @@ export const FormCustomer = () => {
                                 placeholder="info@gmail.com"
                             />
                         )}
-                      </Field>
-                    <ErrorMessage name="email" component="div" />
+                    </Field>
+                    {errors.email && (
+                        <div className="text-red-500 text-sm mt-1">{errors.email}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="celular">Celular</Label>
@@ -118,7 +122,9 @@ export const FormCustomer = () => {
                             />
                         )}    
                     </Field>
-                    <ErrorMessage name="celular" component="div" />
+                    {errors.celular && (
+                        <div className="text-red-500 text-sm mt-1">{errors.celular}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="documento">CPF ou CNPJ</Label>
@@ -130,8 +136,10 @@ export const FormCustomer = () => {
                                 onChange={handleChangeDocument}
                             />
                         )}
-                        </Field>
-                    <ErrorMessage name="documento" component="div" />
+                    </Field>
+                    {errors.documento && (
+                        <div className="text-red-500 text-sm mt-1">{errors.documento}</div>
+                    )}
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
@@ -145,8 +153,10 @@ export const FormCustomer = () => {
                                 onChange={handleChangeCep}
                             />
                         )}
-                        </Field>
-                    <ErrorMessage name="cep" component="div" />
+                    </Field>
+                    {errors.cep && (
+                        <div className="text-red-500 text-sm mt-1">{errors.cep}</div>
+                    )}
                 </div>
                 <div className="col-span-2">
                     <Label htmlFor="endereco">Endereço</Label>
@@ -158,7 +168,9 @@ export const FormCustomer = () => {
                             />
                         )}    
                     </Field>
-                    <ErrorMessage name="endereco" component="div" />
+                    {errors.endereco && (
+                        <div className="text-red-500 text-sm mt-1">{errors.endereco}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="numero">Número</Label>
@@ -170,7 +182,9 @@ export const FormCustomer = () => {
                             />
                         )}    
                     </Field>
-                    <ErrorMessage name="numero" component="div" />
+                    {errors.numero && (
+                        <div className="text-red-500 text-sm mt-1">{errors.numero}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="cidade">Cidade</Label>
@@ -182,7 +196,9 @@ export const FormCustomer = () => {
                             />
                         )}    
                     </Field>
-                    <ErrorMessage name="cidade" component="div" />
+                    {errors.cidade && (
+                        <div className="text-red-500 text-sm mt-1">{errors.cidade}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="uf">UF</Label>
@@ -198,6 +214,9 @@ export const FormCustomer = () => {
                             />
                         )}
                     </Field>
+                    {errors.uf && (
+                        <div className="text-red-500 text-sm mt-1">{errors.uf}</div>
+                    )}
                     <div className='relative'>
                         <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 bottom-1/2 dark:text-gray-400">
                             <ChevronDownIcon />
@@ -208,3 +227,5 @@ export const FormCustomer = () => {
         </div>
     )
 }
+
+export default FormCustomer;

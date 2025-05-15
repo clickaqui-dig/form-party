@@ -62,7 +62,7 @@ export const validationSchema = Yup.object().shape({
       );
     }),
     cep: Yup.string().required('O CEP deve ser passado.'),
-    endereco: Yup.string(),
-    cidade: Yup.string(),
+    endereco: Yup.string().required('O endereço deve ser passado.'),
+    cidade: Yup.string().required('A cidade deve ser passado.'),
     numero: Yup.string().required('O Número deve ser passado.'),
 });

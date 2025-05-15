@@ -43,6 +43,7 @@ export const getCustomer = async(
         const query = buildQueryParams({ page, size, nome });
 
         const response = await api.get(`${URL}/cliente${query}`);
+        console.log("getAllCustomer ===>>", response)
 
         return response.data;
     } catch (error) {

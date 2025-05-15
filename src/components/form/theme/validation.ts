@@ -49,20 +49,5 @@ function validarCNPJ(cnpj: string): boolean {
 }
 
 export const validationSchema = Yup.object().shape({
-    name: Yup.string().max(100).min(5).required("O nome do perfil deve ser passado."),
-    email: Yup.string().email('Email inválido').required('O email deve ser passado.'),
-    phone: Yup.string().required(),
-    document: Yup.string().required('CPF/CNPJ é obrigatório')
-    .test('cpfCnpj-valido', 'CPF/CNPJ inválido', function (value) {
-      if (!value) return false;
-      const cpfCnpj = value.replace(/[^\d]+/g, '');
-      return (
-        (cpfCnpj.length === 11 && validarCPF(cpfCnpj)) ||
-        (cpfCnpj.length === 14 && validarCNPJ(cpfCnpj))
-      );
-    }),
-    cep: Yup.string().required('O CEP deve ser passado.'),
-    address: Yup.string(),
-    city: Yup.string(),
-    number: Yup.string().required('O Número deve ser passado.'),
+  descricao: Yup.string().max(100).min(5).required("A descrição deve ser passada."),
 });
