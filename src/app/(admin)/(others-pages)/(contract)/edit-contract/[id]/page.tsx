@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { Formik, FormikHelpers } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Contract } from "../../search-contract/page";
-import FormContract from "../../new-contract/form";
 import { getContractById } from "@/services/contract/getContractById";
-import { FormContractEdit } from "./form/formContractEdit";
+import FormContract from "@/components/form/contract";
 
 
 export default function PageEditCustomer() {
@@ -54,6 +53,16 @@ export default function PageEditCustomer() {
             const response = await getContractById({ id });
             console.log("response ===>>>", response)
             if (response) {
+                const listaAniversariantes = response.listaAniversariantes.map((item) => {
+                    return {
+                        id: item.id,
+                        nome: item.nome,
+                        dataNascimento: item.dataNascimento,
+                        tema: item.tema.descricao,
+                        idade: item.idade,
+                        idadeNoEvento: item.idadeNoEvento,
+                    }
+                })
                 setInitialValues({
                     ...response,
                     idForm: response.id,
@@ -67,7 +76,7 @@ export default function PageEditCustomer() {
                     celularCliente: response.cliente.celular,
                     uf: response.cliente.uf,
                     tipoDoContrato:response.tipoDoContrato,
-                    listaAniversariantes: response.listaAniversariantes,
+                    listaAniversariantes,
                     itensContrato: response.itensContrato,
                 })
             }
@@ -77,8 +86,7 @@ export default function PageEditCustomer() {
     }
 
     const handleSubmit = async (
-        values: typeof initialValues,
-        formikHelpers: FormikHelpers<typeof initialValues>
+        values: typeof initialValues
     ) => {
         console.log(values)
 
@@ -91,7 +99,7 @@ export default function PageEditCustomer() {
                 {({ handleSubmit, isValid, dirty }) => {
                     return (
                         <ComponentCard title="Edição Contrato">
-                            <FormContractEdit />
+                            <FormContract />
                             <button
                                 onClick={() => handleSubmit()}
                                 type="button"

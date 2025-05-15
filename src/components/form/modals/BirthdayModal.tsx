@@ -201,6 +201,7 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
             type="text"
             name="tema"
             value={formData.tema}
+            onChange={handleChange}
             placeholder="Tema"
           />
         </div>

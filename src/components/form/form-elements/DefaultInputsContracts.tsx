@@ -7,7 +7,7 @@ import Select from "../Select";
 import { ChevronDownIcon } from "../../../icons";
 import PhoneInput from "../group-input/PhoneInput";
 import BirthdayList from "./BirthdayList";
-import TabsComponent from "./TabsComponent";
+import TabsComponent from "../contract/components/Tabs/TabsComponent";
 
 export default function DefaultInputsContracts() {
   const [showPassword, setShowPassword] = useState(false);

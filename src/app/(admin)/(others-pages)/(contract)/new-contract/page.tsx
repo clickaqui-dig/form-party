@@ -2,10 +2,10 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
-import { Formik, FormikHelpers, useFormikContext } from "formik";
-import { FormContract } from "./form/formContract";
+import { Formik, FormikHelpers } from "formik";
 import { postContract } from "@/services/contract/postContract";
 import { useRouter } from "next/navigation";
+import FormContract from "@/components/form/contract";
 
 const initialValues = {
   idContrato: 0,
@@ -29,8 +29,7 @@ const initialValues = {
 export default function FormElements() {
     const router = useRouter();
     const handleSubmit = async (
-      values: typeof initialValues,
-      formikHelpers: FormikHelpers<typeof initialValues>
+      values: typeof initialValues
     ) => {
       try {
         const response = await postContract({
@@ -63,7 +62,7 @@ export default function FormElements() {
     <div>
       <PageBreadcrumb pageTitle="Novo Contrato" />
         <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-          {({ handleSubmit, isValid, dirty }) => {
+          {({ handleSubmit }) => {
             return (
               <ComponentCard title="Formulário">
                 <FormContract/>
