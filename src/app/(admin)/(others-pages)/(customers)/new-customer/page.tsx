@@ -61,13 +61,12 @@ export default function PageNewCustomer() {
         validateOnBlur={false}
         validateOnMount={false}
       >
-        {({ handleSubmit, isValid, dirty, errors, validateForm, setTouched, touched }) => {
+        {({ handleSubmit, isValid, dirty, validateForm, }) => {
 
           const handleValidateAndSubmit = async () => {
             const errors = await validateForm();
             
             if (Object.keys(errors).length === 0) {
-              console.log("tessteeee")
               handleSubmit();
             }
           };
@@ -80,6 +79,7 @@ export default function PageNewCustomer() {
                   <button
                     onClick={handleValidateAndSubmit}
                     type="button"
+                    disabled={!(isValid && dirty)}
                     className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
                   >
                     Salvar

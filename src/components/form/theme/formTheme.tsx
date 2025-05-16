@@ -3,10 +3,7 @@ import Label from '@/components/form/Label';
 import { Field, ErrorMessage, FieldProps, useFormikContext } from 'formik';
 
 export const FormTheme = () => {
-    const formik = useFormikContext<{
-        descricao: string;
-        observacoes: string;
-    }>();
+    const {errors} = useFormikContext<{ descricao: string; observacoes: string; }>();
 
     return (
         <div className="space-y-6">
@@ -22,7 +19,9 @@ export const FormTheme = () => {
                             />
                         )}
                     </Field>
-                    <ErrorMessage name="descricao" component="div" className="text-red-500 text-sm mt-1" />
+                    {errors.descricao && (
+                        <div className="text-red-500 text-sm mt-1">{errors.descricao}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="observacoes">Observações</Label>
@@ -35,7 +34,6 @@ export const FormTheme = () => {
                             />
                         )}
                     </Field>
-                    <ErrorMessage name="observacoes" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
             </div>
         </div>

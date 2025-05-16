@@ -4,6 +4,7 @@ import Label from '@/components/form/Label';
 import { Field, ErrorMessage, FieldProps, useFormikContext } from 'formik';
 
 export const FormItemContract = () => {
+const {errors} = useFormikContext<{ descricao: string; valor: number; }>();
 
     return (
         <div className="space-y-6">
@@ -19,7 +20,9 @@ export const FormItemContract = () => {
                             />
                         )}
                         </Field>
-                    <ErrorMessage name="descricao" component="div" />
+                    {errors.descricao && (
+                        <div className="text-red-500 text-sm mt-1">{errors.descricao}</div>
+                    )}
                 </div>
                 <div>
                     <Label htmlFor="valor">Valor</Label>
@@ -32,7 +35,9 @@ export const FormItemContract = () => {
                             />
                         )}
                       </Field>
-                    <ErrorMessage name="valor" component="div" />
+                    {errors.valor && (
+                        <div className="text-red-500 text-sm mt-1">{errors.valor}</div>
+                    )}
                 </div>
             </div>
         </div>
