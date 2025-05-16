@@ -20,7 +20,7 @@ const BirthdayList =() => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
-  const { values, setFieldValue } = useFormikContext<any>();
+  const { values, setFieldValue, errors} = useFormikContext<any>();
 
 
   useEffect(() => {
@@ -166,6 +166,7 @@ const BirthdayList =() => {
           </table>
         </div>
         <BithdayModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleAddBirthday} />
+        
       </div>
     </ComponentCard>
   );

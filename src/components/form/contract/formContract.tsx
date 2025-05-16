@@ -9,7 +9,6 @@ import Input from "../input/InputField";
 import Label from "../Label";
 import Select from "../Select";
 import { ChevronDownIcon } from "lucide-react";
-import { Contract } from "@/models/Contract";
 import { getContractByDate } from "@/services/contract/getContractByDate";
 
 function calcularDuracaoHoras(inicio: string, fim: string): string {
@@ -24,7 +23,7 @@ function calcularDuracaoHoras(inicio: string, fim: string): string {
 }
 
 export const FormContract = () => {
-  const { setFieldValue, values } = useFormikContext<any>();
+  const { setFieldValue, values, errors } = useFormikContext<any>();
   const [clientSuggestions, setClientSuggestions] = useState<any[]>([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -67,12 +66,12 @@ export const FormContract = () => {
   }, 500);
 
   const valuePending = useMemo(() => {
-    return values.valorTotal  -Number(values.valorRecebido) ;
+    return values.valorTotal - Number(values.valorRecebido);
   }, [values.valorRecebido, values.valorTotal]);
 
   const valueRecept = useMemo(() => {
     return values.valorRecebido;
-  },[values.valorRecebido]);
+  }, [values.valorRecebido]);
 
 
   useEffect(() => {
@@ -100,7 +99,7 @@ export const FormContract = () => {
 
   const handleClientSelect = (client: any) => {
     setFieldValue("cliente", client.id);
-    setFieldValue("nome", client.nome);
+    // setFieldValue("nome", client.nome);
     setFieldValue("emailCliente", client.email);
     setFieldValue("celularCliente", client.celular);
     setFieldValue("documento", client.documento);
@@ -118,11 +117,10 @@ export const FormContract = () => {
 
   const optionsContract = [
     { value: "ANIVERSARIO", label: "Aniversário" },
-    { value: "CONFRATERNIZACAO", label: "Confraternização" },
   ];
 
   const handleSelectChangeContract = (value: string) => {
-    setFieldValue("tipoDoContrato", value)
+    setFieldValue("tipoDoContrato", "ANIVERSARIO")
     console.log("Selected value:", value);
   };
 
@@ -154,7 +152,7 @@ export const FormContract = () => {
 
   const handleChangeQuery = (e: any) => {
     setQuery(e.target.value)
-    setFieldValue('nomeCliente',e.target.value)
+    setFieldValue('nomeCliente', e.target.value)
   }
 
   return (
@@ -188,7 +186,7 @@ export const FormContract = () => {
         </div>
         <div>
           <Label htmlFor="situation">Situação</Label>
-          <Label>Criado</Label>
+          {/* <Label></Label> */}
         </div>
         <div>
           <Label htmlFor="valorRecebido">Valor Recebido</Label>
@@ -206,10 +204,10 @@ export const FormContract = () => {
           <button
             type="button"
             className="btn btn-danger flex w-full justify-center rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 sm:w-auto disabled:bg-gray-300 disabled:cursor-not-allowed "
-            disabled={values.idContrato === 0 ? true : false }
-            // onClick={()=>{
-            //   alert("teste")
-            // }}
+            disabled={values.idContrato === 0 ? true : false}
+          // onClick={()=>{
+          //   alert("teste")
+          // }}
           >
             Cancelar contrato
           </button>
@@ -230,7 +228,9 @@ export const FormContract = () => {
               />
             )}
           </Field>
-          <ErrorMessage name="nomeCliente" component="div" />
+          {errors.nomeCliente && (
+            <div className="text-red-500 text-sm mt-1">{errors.nomeCliente}</div>
+          )}
           {isLoading && <div className="absolute top-full bg-gray-100 p-2 z-20">Carregando...</div>}
           {clientSuggestions.length > 0 && (
             <ul className="absolute top-full z-10 bg-white border border-gray-300 rounded-md w-full max-h-48 overflow-y-auto">
@@ -259,21 +259,27 @@ export const FormContract = () => {
           <Field id="emailCliente" name="emailCliente">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="emailCliente" component="div" />
+          {errors.emailCliente && (
+            <div className="text-red-500 text-sm mt-1">{errors.emailCliente}</div>
+          )}
         </div>
         <div>
           <Label htmlFor="celularCliente">Celular</Label>
           <Field id="celularCliente" name="celularCliente">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="celularCliente" component="div" />
+          {errors.celularCliente && (
+            <div className="text-red-500 text-sm mt-1">{errors.celularCliente}</div>
+          )}
         </div>
         <div>
           <Label htmlFor="documento">CPF/CNPJ</Label>
           <Field id="documento" name="documento">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="documento" component="div" />
+          {errors.documento && (
+            <div className="text-red-500 text-sm mt-1">{errors.documento}</div>
+          )}
         </div>
       </div>
 
@@ -284,35 +290,45 @@ export const FormContract = () => {
           <Field id="cep" name="cep">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="cep" component="div" />
+          {errors.cep && (
+            <div className="text-red-500 text-sm mt-1">{errors.cep}</div>
+          )}
         </div>
         <div className="col-span-2">
           <Label htmlFor="endereco">Endereço</Label>
           <Field id="endereco" name="endereco">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="endereco" component="div" />
+          {errors.endereco && (
+            <div className="text-red-500 text-sm mt-1">{errors.endereco}</div>
+          )}
         </div>
         <div>
           <Label htmlFor="numero">Número</Label>
           <Field id="numero" name="numero">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="numero" component="div" />
+          {errors.numero && (
+            <div className="text-red-500 text-sm mt-1">{errors.numero}</div>
+          )}
         </div>
         <div>
           <Label htmlFor="cidade">Cidade</Label>
           <Field id="cidade" name="cidade">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="cidade" component="div" />
+          {errors.cidade && (
+            <div className="text-red-500 text-sm mt-1">{errors.cidade}</div>
+          )}
         </div>
         <div>
           <Label htmlFor="uf">UF</Label>
           <Field id="uf" name="uf">
             {({ field }: any) => <Input {...field} type="text" value={field.value ?? ''} disabled />}
           </Field>
-          <ErrorMessage name="uf" component="div" />
+          {errors.uf && (
+            <div className="text-red-500 text-sm mt-1">{errors.uf}</div>
+          )}
         </div>
       </div>
 
@@ -325,13 +341,16 @@ export const FormContract = () => {
               {({ field }: any) => (
                 <Select
                   {...field}
-                  options={optionsContract}
-                  placeholder="tipoDoContrato"
+                  options={[optionsContract][0]}
                   onChange={handleSelectChangeContract}
                   className="dark:bg-dark-700"
+                // disable={true}
                 />
               )}
             </Field>
+            {errors.tipoDoContrato === "ANIVERSARIO" && (
+              <div className="text-red-500 text-sm mt-1">{errors.tipoDoContrato}</div>
+            )}
             <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
               <ChevronDownIcon />
             </span>
@@ -353,7 +372,9 @@ export const FormContract = () => {
                 />
               )}
             </Field>
-            <ErrorMessage name="dataHoraInicial" component="div" />
+            {errors.dataHoraInicial && (
+              <div className="text-red-500 text-sm mt-1">{errors.dataHoraInicial}</div>
+            )}
           </div>
         </div>
         <div>
@@ -372,7 +393,9 @@ export const FormContract = () => {
                 />
               )}
             </Field>
-            <ErrorMessage name="dataHoraFinal" component="div" />
+            {errors.dataHoraFinal && (
+              <div className="text-red-500 text-sm mt-1">{errors.dataHoraFinal}</div>
+            )}
           </div>
         </div>
         <div>
@@ -392,7 +415,9 @@ export const FormContract = () => {
               />
             )}
           </Field>
-          <ErrorMessage name="quantidadeConvidados" component="div" />
+          {errors.quantidadeConvidados && (
+            <div className="text-red-500 text-sm mt-1">{errors.quantidadeConvidados}</div>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
@@ -409,7 +434,9 @@ export const FormContract = () => {
               />
             )}
           </Field>
-          <ErrorMessage name="quantidadeConvidados" component="div" />
+          {errors.observacoes && (
+            <div className="text-red-500 text-sm mt-1">{errors.observacoes}</div>
+          )}
         </div>
       </div>
 

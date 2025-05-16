@@ -23,7 +23,7 @@ export default function PageNewItemContract() {
 
       if (response) {
         toast.success("Item cadastrado com sucesso !")
-        formikHelpers.resetForm()
+        formikHelpers.resetForm();
       } else {
         toast.error("Error ao item, revise o formulario.")
       }
