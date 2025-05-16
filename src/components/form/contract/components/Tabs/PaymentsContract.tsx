@@ -4,8 +4,10 @@ import Label from "@/components/form/Label";
 import Select from "@/components/form/Select";
 import { Field, FieldProps, useFormikContext } from "formik";
 import { ChevronDownIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, } from "react";
 import { PaymentsContractModal } from "../Modals/PaymentContractModal";
+import { maskCurrency } from "@/utils/masks/maskCurrency";
+import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 
 interface PaymentItem {
     id: number;
@@ -18,7 +20,7 @@ interface PaymentItem {
 
 const typeDiscount = [
     { value: "fechado", label: "Fechado" },
-    { value: "aberto", label: "Aberto" },
+    // { value: "aberto", label: "Aberto" },
 ];
 
 export const PaymentsContract = () => {
@@ -26,11 +28,35 @@ export const PaymentsContract = () => {
     const [isModalPaymentOpen, setModalPaymentOpen] = useState(false);
     const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
     const [useDiscount, setUseDiscount] = useState("fechado");
+
+    const [discount, setDiscount] = useState(0);
+    const [addition, setAddition] = useState(0);
+   
     const { values, setFieldValue } = useFormikContext<any>();
-    
+
     useEffect(() => {
         setPaymentsItems(values.pagamentos);
+        setFieldValue('valorRecebido', paymentsItems.reduce((total: any, item: any) => total + Number(item.valor), 0).toFixed(2))
     }, [values]);
+
+
+    const baseCurrency = useMemo(() => {
+        const oldCurrency = values.itensContrato.reduce((total: any, item: any) => total + Number(item.valor), 0).toFixed(2);
+        if (oldCurrency !== values.valorTotal) {
+            return values.valorTotal;
+        } else {
+            return oldCurrency;
+        }
+    }, [values.itensContrato]);
+
+    const finalCurrency = useMemo(() => {
+        const newCurrency = (Number(baseCurrency) + addition - discount).toFixed(2);
+        return newCurrency;
+    }, [baseCurrency, discount, addition]);
+
+    useEffect(() => {
+        setFieldValue('valorTotal', Number(finalCurrency));
+    }, [finalCurrency])
 
     const handleAddPaymentItem = (newItem: PaymentItem) => {
         const newEntry = {
@@ -45,6 +71,7 @@ export const PaymentsContract = () => {
         };
 
         setPaymentsItems(prevItems => [...prevItems, newEntry]);
+        setFieldValue("pagamentos", [...values.pagamentos, newEntry])
         setModalPaymentOpen(false);
     }
 
@@ -69,6 +96,20 @@ export const PaymentsContract = () => {
         setPaymentsItems(updatedBirthdays);
         setSelectedPayments([]);
     };
+
+    const handleChangeCurrency = (e: any, type: string) => {
+        const maskedValue = maskCurrency(e.target.value)
+        setFieldValue(type, maskedValue);
+
+        const unMaskCurrency = unmaskCurrency(maskedValue)
+        if (type === 'desconto') {
+            setDiscount(unMaskCurrency);
+        }
+
+        if (type === 'acrescimo') {
+            setAddition(unMaskCurrency);
+        }
+    };
     return (
         <>
             <div className="mt-4">
@@ -77,12 +118,14 @@ export const PaymentsContract = () => {
                     <div className="relative">
                         <Select
                             options={typeDiscount}
-                            placeholder="Tipo"
+                            // placeholder="Tipo"
                             onChange={(event) => {
                                 setUseDiscount(event)
-                                setFieldValue("tipoPagamento", event)
+                                // setFieldValue("tipoPagamento", event)
                             }}
                             className="dark:bg-dark-700"
+                            defaultValue="fechado"
+                            disable={true}
                         />
                         <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
                             <ChevronDownIcon />
@@ -98,9 +141,9 @@ export const PaymentsContract = () => {
                             render={({ field }: FieldProps) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    onChange={(event) => {
-                                        setFieldValue("desconto", event.target.value)
+                                    type="text"
+                                    onChange={(e) => {
+                                        handleChangeCurrency(e, "desconto")
                                     }}
                                 />
                             )}
@@ -114,9 +157,9 @@ export const PaymentsContract = () => {
                             render={({ field }: FieldProps) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    onChange={(event) => {
-                                        setFieldValue("acrescimo", event.target.value)
+                                    type="text"
+                                    onChange={(e) => {
+                                        handleChangeCurrency(e, "acrescimo")
                                     }}
                                 />
                             )}
@@ -126,7 +169,7 @@ export const PaymentsContract = () => {
                     {/* Valor Total */}
                     <div className="w-full md:w-1/3">
                         <Label>Valor Total</Label>
-                        <p className="text-lg text-green-600 font-bold mt-2">R$ 0,00</p>
+                        <p className="text-lg text-green-600 font-bold mt-2">R$ {finalCurrency}</p>
                     </div>
                 </div>
 
@@ -218,9 +261,9 @@ export const PaymentsContract = () => {
                     </table>
                 </div>
             </div>
-        <PaymentsContractModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem} />
+            <PaymentsContractModal isOpen={isModalPaymentOpen} onClose={() => setModalPaymentOpen(false)} onAddItem={handleAddPaymentItem} />
 
         </>
-       
+
     )
 }

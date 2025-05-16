@@ -2,6 +2,9 @@
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { Modal } from "@/components/ui/modal";
+import { maskCurrencyWithLimit } from "@/utils/masks/limityValue";
+import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
+import { useFormikContext } from "formik";
 import { FC, useState } from "react";
 
 interface PaymentModalProps {
@@ -19,11 +22,17 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
         recebido: false,
         observacoes: ''
     });
+    const { values, setFieldValue } = useFormikContext<any>();
 
     if (!isOpen) return null;
 
     const handleChange = (e: any) => {
         const { name, value, type, checked } = e.target;
+
+        if (name === 'valor') {
+            return;
+        }
+
         setFormData(prevState => ({
             ...prevState,
             [name]: type === 'checkbox' ? checked : value
@@ -51,6 +60,16 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
         onClose();
     };
 
+    const handleCurrencyChange = (e:any)=>{
+        const maskedValue = maskCurrencyWithLimit(e.target.value, values.valorTotal);
+
+        setFormData(prevState => ({
+            ...prevState,
+            valor:maskedValue
+        }))
+
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -67,10 +86,10 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
                         Valor (R$) <span className="text-red-500">*</span>
                     </Label>
 
-                    <Input type="number"
+                    <Input type="text"
                         name="valor"
                         value={formData.valor}
-                        onChange={handleChange}
+                        onChange={handleCurrencyChange}
                         placeholder="Valor da parcela"
                     />
                 </div>

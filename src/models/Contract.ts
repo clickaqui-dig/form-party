@@ -1,6 +1,6 @@
 export interface Contract {
     id?: number;
-    cliente: number;
+    cliente: any;
     valorRecebido: number;
     valorPendente: number;
     valorTotal: number;
@@ -14,4 +14,5 @@ export interface Contract {
     acrescimo: number;
     itensContrato: number[];
     listaAniversariantes: number[];
+    situacao ?: any;
 }

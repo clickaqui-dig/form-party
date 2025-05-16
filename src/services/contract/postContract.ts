@@ -5,7 +5,7 @@ const URL = 'http://localhost:8080';
 
 export const postContract = async (body: Contract): Promise<any> => {
     try {
-
+        console.log("testeeee -===>>", body)
         const teste = await api.post(`${URL}/contrato`, body);
 
         return teste;

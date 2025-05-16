@@ -7,6 +7,9 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { getContractById } from "@/services/contract/getContractById";
 import FormContract from "@/components/form/contract";
+import { toast } from "react-toastify";
+import { putContractById } from "@/services/contract/putContractById";
+import { postPayments } from "@/services/payments/postPayments";
 
 
 export default function PageEditCustomer() {
@@ -37,6 +40,7 @@ export default function PageEditCustomer() {
         listaAniversariantes: [],
         itensContrato: [],
         tipoPagemento: [],
+        pagamentos: [],
         desconto: 0,
         acrescimo: 0,
     });
@@ -75,7 +79,7 @@ export default function PageEditCustomer() {
                     cidade: response.cliente.cidade,
                     celularCliente: response.cliente.celular,
                     uf: response.cliente.uf,
-                    tipoDoContrato:response.tipoDoContrato,
+                    tipoDoContrato: response.tipoDoContrato,
                     listaAniversariantes,
                     itensContrato: response.itensContrato,
                 })
@@ -88,7 +92,44 @@ export default function PageEditCustomer() {
     const handleSubmit = async (
         values: typeof initialValues
     ) => {
-        console.log(values)
+        try {
+            if (id) {
+                console.log("teste pagamentos ===>>", values)
+
+                // await putContractById(Number(id),{
+                //   cliente: values.cliente.id,
+                //   valorRecebido: values.valorRecebido,
+                //   valorPendente:values.valorPendente,
+                //   valorTotal:values.valorTotal,
+                //   tipoDoContrato:values.tipoDoContrato,
+                //   dataHoraInicial:values.dataHoraInicial,
+                //   dataHoraFinal:values.dataHoraFinal,
+                //   duracao:values.duracao,
+                //   quantidadeConvidados:values.quantidadeConvidados,
+                //   observacoes:values.observacoes,
+                //   desconto:0,
+                //   acrescimo:0,
+                //   itensContrato: values.itensContrato.map((item: any) => item.id),
+                //   listaAniversariantes:values.listaAniversariantes.map((item: any) => item.id),
+                //   situacao: 'EM_ANDAMENTO',
+                // });
+
+                await postPayments(Number(id), {
+                    valor:values.pagamentos[0].valor,
+                    meioPagamento: 'PIX',
+                    dataPagamento: values.pagamentos[0].dataPagamento,
+                    recebido: values.pagamentos[0].recebido,
+                    observacoes: values.pagamentos[0].observacoes,
+                    contratoId: Number(id),
+                })
+
+            }
+
+
+        } catch (error: any) {
+            const messageErro = error ? error.response.data.error : 'Algo inesperado aconteceu em nosso sistema.'
+            toast.error(messageErro)
+        }
 
     }
 

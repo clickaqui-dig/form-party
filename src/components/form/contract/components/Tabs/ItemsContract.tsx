@@ -18,7 +18,7 @@ export const ItemsContract = () => {
     const [contractItems, setContractItems] = useState<ContractItem[]>([]);
     const [selectedItemContract, setSelectedItemContract] = useState<TypeSelectItemContract[]>([]);
     const [isModalOpen, setModalOpen] = useState(false);
-    const { values } = useFormikContext<any>();
+    const { values, setFieldValue} = useFormikContext<any>();
 
     useEffect(() => {
         setContractItems(values.itensContrato)
@@ -32,6 +32,10 @@ export const ItemsContract = () => {
             valor: newItem.valor,
         };
         setContractItems(prevItems => [...prevItems, newEntry]);
+        setFieldValue("itensContrato",[...values.itensContrato, newEntry])
+
+        const totalValue = [...values.itensContrato, newEntry].reduce((total, item) => total + Number(item.valor), 0).toFixed(2);
+        setFieldValue("valorTotal",totalValue)
 
         setModalOpen(false);
     }
@@ -48,7 +52,12 @@ export const ItemsContract = () => {
             (item, index) => !selected.includes(index)
         );
 
+
         setContractItems(updatedItemContract);
+        setFieldValue("itensContrato",updatedItemContract)
+
+        const totalValue = contractItems.reduce((total, item) => total - Number(item.valor), 0).toFixed(2);
+        setFieldValue("valorTotal",totalValue)
     };
 
     const handleSelectItemContract = (id: number, index: number) => {
@@ -122,7 +131,7 @@ export const ItemsContract = () => {
                         <tfoot className="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
-                                    Total: {contractItems.reduce((total, item) => total + Number(item.valor), 0).toFixed(2)}
+                                    Total: {values.valorTotal}
                                 </td>
                             </tr>
                         </tfoot>

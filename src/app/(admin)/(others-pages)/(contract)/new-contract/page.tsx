@@ -32,21 +32,23 @@ export default function FormElements() {
       values: typeof initialValues
     ) => {
       try {
+        console.log("value novo contrato ===>>", values);
         const response = await postContract({
           cliente: values.cliente,
           valorRecebido: values.valorRecebido,
           valorPendente:values.valorPendente,
-          valorTotal:values.valorTotal,
+          valorTotal:Number(values.valorTotal),
           tipoDoContrato:values.tipoDoContrato,
           dataHoraInicial:values.dataHoraInicial,
           dataHoraFinal:values.dataHoraFinal,
-          duracao:values.duracao,
+          duracao:Number(values.duracao),
           quantidadeConvidados:values.quantidadeConvidados,
           observacoes:values.observacoes,
           desconto:0,
           acrescimo:0,
-          itensContrato: values.itensContrato,
-          listaAniversariantes:values.listaAniversariantes
+          situacao: 1,
+          itensContrato: values.itensContrato.map((item: any)=> item.id),
+          listaAniversariantes:values.listaAniversariantes.map((item: any)=> item.id)
         });
 
         if (response) {
