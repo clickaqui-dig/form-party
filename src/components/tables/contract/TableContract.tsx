@@ -42,7 +42,7 @@ export default function TableContract({ contract }: TableContractProps) {
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {contract.map((contract) => (
+              {contract && contract.map((contract) => (
                 <TableRow key={contract.id}>
                   <TableCell className="px-5 py-4 text-gray-500 text-start text-theme-sm dark:text-gray-400">{contract.id}</TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{formatarData(contract.dataHoraInicial)}</TableCell>

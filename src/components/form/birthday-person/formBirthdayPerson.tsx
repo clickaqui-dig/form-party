@@ -132,7 +132,7 @@ export const FormBirthDayPerson = () => {
             )}
             {themeSuggestions.length > 0 && (
               <ul className="absolute top-full z-10 bg-white border border-gray-200 max-h-48 overflow-y-auto w-full">
-                {themeSuggestions.map(theme => (
+                {themeSuggestions && themeSuggestions.map(theme => (
                   <li
                     key={theme.id}
                     className="p-2 hover:bg-gray-200 cursor-pointer"
