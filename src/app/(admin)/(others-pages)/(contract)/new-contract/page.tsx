@@ -50,7 +50,7 @@ export default function FormElements() {
         observacoes: values.observacoes,
         desconto: 0,
         acrescimo: 0,
-        situacao: 1,
+        situacao: 'EM_ANDAMENTO',
         itensContrato: values.itensContrato.map((item: any) => item.id),
         listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id)
       });

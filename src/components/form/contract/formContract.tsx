@@ -186,7 +186,7 @@ export const FormContract = () => {
         </div>
         <div>
           <Label htmlFor="situation">Situação</Label>
-          {/* <Label></Label> */}
+          <Label>{values.idForm > 0 ? values.situacao : ""}</Label>
         </div>
         <div>
           <Label htmlFor="valorRecebido">Valor Recebido</Label>

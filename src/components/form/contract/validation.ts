@@ -65,8 +65,55 @@ export const validationSchemaContract = Yup.object().shape({
     endereco: Yup.string().required('O endereço deve ser passado.'),
     cidade: Yup.string().required('A cidade deve ser passado.'),
     numero: Yup.string().required('O Número deve ser passado.'),
-    dataHoraInicial: Yup.string().required('Informar data inicial.'),
-    dataHoraFinal: Yup.string().required('Informar data final.'),
+    dataHoraInicial: Yup.string()
+      .required('Data inicial é obrigatória')
+      .test(
+        'is-future-date',
+        'A data não pode ser anterior à data atual',
+        function(value) {
+          if (!value) return true; // Deixe a validação required lidar com valores vazios
+          const inputDate = new Date(value);
+          const currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0);
+          const inputDateOnly = new Date(inputDate);
+          inputDateOnly.setHours(0, 0, 0, 0);
+          return inputDateOnly >= currentDate;
+        }
+      ),
+    dataHoraFinal: Yup.string()
+      .required('Informar data final.')
+      .test(
+        'is-not-more-than-one-day',
+        'A data final não pode ser maior que um dia após a data inicial',
+        function(value) {
+          const { dataHoraInicial } = this.parent;
+          if (!value || !dataHoraInicial) return true; // Deixe a validação required lidar com valores vazios
+          
+          const start = new Date(dataHoraInicial);
+          const end = new Date(value);
+          
+          // Calcular a diferença em milissegundos
+          const diffMs = end.getTime() - start.getTime();
+          
+          // Converter para dias (1 dia = 24 * 60 * 60 * 1000 ms)
+          const diffDays = diffMs / (24 * 60 * 60 * 1000);
+          
+          return diffDays <= 1;
+        }
+      )
+      .test(
+        'is-after-start-date',
+        'A data final deve ser posterior à data inicial',
+        function(value) {
+          const { dataHoraInicial } = this.parent;
+          if (!value || !dataHoraInicial) return true;
+          
+          const start = new Date(dataHoraInicial);
+          const end = new Date(value);
+          
+          return end > start;
+        }
+      ),
     quantidadeConvidados: Yup.number()
         .min(5,'Quantidade tem que ser maior que 5')
         .max(60,"Lotação maxima é 60 pessoas")

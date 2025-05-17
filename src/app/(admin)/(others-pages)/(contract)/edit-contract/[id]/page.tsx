@@ -55,7 +55,7 @@ export default function PageEditCustomer() {
     const fetchCustomer = async (id: number) => {
         try {
             const response = await getContractById({ id });
-            console.log("response ===>>>", response)
+            console.log("response edit ===>>>", response)
             if (response) {
                 const listaAniversariantes = response.listaAniversariantes.map((item) => {
                     return {
@@ -82,6 +82,7 @@ export default function PageEditCustomer() {
                     tipoDoContrato: response.tipoDoContrato,
                     listaAniversariantes,
                     itensContrato: response.itensContrato,
+                    situacao: response.situacao === 'CANCELADO' ? "Cancelado" : "Em Andamento"
                 })
             }
         } catch (error) {
