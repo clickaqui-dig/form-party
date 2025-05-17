@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import { useFormikContext } from "formik";
 import BithdayModal from "../modals/BirthdayModal";
+import { toast } from "react-toastify";
 
 export interface BirthDayItem {
   id: number;
@@ -28,7 +29,7 @@ const BirthdayList =() => {
   }, [values]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {
-
+    console.log("newItem.nome === >", newItem.nome)
     if (newItem.nome) {
       const newEntry = {
         ...newItem,
@@ -46,6 +47,7 @@ const BirthdayList =() => {
       setIsModalOpen(false);
     } else {
       //!TODO Colocar toast
+      toast.error("Preenchar os campos")
     }
   };
 
