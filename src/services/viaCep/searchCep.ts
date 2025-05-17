@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "https://viacep.com.br";
+const URL = process.env.NEXT_PUBLIC_API_VIA_CEP;
 
 export interface CepResponse {
     cep: string;

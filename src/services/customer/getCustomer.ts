@@ -2,8 +2,6 @@ import { Customer } from "@/models/Customer";
 import { buildQueryParams } from "@/utils/builders/buildQueryParams";
 import api from '@/config/apiConfig';
 
-const URL = 'http://localhost:8080';
-
 interface RequestCustomer {
     page: number,
     size: number,
@@ -42,8 +40,7 @@ export const getCustomer = async(
     try {
         const query = buildQueryParams({ page, size, nome });
 
-        const response = await api.get(`${URL}/cliente${query}`);
-        console.log("getAllCustomer ===>>", response)
+        const response = await api.get(`/cliente${query}`);
 
         return response.data;
     } catch (error) {

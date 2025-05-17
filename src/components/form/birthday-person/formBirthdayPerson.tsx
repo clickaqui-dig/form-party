@@ -67,10 +67,6 @@ export const FormBirthDayPerson = () => {
     fetchThemes(inputValue, page, false);
   };
 
-  useEffect(()=>{
-    console.log("values.idade", values.idade === 0)
-  },[])
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">

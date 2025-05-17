@@ -1,7 +1,5 @@
 import api from '@/config/apiConfig';
 
-const URL = 'http://localhost:8080';
-
 /**
  * Busca itens de contrato por descrição no backend, com paginação
  * @param descricao Texto a ser pesquisado
@@ -15,7 +13,7 @@ export const getItemContract = async (
   size: number = 10
 ) => {
   try {
-    const response = await api.get(`${URL}/item-contrato`, {
+    const response = await api.get(`/item-contrato`, {
       params: { descricao, page, size }
     });
     return response.data;

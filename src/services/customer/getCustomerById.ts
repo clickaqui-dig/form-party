@@ -1,12 +1,9 @@
 import { Customer } from "@/models/Customer";
 import api from '@/config/apiConfig';
 
-const URL = 'http://localhost:3001';
-
 interface RequestCustomer {
     id: number,
 }
-
 
 export const getCustomerById = async(
     {id}
