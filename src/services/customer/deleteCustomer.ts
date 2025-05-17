@@ -6,7 +6,7 @@ interface RequestCustomer {
 
 export const deleteCustomer = async ({ id }: RequestCustomer): Promise<boolean> => {
     try {
-        await api.delete(`${URL}/customers/${id}`);
+        await api.delete(`/customers/${id}`);
 
         return true;
     } catch (error) {

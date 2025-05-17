@@ -1,7 +1,4 @@
-import { Contract } from "@/app/(admin)/(others-pages)/(contract)/search-contract/page";
 import api from "@/config/apiConfig";
-
-const URL = 'http://localhost:8080';
 
 interface RequestContract {
     page: number,
@@ -30,7 +27,7 @@ export const getContract = async(
         };
         if (search) params.nome = search; 
 
-        const response = await api.get(`${URL}/contrato`, { params });
+        const response = await api.get(`/contrato`, { params });
 
         // Adaptar Page Spring para o front
         const backend = response.data;

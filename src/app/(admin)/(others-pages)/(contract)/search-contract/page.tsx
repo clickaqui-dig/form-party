@@ -27,6 +27,7 @@ export interface Contract {
   desconto?: number;
   acrescimo?:number
   pagamentos?: any[];
+  situacao?: string;
 }
 
 interface ContractState {

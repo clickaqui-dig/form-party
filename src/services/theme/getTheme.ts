@@ -1,7 +1,5 @@
 import api from '@/config/apiConfig';
 
-const URL = 'http://localhost:8080';
-
 /**
  * Busca temas por descrição no backend com paginação
  * @param descricao Texto a ser pesquisado
@@ -15,7 +13,7 @@ export const getThemesByDescription = async (
   size = 10
 ) => {
   try {
-    const response = await api.get(`${URL}/tema`, {
+    const response = await api.get(`/tema`, {
       params: { descricao, page, size }
     });
     return response.data;
