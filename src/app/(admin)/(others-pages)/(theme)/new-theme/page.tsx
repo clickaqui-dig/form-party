@@ -5,7 +5,8 @@ import { Formik, FormikHelpers } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
 import { FormTheme } from "@/components/form/theme/formTheme";
 import { postTheme } from "@/services/theme/postTheme";
-import { validationSchema } from "@/components/form/theme/validation";
+import { validationSchemaThema } from "@/components/form/theme/validation";
+import { toast } from "react-toastify";
 
 const initialValues = {
   descricao: "",
@@ -18,29 +19,46 @@ export default function PageNewTheme() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      await postTheme(values)
-    } catch (error) {
+      const response = await postTheme(values);
 
+      if (response) {
+        toast.success("Tema cadastrado com sucesso !")
+        formikHelpers.resetForm()
+      } else {
+        toast.error("Error ao criar tema, revise o formulario.")
+      }
+
+    } catch (error: any) {
+      toast.error(error.message)
     }
   }
   return (
     <div>
       <PageBreadcrumb pageTitle="Novo Tema" />
-      <Formik 
-        initialValues={initialValues} 
-        onSubmit={handleSubmit} 
-        validationSchema={validationSchema}
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchemaThema}
         validateOnChange={false}
         validateOnBlur={false}
-        validateOnMount={false} >
-        {({ handleSubmit, isValid, dirty }) => {
+        validateOnMount={false}
+        >
+        {({ handleSubmit, validateForm }) => {
+
+          const handleValidateAndSubmit = async () => {
+            const errors = await validateForm();
+
+            if (Object.keys(errors).length === 0) {
+              handleSubmit();
+            }
+          };
+
           return (
             <ComponentCard title="Formulário">
               <FormTheme />
               <button
-                onClick={() => handleSubmit()}
+                onClick={() => handleValidateAndSubmit()}
                 type="button"
-                disabled={!(isValid && dirty)}
                 className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
               >
                 Salvar

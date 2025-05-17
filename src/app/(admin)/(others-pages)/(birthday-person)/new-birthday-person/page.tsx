@@ -6,13 +6,15 @@ import ComponentCard from "@/components/common/ComponentCard";
 import Cookies from 'js-cookie';
 import FormBirthDayPerson from "@/components/form/birthday-person";
 import { postBirthDayPerson } from "@/services/birthday-person/postBirthDayPerson";
+import { toast } from "react-toastify";
+import { validationSchemaBirthDayPerson } from "@/components/form/birthday-person/validation";
 
 const initialValues = {
   nome: "",
   dataNascimento: "",
   idade: 0,
   idadeNoEvento: 0,
-  tema:0
+  tema: 0
 };
 
 export default function PageNewBithdayPerson() {
@@ -21,33 +23,54 @@ export default function PageNewBithdayPerson() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      console.log("theme ===>>", values)
-      await postBirthDayPerson(values)
-    } catch (error) {
-      
+      const response = await postBirthDayPerson(values)
+
+      if (response) {
+        toast.success("Aniversariante cadastrado com sucesso!")
+        formikHelpers.resetForm()
+      } else {
+        toast.error("Error ao criar Aniversariante, revise o formulario.")
+      }
+
+    } catch (error: any) {
+      toast.error(error)
     }
   }
   return (
     <div>
       <PageBreadcrumb pageTitle="Novo Aniversariante" />
-      <Formik initialValues={initialValues} onSubmit={handleSubmit} >
-        {({ handleSubmit, isValid, dirty }) => {
+      <Formik 
+        initialValues={initialValues} 
+        onSubmit={handleSubmit} 
+        validationSchema={validationSchemaBirthDayPerson}         
+        validateOnChange={false}
+        validateOnBlur={false}
+        validateOnMount={false}>
+        {({ handleSubmit, validateForm }) => {
+
+          const handleValidateAndSubmit = async () => {
+            const errors = await validateForm();
+
+            if (Object.keys(errors).length === 0) {
+              handleSubmit();
+            }
+          };
+
           return (
             <ComponentCard title="Formulário">
-              <FormBirthDayPerson/>
+              <FormBirthDayPerson />
               <button
-                onClick={() => handleSubmit()}
+                onClick={() => handleValidateAndSubmit()}
                 type="button"
-                disabled={!(isValid && dirty)}
                 className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
               >
                 Salvar
               </button>
             </ComponentCard>
           )
-         }}
+        }}
       </Formik>
-     
+
     </div>
   );
 }

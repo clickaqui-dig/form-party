@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { Formik, FormikHelpers } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Contract } from "../../search-contract/page";
-import FormContract from "../../new-contract/form";
 import { getContractById } from "@/services/contract/getContractById";
-import { FormContractEdit } from "./form/formContractEdit";
+import FormContract from "@/components/form/contract";
+import { toast } from "react-toastify";
+import { putContractById } from "@/services/contract/putContractById";
+import { postPayments } from "@/services/payments/postPayments";
 
 
 export default function PageEditCustomer() {
@@ -38,6 +40,7 @@ export default function PageEditCustomer() {
         listaAniversariantes: [],
         itensContrato: [],
         tipoPagemento: [],
+        pagamentos: [],
         desconto: 0,
         acrescimo: 0,
     });
@@ -54,6 +57,16 @@ export default function PageEditCustomer() {
             const response = await getContractById({ id });
             console.log("response ===>>>", response)
             if (response) {
+                const listaAniversariantes = response.listaAniversariantes.map((item) => {
+                    return {
+                        id: item.id,
+                        nome: item.nome,
+                        dataNascimento: item.dataNascimento,
+                        tema: item.tema.descricao,
+                        idade: item.idade,
+                        idadeNoEvento: item.idadeNoEvento,
+                    }
+                })
                 setInitialValues({
                     ...response,
                     idForm: response.id,
@@ -66,8 +79,8 @@ export default function PageEditCustomer() {
                     cidade: response.cliente.cidade,
                     celularCliente: response.cliente.celular,
                     uf: response.cliente.uf,
-                    tipoDoContrato:response.tipoDoContrato,
-                    listaAniversariantes: response.listaAniversariantes,
+                    tipoDoContrato: response.tipoDoContrato,
+                    listaAniversariantes,
                     itensContrato: response.itensContrato,
                 })
             }
@@ -77,10 +90,46 @@ export default function PageEditCustomer() {
     }
 
     const handleSubmit = async (
-        values: typeof initialValues,
-        formikHelpers: FormikHelpers<typeof initialValues>
+        values: typeof initialValues
     ) => {
-        console.log(values)
+        try {
+            if (id) {
+                console.log("teste pagamentos ===>>", values)
+
+                // await putContractById(Number(id),{
+                //   cliente: values.cliente.id,
+                //   valorRecebido: values.valorRecebido,
+                //   valorPendente:values.valorPendente,
+                //   valorTotal:values.valorTotal,
+                //   tipoDoContrato:values.tipoDoContrato,
+                //   dataHoraInicial:values.dataHoraInicial,
+                //   dataHoraFinal:values.dataHoraFinal,
+                //   duracao:values.duracao,
+                //   quantidadeConvidados:values.quantidadeConvidados,
+                //   observacoes:values.observacoes,
+                //   desconto:0,
+                //   acrescimo:0,
+                //   itensContrato: values.itensContrato.map((item: any) => item.id),
+                //   listaAniversariantes:values.listaAniversariantes.map((item: any) => item.id),
+                //   situacao: 'EM_ANDAMENTO',
+                // });
+
+                await postPayments(Number(id), {
+                    valor:values.pagamentos[0].valor,
+                    meioPagamento: 'PIX',
+                    dataPagamento: values.pagamentos[0].dataPagamento,
+                    recebido: values.pagamentos[0].recebido,
+                    observacoes: values.pagamentos[0].observacoes,
+                    contratoId: Number(id),
+                })
+
+            }
+
+
+        } catch (error: any) {
+            const messageErro = error ? error.response.data.error : 'Algo inesperado aconteceu em nosso sistema.'
+            toast.error(messageErro)
+        }
 
     }
 
@@ -91,7 +140,7 @@ export default function PageEditCustomer() {
                 {({ handleSubmit, isValid, dirty }) => {
                     return (
                         <ComponentCard title="Edição Contrato">
-                            <FormContractEdit />
+                            <FormContract />
                             <button
                                 onClick={() => handleSubmit()}
                                 type="button"

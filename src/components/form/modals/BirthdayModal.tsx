@@ -1,3 +1,4 @@
+// src/components/BirthDayModal.tsx
 import { Modal } from "@/components/ui/modal";
 import React, { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
 import Label from "../Label";
@@ -5,6 +6,7 @@ import Input from "../input/InputField";
 import { BirthDayItem } from "../form-elements/BirthdayList";
 import debounce from "lodash.debounce";
 import { getBirthDayPersonbyName } from "@/services/birthday-person/getBithdayPerson";
+import { validateBirthdayForm } from "./validations";
 
 interface BirthDayProps {
   isOpen: boolean;
@@ -21,6 +23,7 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     idade: 0,
     idadeNoEvento: 0
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -91,6 +94,15 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
       nome: e.target.value,
     }));
     setPage(0);
+    
+    // Limpa o erro quando o usuário começa a digitar
+    if (formErrors.nome) {
+      setFormErrors(prev => {
+        const newErrors = {...prev};
+        delete newErrors.nome;
+        return newErrors;
+      });
+    }
   };
 
   const handleSuggestionClick = (person: any) => {
@@ -105,6 +117,20 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     });
     setSuggestions([]);
     setHasMore(false);
+    
+    // Limpa os erros relacionados aos campos preenchidos
+    const fieldsToCheck = ['nome', 'dataNascimento', 'tema', 'idade', 'idadeNoEvento'];
+    const fieldsWithValues = fieldsToCheck.filter(field => !!person[field]);
+    
+    if (fieldsWithValues.length > 0) {
+      setFormErrors(prev => {
+        const newErrors = {...prev};
+        fieldsWithValues.forEach(field => {
+          delete newErrors[field];
+        });
+        return newErrors;
+      });
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -114,14 +140,34 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
       [name]: value,
     }));
     if (name === "nome") setInputValue(value);
+    
+    // Limpa o erro quando o usuário começa a digitar
+    if (formErrors[name]) {
+      setFormErrors(prev => {
+        const newErrors = {...prev};
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleLoadMore = () => {
     fetchPersons(inputValue, page, false);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validar o formulário antes de enviar
+    const { isValid, errors } = await validateBirthdayForm(formData);
+    
+    if (!isValid) {
+      setFormErrors(errors);
+      return;
+    }
+    
+    // Se for válido, limpa os erros e continua
+    setFormErrors({});
     onAddItem(formData);
     setFormData({
       id: 0,
@@ -135,6 +181,13 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     setPage(0);
     setSuggestions([]);
     onClose();
+  };
+
+  // Função para exibir mensagem de erro
+  const renderError = (field: string) => {
+    return formErrors[field] ? (
+      <p className="text-red-500 text-xs mt-1">{formErrors[field]}</p>
+    ) : null;
   };
 
   if (!isOpen) return null;
@@ -154,8 +207,10 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Digite para buscar aniversariante..."
-            className="w-full"
+            className={`w-full ${formErrors.nome ? 'border-red-500' : ''}`}
           />
+          {renderError('nome')}
+          
           {isLoading && (
             <div className="absolute left-0 top-full bg-white border border-gray-200 w-full p-2 rounded-b shadow z-20">
               <span className="text-gray-600 text-sm">Carregando...</span>
@@ -192,7 +247,9 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
             value={formData.dataNascimento}
             onChange={handleChange}
             placeholder="Data de Nascimento"
+            className={formErrors.dataNascimento ? 'border-red-500' : ''}
           />
+          {renderError('dataNascimento')}
         </div>
 
         <div className="mb-4">
@@ -201,8 +258,11 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
             type="text"
             name="tema"
             value={formData.tema}
+            onChange={handleChange}
             placeholder="Tema"
+            className={formErrors.tema ? 'border-red-500' : ''}
           />
+          {renderError('tema')}
         </div>
 
         <div className="flex justify-end mt-4">
@@ -224,4 +284,5 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     </Modal>
   );
 };
+
 export default BirthDayModal;

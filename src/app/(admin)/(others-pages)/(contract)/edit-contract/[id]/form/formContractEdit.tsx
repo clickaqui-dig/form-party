@@ -5,7 +5,7 @@ import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import { ChevronDownIcon } from '@/icons';
 import BirthdayList from "@/components/form/form-elements/BirthdayList";
-import TabsComponent from "@/components/form/form-elements/TabsComponent";
+import TabsComponent from "@/components/form/contract/components/Tabs/TabsComponent";
 import { ErrorMessage, Field, useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 import { getCustomerByName } from "@/services/customer/getCustomerbyName";

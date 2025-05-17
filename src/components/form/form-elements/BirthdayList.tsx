@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import { useFormikContext } from "formik";
 import BithdayModal from "../modals/BirthdayModal";
-import { Contract } from "@/app/(admin)/(others-pages)/(contract)/search-contract/page";
+import { toast } from "react-toastify";
 
 export interface BirthDayItem {
   id: number;
@@ -14,38 +16,38 @@ export interface BirthDayItem {
   idadeNoEvento:number;
 }
 
-interface Props {
-  birthdayList : any[]
-}
 
-const BirthdayList: FC<Props> =({birthdayList}) => {
+const BirthdayList =() => {
   const [birthdays, setBirthdays] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBirthdays, setSelectedBirthdays] = useState([]);
-  const { setFieldValue, values} = useFormikContext<any>();
+  const { values, setFieldValue, errors} = useFormikContext<any>();
 
-  // useEffect(() => {
-  //   setFieldValue("birthdayList componente ====>>>", birthdayList)
-  // },[birthdayList]);
 
   useEffect(() => {
-    setFieldValue("listaAniversariantes", birthdays.map(item => item.id))
-  }, [birthdays]);
+    setBirthdays(values.listaAniversariantes);
+  }, [values]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {
-    if (newItem.nome && newItem.nome) {
-
+    console.log("newItem.nome === >", newItem.nome)
+    if (newItem.nome) {
       const newEntry = {
         ...newItem,
         id: newItem.id,
         idade: newItem.idade,
         idadeNoEvento: newItem.idadeNoEvento,
       }
-      setBirthdays((prev) => [...prev, newEntry]);
 
+      const allBirthdays = birthdays;
+
+      allBirthdays.push(newEntry);
+      setBirthdays(allBirthdays);
+      setFieldValue("listaAniversariantes", allBirthdays)
+      
       setIsModalOpen(false);
     } else {
-      alert("Preencha todos os campos!");
+      //!TODO Colocar toast
+      toast.error("Preenchar os campos")
     }
   };
 
@@ -120,8 +122,8 @@ const BirthdayList: FC<Props> =({birthdayList}) => {
             </thead>
             <tbody>
               {birthdays.length > 0 ? (
-                birthdayList.length !==0 ? birthdayList:  birthdays
-                  .map((birthday) => (
+                birthdays
+                  .map((birthday: any) => (
                     <tr key={birthday.id} className="bg-white dark:bg-gray-800">
                       <td className="px-10 py-3">
                         <input
@@ -166,6 +168,7 @@ const BirthdayList: FC<Props> =({birthdayList}) => {
           </table>
         </div>
         <BithdayModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleAddBirthday} />
+        
       </div>
     </ComponentCard>
   );

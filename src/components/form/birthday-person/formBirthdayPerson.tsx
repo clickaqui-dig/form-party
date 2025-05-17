@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import { getThemesByDescription } from '@/services/theme/getTheme';
 
 export const FormBirthDayPerson = () => {
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, errors, values} = useFormikContext<any>();
   const [themeSuggestions, setThemeSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
@@ -67,6 +67,10 @@ export const FormBirthDayPerson = () => {
     fetchThemes(inputValue, page, false);
   };
 
+  useEffect(()=>{
+    console.log("values.idade", values.idade === 0)
+  },[])
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -75,7 +79,9 @@ export const FormBirthDayPerson = () => {
           <Field id="nome" name="nome">
             {({ field }: FieldProps) => <Input {...field} type="text" />}
           </Field>
-          <ErrorMessage name="nome" component="div" />
+          {errors.nome && (
+            <div className="text-red-500 text-sm mt-1">{errors.nome}</div>
+          )}
         </div>
 
         <div>
@@ -85,7 +91,9 @@ export const FormBirthDayPerson = () => {
               <Input {...field} type="date" placeholder="Data de Nascimento" />
             )}
           </Field>
-          <ErrorMessage name="dataNascimento" component="div" />
+                    {errors.dataNascimento && (
+            <div className="text-red-500 text-sm mt-1">{errors.dataNascimento}</div>
+          )}
         </div>
 
         <div>
@@ -93,7 +101,9 @@ export const FormBirthDayPerson = () => {
           <Field id="idade" name="idade">
             {({ field }: FieldProps) => <Input {...field} type="text" />}
           </Field>
-          <ErrorMessage name="idade" component="div" />
+          {errors.idade && values.idade == 0 && (
+            <div className="text-red-500 text-sm mt-1">{errors.idade}</div>
+          )}
         </div>
 
         <div>
@@ -101,7 +111,9 @@ export const FormBirthDayPerson = () => {
           <Field id="idadeNoEvento" name="idadeNoEvento">
             {({ field }: FieldProps) => <Input {...field} type="text" />}
           </Field>
-          <ErrorMessage name="idadeNoEvento" component="div" />
+          {errors.idadeNoEvento && (
+            <div className="text-red-500 text-sm mt-1">{errors.idadeNoEvento}</div>
+          )}
         </div>
 
         {/* Campo Tema com autocomplete */}
@@ -115,7 +127,7 @@ export const FormBirthDayPerson = () => {
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
               placeholder="Digite para buscar temas..."
-            //   autoComplete="off"
+              requerid={true}
             />
             {isLoading && (
               <div className="absolute top-full left-0 bg-gray-100 p-2 z-20">
@@ -150,7 +162,9 @@ export const FormBirthDayPerson = () => {
             )}
           </div>
           {/* Corrigido o name do ErrorMessage para 'tema' (não 'temas') */}
-          <ErrorMessage name="tema" component="div" />
+          {  errors.tema && (
+            <div className="text-red-500 text-sm mt-1">{errors.tema}</div>
+          )}
         </div>
       </div>
     </div>
