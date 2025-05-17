@@ -2,7 +2,6 @@
 import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ListItemNode, ListNode } from "@lexical/list";
 import {
-  HeadingNode,
   QuoteNode,
 } from "@lexical/rich-text";
 import {TableNode, TableRowNode, TableCellNode} from "@lexical/table";

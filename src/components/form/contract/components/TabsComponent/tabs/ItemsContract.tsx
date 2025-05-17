@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useFormikContext } from "formik";
 import { useEffect, useState } from "react"
-import { ItemsContractModal } from "../Modals/ItemsContractModal";
+import { ItemsContractModal } from "../../Modals/ItemsContractModal";
 
 interface ContractItem {
     id: number;

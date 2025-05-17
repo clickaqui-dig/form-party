@@ -1,61 +1,150 @@
-export const initialHtml = `
-<p style="text-align:center;">
-    <span style="font-size:14px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong></span>
-</p>
-<p>
-    &nbsp;
-</p>
-<p>
-    <span style="font-size:12px;">Pelo presente instrumento e na melhor forma de direito que fazem de um lado SABRINA FERREIRA ROMAY SKABA portador(a) do RG e inscrito(a) no CPF 05202054726 residente e domiciliado à Rua Congo 499 Torre 1 apto 123 - Jardim Bonfiglioli - CEP 13207-340 na cidade de Jundiaí-SP, na doravante designado(a) simplesmente <strong>CONTRATANTE</strong>, de outro, KARIN PATRICIA ARAUJO ALECRIM inscrita no CNPJ/CPF 31774785000183, estabelecida na Rua José Veríssimo 143 - Vila Rio Branco - CEP 13215-430 na cidade de Jundiaí - SP, designado simplesmente <strong>CONTRATADA</strong>, têm entre si justos e contratados o presente instrumento de prestação de serviços que se rege conforme as cláusulas a seguir dispostas:</span>
-</p>
-<p>
-    <span style="font-size:12px;"><strong>Cláusula 1ª </strong>- A <strong>CONTRATADA</strong> se responsabiliza em prestar ao(à) <strong>CONTRATANTE</strong> os serviços e produtos escolhidos conforme apresentados abaixo, reservando os referidos serviços para o <strong>dia 20/03/2022 das 18:00h às 21:00h.</strong> Por outro lado, a <strong>CONTRATANTE</strong> reconhece na tabela abaixo todos os itens&nbsp;junto à <strong>CONTRATADA</strong>.</span>
-</p>
-<p>
-    <span style="font-size:12px;"><strong>Itens do contrato</strong>:</span><br>
-    &nbsp;
-</p>
-<figure class="table">
-    <table>
-        <thead>
+interface headerHtmlProps {
+    nameClient: string;
+    documentClient: string;
+    street: string;
+    number: string;
+    city: string;
+    state: string;
+    cep: string;
+    dateInit: string;
+    dateEnd: string;
+}
+
+export const headerHtml = (data: headerHtmlProps) => {
+    const address = `${data.street} ${data.number} - CEP ${data.cep} na cidade de ${data.city}-${data.state}`;
+
+    const inicio = formatIso(data.dateInit);
+    const fim    = formatIso(data.dateEnd);
+  
+    const dateSpan = `${inicio.date} das ${inicio.time} às ${fim.time}.`;
+    return `
+    <p style="text-align:center;">
+      <span style="font-size:14px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong></span>
+    </p>
+
+    <p>&nbsp;</p>
+
+    <p>
+      <span style="font-size:12px;">
+        Pelo presente instrumento e na melhor forma de direito que fazem de um lado
+        ${data.nameClient} portador(a) do RG e inscrito(a) no CPF ${data.documentClient}
+        residente e domiciliado à ${address},
+        doravante designado(a) simplesmente <strong>CONTRATANTE</strong>, de outro,
+        KARIN PATRICIA ARAUJO ALECRIM inscrita no CNPJ 31.774.785/0001-83,
+        estabelecida na Rua José Veríssimo 143 – Vila Rio Branco – CEP 13215-430
+        na cidade de Jundiaí-SP, designada simplesmente <strong>CONTRATADA</strong>,
+        têm entre si justos e contratados o presente instrumento de prestação de serviços que se rege
+        conforme as cláusulas a seguir dispostas:
+      </span>
+    </p>
+
+    <p>
+      <span style="font-size:12px;">
+        <strong>Cláusula 1ª </strong>– A <strong>CONTRATADA</strong> se responsabiliza em prestar
+        ao(à) <strong>CONTRATANTE</strong> os serviços e produtos escolhidos conforme apresentados
+        abaixo, reservando os referidos serviços para o <strong>dia ${dateSpan}</strong>
+        Por outro lado, a <strong>CONTRATANTE</strong> reconhece na tabela abaixo todos os itens
+        junto à <strong>CONTRATADA</strong>.
+      </span>
+    </p>
+  `;
+}
+
+const formatIso =(iso: string) =>  {
+    const d = new Date(iso);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+  
+    const dia   = pad(d.getDate());
+    const mes   = pad(d.getMonth() + 1);
+    const ano   = d.getFullYear();
+  
+    const horas = pad(d.getHours());
+    const mins  = pad(d.getMinutes());
+  
+    return {
+      date: `${dia}/${mes}/${ano}`, 
+      time: `${horas}:${mins}h`,        
+    };
+}
+
+const formatBrl = (v: number) =>
+    new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+    }).format(v);
+
+interface contractItemHtmlProps {
+    id: number;
+    descricao: string;
+    valor: number; 
+  }
+  
+export const contractItemHtml = (data: contractItemHtmlProps[]) => {
+    if (!data.length) return '';
+
+    const linhas = data
+      .map(
+        (it) => `
+          <tr>
+            <td>
+              <span style="font-size:12px;">${it.descricao}</span>
+            </td>
+            <td>
+              <span style="font-size:12px;">${formatBrl(it.valor)}</span>
+            </td>
+          </tr>`,
+      )
+      .join('');
+  
+    const total = data.reduce((s, it) => s + it.valor, 0);
+  
+    return `
+      <p>
+        <span style="font-size:12px;"><strong>Itens do contrato</strong>:</span><br>
+        &nbsp;
+      </p>
+  
+      <figure class="table">
+        <table style="table-layout:auto;border-collapse:collapse;width:100%;">
+          <thead>
             <tr>
-                <th style="width:450px;">
-                    <span style="font-size:12px;">Descricao</span>
-                </th>
-                <th>
-                    <span style="font-size:12px;">Valor</span>
-                </th>
+              <th style="width:450px;">
+                <span style="font-size:12px;">Descricao</span>
+              </th>
+              <th>
+                <span style="font-size:12px;">Valor</span>
+              </th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+  
+          <tbody>
+            ${linhas}
+  
             <tr>
-                <td>
-                    <span style="font-size:12px;">FESTA DA FELICIDADE - 3 H, 20 CRIANÇAS, ALIMENTAÇÃO, RECREAÇÃO, LEMBRANCINHAS</span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">R$&nbsp;2.200,00</span>
-                </td>
+              <td>
+                <span style="font-size:12px;"><strong>Total</strong></span>
+              </td>
+              <td>
+                <span style="font-size:12px;"><strong>${formatBrl(total)}</strong></span>
+              </td>
             </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;">30 itens de papelaria</span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">R$&nbsp;130,00</span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <span style="font-size:12px;"><strong>Total</strong></span>
-                </td>
-                <td>
-                    <span style="font-size:12px;"><strong>R$&nbsp;2.330,00</strong></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</figure>
-<p>
+          </tbody>
+        </table>
+      </figure>
+    `;
+}
+
+interface valuesHtmlProps {
+    addition: number;
+    discount: number;
+    valor: number; 
+    amountAlreadyPaid: number;
+    amountToPay: number;
+  }
+
+export const valuesHtml = (data: valuesHtmlProps) => {
+    return `<p>
     <br>
     <span style="font-size:12px;"><strong>Valores</strong>:</span>
 </p>
@@ -67,7 +156,7 @@ export const initialHtml = `
                     <span style="font-size:12px;"><strong>NO Acréscimo</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;0,00</span>
+                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.addition)}</span>
                 </td>
             </tr>
             <tr>
@@ -75,7 +164,7 @@ export const initialHtml = `
                     <span style="font-size:12px;"><strong>Desconto</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;0,00</span>
+                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.discount)}</span>
                 </td>
             </tr>
             <tr>
@@ -83,7 +172,7 @@ export const initialHtml = `
                     <span style="font-size:12px;"><strong>Total</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;2.330,00</span>
+                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.valor)}</span>
                 </td>
             </tr>
             <tr>
@@ -91,7 +180,7 @@ export const initialHtml = `
                     <span style="font-size:12px;"><strong>Valor já pago</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;1.050,00</span>
+                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.amountAlreadyPaid)}</span>
                 </td>
             </tr>
             <tr>
@@ -99,12 +188,17 @@ export const initialHtml = `
                     <span style="font-size:12px;"><strong>Valor a pagar</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;1.280,00</span>
+                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.amountToPay)}</span>
                 </td>
             </tr>
         </tbody>
     </table>
-</figure>
+</figure>`;
+}
+
+export const initialHtml = `
+
+
 <p>
     <br>
     &nbsp;

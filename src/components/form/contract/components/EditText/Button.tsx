@@ -5,18 +5,15 @@ import {
 } from "react";
 import clsx from "clsx";
 
-/* --- Tipos auxiliares ------------------------- */
 type Variant = "ghost" | "solid";
 type Size = "icon" | "sm" | "md";
 
-/* --- Interface de propriedades ---------------- */
 export interface ButtonProps
     extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: Variant;
     size?: Size;
 }
 
-/* --- Implementação ---------------------------- */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     (
         {
@@ -56,5 +53,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
 );
 
-// boa prática para depuração e DevTools
 Button.displayName = "Button";

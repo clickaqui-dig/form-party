@@ -5,7 +5,7 @@ import {
     $getSelection,
     $isRangeSelection,
 } from "lexical";
-
+import { $patchStyleText } from '@lexical/selection';
 import {
     Bold,
     Italic,
@@ -28,12 +28,12 @@ export function ToolbarPlugin() {
             editor.update(() => {
                 const selection = $getSelection();
                 if ($isRangeSelection(selection)) {
-                    $patchStyleTextSelection(selection, styleObj);
+                    $patchStyleText(selection, styleObj);
                 }
             });
         },
         [editor],
-    );
+      );
 
     return (
         <div className="flex flex-wrap items-center gap-1 border-b bg-gray-50 p-2">
