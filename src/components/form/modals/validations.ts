@@ -10,7 +10,7 @@ export const birthdayModalSchema = Yup.object().shape({
     .required('A data de nascimento é obrigatória')
     .matches(
       /^\d{4}-\d{2}-\d{2}$/,
-      'A data deve estar no formato correto (AAAA-MM-DD)'
+      'A data deve estar no formato correto (DD-MM-AAAA)'
     ),
   
   tema: Yup.string()
