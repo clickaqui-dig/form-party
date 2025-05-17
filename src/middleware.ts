@@ -9,6 +9,10 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  if (pathname.endsWith('/')) {
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
+
   if (!token) {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
