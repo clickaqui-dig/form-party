@@ -9,7 +9,7 @@ import { WriteContract } from "./tabs/WriteContract";
 
 export const TabsComponent = () => {
     const [activeTab, setActiveTab] = useState("itensContrato");
-    const { values } = useFormikContext<any>();
+    const { values, setFieldValue } = useFormikContext<any>();
 
     return (
         <ComponentCard title="Contratos e Pagamentos">
@@ -46,6 +46,9 @@ export const TabsComponent = () => {
                     onClick={() => {
                         if (values.id) {
                             setActiveTab("contrato")
+                            
+                            //TODO :: SOLUÇÃO PALIATIVA
+                            setFieldValue("valorPendente", values.valorTotal - Number(values.valorRecebido));
                         }
                     }}
                 >
