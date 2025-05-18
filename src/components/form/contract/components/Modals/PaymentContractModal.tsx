@@ -106,8 +106,8 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
                         required
                     >
                         <option value="">Selecione uma opção</option>
-                        <option value="Cartão">Cartão</option>
-                        <option value="Boleto">Boleto</option>
+                        <option value="Cartão">Cartão de Crédito</option>
+                        <option value="Boleto">Cartão de Débito</option>
                         <option value="Pix">Pix</option>
                     </select>
                 </div>
