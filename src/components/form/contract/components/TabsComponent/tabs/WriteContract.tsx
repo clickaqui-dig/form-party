@@ -12,7 +12,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
-import { contractItemHtml, headerHtml, valuesHtml } from "../../EditText/config/initialHtml";
+import { clauseHtml, contractItemHtml, headerHtml, signatureHtml, valuesHtml } from "../../EditText/config/initialHtml";
 import { editorConfig } from "../../EditText/config/editorConfig";
 import { PrepopulatedFromHtmlPlugin } from "../../EditText/config/populatedHtml";
 import { OptionsEditComponent } from "../../EditText/OptionsEditComponent";
@@ -44,13 +44,17 @@ export const WriteContract = () => {
         amountToPay: values.valorRecebido
       })
 
-      return header + itens + value;
+      const clause = clauseHtml({ birthday: values.listaAniversariantes, installments: values.pagamentos })
+
+      const signature = signatureHtml();
+
+      return header + itens + value + clause + signature;
     },
     [values]
   );
 
     return (
-      <LexicalComposer initialConfig={editorConfig}>
+      <LexicalComposer key={templateHtml} initialConfig={editorConfig}>
         <OptionsEditComponent />
             <ToolbarPlugin />
             <RichTextPlugin

@@ -22,7 +22,7 @@ export const OptionsEditComponent = () => {
         await pdf.html(wrapper, {
             margin: [20, 20, 20, 20],
             autoPaging: 'text',
-            html2canvas: { scale: 0.32, useCORS: true },
+            html2canvas: { scale: 0.30, useCORS: true },
             
         }).save('documento.pdf');
 
