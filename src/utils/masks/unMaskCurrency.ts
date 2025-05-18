@@ -8,3 +8,13 @@ export const unmaskCurrency = (value: string) => {
   // Converte para número (float)
   return parseFloat(numericValue || "0");
 };
+
+
+export const validationTypePayments = (value : string) =>{
+  if(value === 'Pix')
+    return 'PIX'
+  else if (value === 'Cartão de Crédito')
+    return 'CARTAO_CREDITO'
+  else
+    return 'CARTAO_DEBITO'
+}
