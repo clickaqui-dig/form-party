@@ -1,11 +1,12 @@
 import api from "@/config/apiConfig";
 
-export const getContractByDate = async (dataHoraInicial: string) => {
+export const getContractByDate = async (dataHoraInicial: string, dataHoraFinal: string) => {
     try {
         const params = {
             page: 0,
             size: 1,
-            dataHoraInicial
+            dataHoraInicial,
+            dataHoraFinal
         };
         const response = await api.get(`/contrato`, { params });
         return response.data.content; 

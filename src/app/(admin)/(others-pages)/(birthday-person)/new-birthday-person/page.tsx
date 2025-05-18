@@ -33,7 +33,8 @@ export default function PageNewBithdayPerson() {
       }
 
     } catch (error: any) {
-      toast.error(error)
+      toast.error("Error ao criar Aniversariante, revise o formulario.");
+      console.error(error);
     }
   }
   return (

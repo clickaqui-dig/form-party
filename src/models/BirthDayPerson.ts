@@ -1,7 +1,10 @@
+import { Theme } from "./Theme";
+
 export interface BirthDayPerson {
-    id?: number;
-    dataNascimento: string;
-    idade: number;
-    idadeNoEvento: number;
-    tema: number;
-  }
+  id?: number;
+  nome?: string;
+  dataNascimento: string;
+  idade: number;
+  idadeNoEvento: number;
+  tema: Theme | number | null;
+}

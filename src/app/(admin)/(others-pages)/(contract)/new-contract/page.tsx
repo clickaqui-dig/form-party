@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { postContract } from "@/services/contract/postContract";
 import { useRouter } from "next/navigation";
 import FormContract from "@/components/form/contract";
 import { validationSchemaContract } from "@/components/form/contract/validation";
 import { toast } from "react-toastify";
+import { mapContractFormToRequest } from "@/models/Contract";
 
 const initialValues = {
   idContrato: 0,
@@ -31,43 +33,24 @@ const initialValues = {
 
 export default function FormElements() {
   const router = useRouter();
+
   const handleSubmit = async (
-    values: typeof initialValues,
-    formikHelpers: FormikHelpers<typeof initialValues>
+    values: typeof initialValues
   ) => {
     try {
-      console.log("value novo contrato ===>>", values);
-      const response = await postContract({
-        cliente: values.cliente,
-        valorRecebido: values.valorRecebido,
-        valorPendente: values.valorPendente,
-        valorTotal: Number(values.valorTotal),
-        tipoDoContrato: values.tipoDoContrato,
-        dataHoraInicial: values.dataHoraInicial,
-        dataHoraFinal: values.dataHoraFinal,
-        duracao: Number(values.duracao),
-        quantidadeConvidados: values.quantidadeConvidados,
-        observacoes: values.observacoes,
-        desconto: 0,
-        acrescimo: 0,
-        situacao: 'EM_ANDAMENTO',
-        itensContrato: values.itensContrato.map((item: any) => item.id),
-        listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id)
-      });
+      const payload = mapContractFormToRequest(values, values.cliente);
+      const response = await postContract(payload);
 
       if (response) {
-        router.push('/search-contract')
-      }
-
-      if (response) {
-        router.push('/search-contract')
-        formikHelpers.resetForm()
+        toast.success("Contrato cadastrado com sucesso !");
+        router.push('/search-contract');
       } else {
-        toast.error("Error ao criar contrato, revise o formulario.")
+        toast.error("Error ao salvar contrato, revise o formulario.")
       }
 
     } catch (error) {
-      console.log(error)
+      toast.error("Ocorreu um erro. Verifique os dados e tente novamente.");
+      console.error("Erro ao enviar formulário:", error);
     }
 
   }
@@ -85,7 +68,7 @@ export default function FormElements() {
 
           const handleValidateAndSubmit = async () => {
             const errors = await validateForm();
-
+            console.log(errors);
             if (Object.keys(errors).length === 0) {
               handleSubmit();
             }

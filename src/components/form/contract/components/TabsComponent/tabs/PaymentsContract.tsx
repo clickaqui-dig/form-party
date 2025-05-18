@@ -8,6 +8,9 @@ import { useEffect, useMemo, useState, } from "react";
 import { PaymentsContractModal } from "../../Modals/PaymentContractModal";
 import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
+import { toast } from "react-toastify";
+import { formatDate } from "@/utils/toDates";
+import { maskCurrencyWithLimit } from "@/utils/masks/limityValue";
 
 interface PaymentItem {
     id: number;
@@ -20,7 +23,6 @@ interface PaymentItem {
 
 const typeDiscount = [
     { value: "fechado", label: "Fechado" },
-    // { value: "aberto", label: "Aberto" },
 ];
 
 export const PaymentsContract = () => {
@@ -37,30 +39,18 @@ export const PaymentsContract = () => {
 
     useEffect(() => {
         setPaymentsItems(values.pagamentos);
-        setFieldValue('valorRecebido', paymentsItems.reduce((total, item) => Number(unmaskCurrency(total.toString())) + Number(unmaskCurrency(item.valor)), 0).toFixed(2))
     }, [values]);
 
 
-    const baseCurrency = useMemo(() => {
-        const oldCurrency = values.itensContrato.reduce((total: any, item: any) => total + Number(item.valor), 0).toFixed(2);
-        if (oldCurrency !== values.valorTotal) {
-            return values.valorTotal;
-        } else {
-            return oldCurrency;
-        }
-    }, [values.itensContrato]);
-
     const finalCurrency = useMemo(() => {
-        const newCurrency = (Number(baseCurrency) + addition - discount).toFixed(2);
+        const newCurrency = (values.valorTotal + addition - discount).toFixed(2);
         return newCurrency;
-    }, [baseCurrency, discount, addition]);
-
-    useEffect(() => {
-        setFieldValue('valorTotal', Number(finalCurrency));
-    }, [finalCurrency]);
+    }, [values.valorTotal, addition, discount]);
+;
 
     const valueTotal = useMemo(() => {
-        return paymentsItems.reduce((total, item) => Number(unmaskCurrency(total.toString())) + Number(unmaskCurrency(item.valor)), 0).toFixed(2);
+        const total = paymentsItems.reduce((total, item) => total + Number(unmaskCurrency(item.valor)), 0).toFixed(2)
+        return maskCurrency(total);
     }, [paymentsItems]);
 
     const handleAddPaymentItem = (newItem: PaymentItem) => {
@@ -75,9 +65,15 @@ export const PaymentsContract = () => {
 
         };
 
-        setPaymentsItems(prevItems => [...prevItems, newEntry]);
-        setFieldValue("pagamentos", [...values.pagamentos, newEntry])
-        setModalPaymentOpen(false);
+        const total = Number(values.valorRecebido) + Number(unmaskCurrency(newEntry.valor));
+
+        if (values.valorTotal - total < 0) {
+            toast.warning('O valor do pagamento supera o valor faltante.');
+        } else {
+            setPaymentsItems(prevItems => [...prevItems, newEntry]);
+            setFieldValue("pagamentos", [...values.pagamentos, newEntry])
+            setModalPaymentOpen(false);
+        }
     }
 
     const handleSelectPayments = (id: number) => {
@@ -91,7 +87,7 @@ export const PaymentsContract = () => {
 
     const handleRemovePayments = () => {
         if (selectedPayments.length === 0) {
-            alert("Selecione pelo menos um pagamento para remover.");
+            toast.warning("Selecione pelo menos um pagamento para remover.");
             return;
         }
 
@@ -104,17 +100,25 @@ export const PaymentsContract = () => {
     };
 
     const handleChangeCurrency = (e: any, type: string) => {
-        const maskedValue = maskCurrency(e.target.value)
+        if (/[A-Za-zÀ-ÖØ-öø-ÿ]/.test(e.key)) {
+            e.preventDefault();           
+        }
+
+        const currency = unmaskCurrency(e.target.value)
+
+        const maskedValue = maskCurrencyWithLimit(String(currency), values.valorTotal);
         setFieldValue(type, maskedValue);
 
-        const unMaskCurrency = unmaskCurrency(maskedValue)
         if (type === 'desconto') {
-            setDiscount(unMaskCurrency);
+            setDiscount(currency);
+            setFieldValue('valorTotal', (values.valorTotal + addition - currency).toFixed(2));
         }
 
         if (type === 'acrescimo') {
-            setAddition(unMaskCurrency);
+            setAddition(currency);
+            setFieldValue('valorTotal', (values.valorTotal + currency - discount).toFixed(2));
         }
+
     };
     return (
         <>
@@ -124,10 +128,8 @@ export const PaymentsContract = () => {
                     <div className="relative">
                         <Select
                             options={typeDiscount}
-                            // placeholder="Tipo"
                             onChange={(event) => {
                                 setUseDiscount(event)
-                                // setFieldValue("tipoPagamento", event)
                             }}
                             className="dark:bg-dark-700"
                             defaultValue="fechado"
@@ -148,6 +150,7 @@ export const PaymentsContract = () => {
                                 <Input
                                     {...field}
                                     type="text"
+                                    
                                     onChange={(e) => {
                                         handleChangeCurrency(e, "desconto")
                                     }}
@@ -164,6 +167,7 @@ export const PaymentsContract = () => {
                                 <Input
                                     {...field}
                                     type="text"
+                                   
                                     onChange={(e) => {
                                         handleChangeCurrency(e, "acrescimo")
                                     }}
@@ -232,7 +236,7 @@ export const PaymentsContract = () => {
                                             {item.valor}
                                         </td>
                                         <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                                            {item.dataPagamentos}
+                                            {formatDate(item.dataPagamentos)}
                                         </td>
                                         <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                                             {item.recebido === true ? "Sim" : "Não"}
