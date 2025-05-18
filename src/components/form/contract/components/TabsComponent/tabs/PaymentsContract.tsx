@@ -5,7 +5,7 @@ import Select from "@/components/form/Select";
 import { Field, FieldProps, useFormikContext } from "formik";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useMemo, useState, } from "react";
-import { PaymentsContractModal } from "../Modals/PaymentContractModal";
+import { PaymentsContractModal } from "../../Modals/PaymentContractModal";
 import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 

@@ -4,7 +4,7 @@ import { ErrorMessage, Field, useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 import { useEffect, useRef, useState, useMemo } from "react";
 import BirthdayList from "../form-elements/BirthdayList";
-import TabsComponent from "./components/Tabs/TabsComponent";
+import TabsComponent from "./components/TabsComponent";
 import Input from "../input/InputField";
 import Label from "../Label";
 import Select from "../Select";
