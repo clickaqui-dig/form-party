@@ -1,7 +1,7 @@
 import api from "@/config/apiConfig";
-import { Contract } from "@/models/Contract";
+import { ContractRequest, ContractResponse } from "@/models/Contract";
 
-export const putContractById = async (id: number, body: Contract): Promise<Contract | boolean> => {
+export const putContractById = async (id: number, body: ContractRequest): Promise<ContractResponse | boolean> => {
     try {
         const response = await api.put(`/contrato/${id}`, body);
 

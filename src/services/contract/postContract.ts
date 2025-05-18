@@ -1,7 +1,7 @@
 import api from '@/config/apiConfig';
-import { Contract } from '@/models/Contract';
+import { ContractRequest } from '@/models/Contract';
 
-export const postContract = async (body: Contract): Promise<any> => {
+export const postContract = async (body: ContractRequest): Promise<any> => {
     try {
         const teste = await api.post(`/contrato`, body);
 

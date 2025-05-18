@@ -23,14 +23,11 @@ export const OptionsEditComponent = () => {
             margin: [20, 20, 20, 20],
             autoPaging: 'text',
             html2canvas: { 
-                scale: 0.33, 
+                scale: 0.21, 
                 useCORS: true,
                 allowTaint: true,
                 letterRendering: true,
             },
-            x: 20,
-            y: 20,
-            
         }).then(() => {
             pdf.save(`Contrato-bolo-e-balao.pdf`);
             document.body.removeChild(wrapper);

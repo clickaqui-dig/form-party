@@ -45,6 +45,7 @@ export interface ContractRequest {
     itensContrato: number[];
     desconto: number;
     acrescimo: number;
+    situacao : string;
 }
 
 export interface ContractForm {
@@ -85,4 +86,5 @@ export interface ContractForm {
     itensContrato: values.itensContrato.map((i) => i.id),
     desconto: Number(values.desconto) || 0,
     acrescimo: Number(values.acrescimo) || 0,
+    situacao: values.situacao
   });

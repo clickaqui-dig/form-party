@@ -10,6 +10,9 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronDownIcon } from "lucide-react";
 import { ContractForm } from "@/models/Contract";
 import { maskCurrency } from "@/utils/masks/maskCurrency";
+import { putSituationById } from "@/services/contract/putUpdateSituation";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const optionsContract = [
     { value: "ANIVERSARIO", label: "Aniversário" },
@@ -19,6 +22,7 @@ export const InfoComponent = () => {
     const { setFieldValue, values, errors, setFieldError } = useFormikContext<ContractForm>();
     const [clientSuggestions, setClientSuggestions] = useState<any[]>([]);
     const conflictContract = useConflict(values);
+    const router = useRouter();
 
     useEffect(() => {
         if (conflictContract.exists && values.idContrato === 0) {
@@ -55,8 +59,15 @@ export const InfoComponent = () => {
         return maskCurrency(String(values.valorTotal));
     }, [values.valorTotal])
 
-    const handleCancelContract = () => {
-        // !TODO Implementar
+    const handleCancelContract = async () => {
+        try {
+            await putSituationById(values.idContrato,'CANCELADO')
+            router.push('/search-contract');
+        } catch (error) {
+            toast.error("Erro ao cancelar contrato.")
+        }
+       
+        setFieldValue('situacao','CANCELADO')
     }
 
     const handleChangeQuery = (e: any) => {
@@ -141,7 +152,7 @@ export const InfoComponent = () => {
                 </div>
                 <div>
                     <Label htmlFor="situation">Situação</Label>
-                    <Label>{values.idContrato > 0 ? values.situacao : ""}</Label>
+                    <Label>{values.situacao}</Label>
                 </div>
                 <div>
                     <Label htmlFor="valorRecebido">Valor Recebido</Label>

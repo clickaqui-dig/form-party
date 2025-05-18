@@ -16,7 +16,7 @@ import { ContractForm } from "@/models/forms/ContractForm";
 
 
 const initialValues = {
-    idForm: 0,
+    idContrato: 0,
     situacao: "",
     nomeCliente: "",
     celularCliente: "",
@@ -61,7 +61,6 @@ export default function PageEditCustomer() {
     const fetchCustomer = async (id: number) => {
         try {
             const response = await getContractById({ id });
-            console.log("response edit ===>>>", response)
             if (response) {
                 const listaAniversariantes = response.listaAniversariantes.map((item) => {
                     return {
@@ -87,7 +86,7 @@ export default function PageEditCustomer() {
 
                 setInitialValues({
                     ...response,
-                    idForm: response.id,
+                    idContrato: response.id,
                     nomeCliente: response.cliente.nome,
                     emailCliente: response.cliente.email,
                     documento: response.cliente.documento,
@@ -133,7 +132,7 @@ export default function PageEditCustomer() {
                     acrescimo,
                     itensContrato: values.itensContrato.map((item: any) => item.id),
                     listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id),
-                    situacao: 'EM_ANDAMENTO',
+                    situacao: values.situacao,
                 });
 
                 const mapPayments = values.pagamentos.map((item: any) => {
