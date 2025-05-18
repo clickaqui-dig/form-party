@@ -22,11 +22,19 @@ export const OptionsEditComponent = () => {
         await pdf.html(wrapper, {
             margin: [20, 20, 20, 20],
             autoPaging: 'text',
-            html2canvas: { scale: 0.30, useCORS: true },
+            html2canvas: { 
+                scale: 0.33, 
+                useCORS: true,
+                allowTaint: true,
+                letterRendering: true,
+            },
+            x: 20,
+            y: 20,
             
-        }).save('documento.pdf');
-
-        document.body.removeChild(wrapper);
+        }).then(() => {
+            pdf.save(`Contrato-bolo-e-balao.pdf`);
+            document.body.removeChild(wrapper);
+        });
     }, []);
 
     const handleClick = () => {

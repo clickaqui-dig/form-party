@@ -66,7 +66,6 @@ export const FormContract = () => {
   }, 500);
 
   const valuePending = useMemo(() => {
-    // setFieldValue("valorPendente", values.valorTotal - Number(values.valorRecebido));
     return values.valorTotal - Number(values.valorRecebido);
   }, [values.valorRecebido, values.valorTotal]);
 
@@ -122,7 +121,6 @@ export const FormContract = () => {
 
   const handleSelectChangeContract = (value: string) => {
     setFieldValue("tipoDoContrato", "ANIVERSARIO")
-    console.log("Selected value:", value);
   };
 
   // CHECAGEM DE CONFLITO DE DATA/HORA INICIO

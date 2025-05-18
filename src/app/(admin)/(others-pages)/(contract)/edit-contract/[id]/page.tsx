@@ -118,10 +118,10 @@ export default function PageEditCustomer() {
                 const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
 
-                await putContractById(Number(id), {
+                const responsePutContract = await putContractById(Number(id), {
                     cliente: values.cliente.id,
                     valorRecebido: Number(values.valorRecebido),
-                    valorPendente: values.valorPendente,
+                    valorPendente: values.valorTotal - Number(values.valorRecebido),
                     valorTotal: values.valorTotal,
                     tipoDoContrato: values.tipoDoContrato,
                     dataHoraInicial: values.dataHoraInicial,
@@ -147,7 +147,13 @@ export default function PageEditCustomer() {
                     }
                 })
 
-                await postPayments(Number(id), mapPayments)
+                const responsePayments = await postPayments(Number(id), mapPayments)
+
+                if(responsePutContract && responsePayments){
+                    toast.success("Contrato editado com sucesso !")
+                } else {
+                    toast.error("Erro: verificar formulario");
+                }
             }
         } catch (error: any) {
             console.log(error);
