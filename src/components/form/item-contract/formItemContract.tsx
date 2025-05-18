@@ -1,10 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Input from '@/components/form/input/InputField';
 import Label from '@/components/form/Label';
-import { Field, ErrorMessage, FieldProps, useFormikContext } from 'formik';
+import { maskCurrency } from '@/utils/masks/maskCurrency';
+import { unmaskCurrency } from '@/utils/masks/unMaskCurrency';
+import { Field, FieldProps, useFormikContext } from 'formik';
+import { useEffect, useState } from 'react';
 
-export const FormItemContract = () => {
-const {errors} = useFormikContext<{ descricao: string; valor: number; }>();
+export const FormItemContract: React.FC<{ lastResetAt: number | null }> = ({ lastResetAt }) => {
+    const { errors, setFieldValue } = useFormikContext<{descricao: string, valor: number}>();
+    const [currency, setCurrency] = useState('');
+
+    const handleChangeCurrency = (value: any) => {
+        const maskedValue = maskCurrency(value);
+        setCurrency(maskedValue);
+
+        const naturalValue = unmaskCurrency(maskedValue);
+        setFieldValue('valor', naturalValue);
+    };
+
+    useEffect(() => {
+        setCurrency('');
+    }, [lastResetAt])
 
     return (
         <div className="space-y-6">
@@ -16,10 +34,10 @@ const {errors} = useFormikContext<{ descricao: string; valor: number; }>();
                             <Input
                                 {...field}
                                 type="text"
-                                value={field.value ?? ''} 
+                                value={field.value ?? ''}
                             />
                         )}
-                        </Field>
+                    </Field>
                     {errors.descricao && (
                         <div className="text-red-500 text-sm mt-1">{errors.descricao}</div>
                     )}
@@ -30,11 +48,14 @@ const {errors} = useFormikContext<{ descricao: string; valor: number; }>();
                         {({ field }: FieldProps) => (
                             <Input
                                 {...field}
-                                type="number"
-                                value={field.value ?? ''} 
+                                type="text"
+                                value={currency}
+                                onChange={(e) => {
+                                    handleChangeCurrency(e.target.value)
+                                }}
                             />
                         )}
-                      </Field>
+                    </Field>
                     {errors.valor && (
                         <div className="text-red-500 text-sm mt-1">{errors.valor}</div>
                     )}

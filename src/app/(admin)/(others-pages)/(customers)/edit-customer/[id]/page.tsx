@@ -4,7 +4,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import FormCustomer from "@/components/form/customer";
 import { validationSchema } from "@/components/form/customer/validation";
-import { Customer } from "@/models/Customer";
+import { CustomerForm, mapCustomerToForm, mapFormToCustomer } from "@/models/Customer";
 import { getCustomerById } from "@/services/customer/getCustomerById";
 import { putCustomer } from "@/services/customer/putCustomer";
 import { maskCEP, maskPhone } from "@/utils/masks";
@@ -12,28 +12,31 @@ import { Formik } from "formik";
 import { useParams, useRouter } from "next/navigation"
 
 import { useCallback, useEffect, useState } from "react"
+import { toast } from "react-toastify";
+
+const initialValues = {
+    id: 0,
+    nome: "",
+    celular: "",
+    email: "",
+    dataCadastro: "",
+    documento: "",
+    cep: "",
+    endereco: "",
+    numero: "",
+    complemento: "",
+    bairro: "",
+    cidade: "",
+    uf: "",
+    state: true
+  };
 
 
 export default function PageEditCustomer() {
     const router = useRouter();
     const params = useParams();
     const id = params.id;
-    const [initialValues, setInitialValues] = useState<Customer>({
-        id: 0,
-        nome: "",
-        celular: "",
-        email: "",
-        dataCadastro: "",
-        documento: "",
-        cep: "",
-        endereco: "",
-        numero: "",
-        complemento: "",
-        bairro: "",
-        cidade: "",
-        uf: "",
-        status: true
-    });
+    const [customer, setCustomer] = useState<CustomerForm>(initialValues);
 
     const fetchCustomer = useCallback(
         async (customerId: number) => {
@@ -41,19 +44,20 @@ export default function PageEditCustomer() {
                 const response = await getCustomerById({ id: customerId });
 
                 if (response) {
-                    setInitialValues({
-                        ...response,
-                        celular: response.celular ? maskPhone(response.celular) : "",
-                        documento: response.documento,
-                        cep: response.cep ? maskCEP(response.cep) : "",
-                        uf: response.uf?.toLowerCase(),
+                    const mappedData = mapCustomerToForm(response);
+                    setCustomer({
+                        ...mappedData,
+                        celular: mappedData.celular ? maskPhone(response.celular) : "",
+                        documento: mappedData.documento,
+                        cep: mappedData.cep ? maskCEP(mappedData.cep) : "",
+                        uf: mappedData.uf?.toLowerCase(),
                     });
                 }
             } catch (error) {
                 console.error(error);
             }
         },
-        [setInitialValues]
+        [setCustomer]
     );
 
     useEffect(() => {
@@ -66,16 +70,26 @@ export default function PageEditCustomer() {
     const handleSubmit = async (
         values: typeof initialValues
     ) => {
-        const response = await putCustomer({ id: values.id, body: values });
-        if (response === true) {
-            router.push('/search-customer')
+        try {
+            const payload = mapFormToCustomer(values)
+            const response = await putCustomer({ id: values.id, body: payload });
+            if (response) {
+                toast.success("Cliente atualizado com sucesso !");
+                router.push('/search-customer')
+            } else {
+                toast.error("Erro ao atualizar o cliente. Tente novamente.");
+            }
+        } catch (error) {
+                  toast.error("Ocorreu um erro. Verifique os dados e tente novamente.");
+                  console.error("Erro ao enviar formulário:", error);
         }
+
     }
 
     return (
         <div>
             <PageBreadcrumb pageTitle="Edição Cliente" />
-            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema} enableReinitialize>
+            <Formik initialValues={customer} onSubmit={handleSubmit} validationSchema={validationSchema} enableReinitialize>
                 {({ isValid, handleSubmit }) => {
                     return (
                         <ComponentCard title="Formulário">

@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 import { Formik, FormikHelpers } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
-import Cookies from 'js-cookie';
 import FormBirthDayPerson from "@/components/form/birthday-person";
 import { postBirthDayPerson } from "@/services/birthday-person/postBirthDayPerson";
 import { toast } from "react-toastify";

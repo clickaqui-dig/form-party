@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Input from '@/components/form/input/InputField';
 import Label from '@/components/form/Label';
@@ -95,7 +96,7 @@ export const FormBirthDayPerson = () => {
         <div>
           <Label htmlFor="idade">Idade</Label>
           <Field id="idade" name="idade">
-            {({ field }: FieldProps) => <Input {...field} type="text" />}
+            {({ field }: FieldProps) => <Input {...field} type="number" min='0' max='100' />}
           </Field>
           {errors.idade && values.idade == 0 && (
             <div className="text-red-500 text-sm mt-1">{errors.idade}</div>
@@ -105,7 +106,7 @@ export const FormBirthDayPerson = () => {
         <div>
           <Label htmlFor="idadeNoEvento">Idade no Evento</Label>
           <Field id="idadeNoEvento" name="idadeNoEvento">
-            {({ field }: FieldProps) => <Input {...field} type="text" />}
+            {({ field }: FieldProps) => <Input {...field} type="number" min='0' max='100' />}
           </Field>
           {errors.idadeNoEvento && (
             <div className="text-red-500 text-sm mt-1">{errors.idadeNoEvento}</div>

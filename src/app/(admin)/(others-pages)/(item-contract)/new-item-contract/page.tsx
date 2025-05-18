@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import React from "react";
+import React, { useState } from "react";
 import { Formik, FormikHelpers } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
 import FormItemContract from "@/components/form/item-contract";
@@ -14,6 +15,8 @@ const initialValues = {
 };
 
 export default function PageNewItemContract() {
+  const [lastResetAt, setLastResetAt] = useState<number | null>(null);
+
   const handleSubmit = async (
     values: typeof initialValues,
     formikHelpers: FormikHelpers<typeof initialValues>
@@ -24,6 +27,7 @@ export default function PageNewItemContract() {
       if (response) {
         toast.success("Item cadastrado com sucesso !")
         formikHelpers.resetForm();
+        setLastResetAt(Date.now());
       } else {
         toast.error("Error ao item, revise o formulario.")
       }
@@ -53,7 +57,7 @@ export default function PageNewItemContract() {
           };
           return (
             <ComponentCard title="Formulário">
-              <FormItemContract />
+              <FormItemContract lastResetAt={lastResetAt} />
               <button
                 onClick={() => handleValidateAndSubmit()}
                 type="button"

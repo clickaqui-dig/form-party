@@ -2,7 +2,7 @@
 "use client"
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { getContractById } from "@/services/contract/getContractById";
@@ -12,40 +12,44 @@ import { putContractById } from "@/services/contract/putContractById";
 import { postPayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
 import { maskCurrency } from "@/utils/masks/maskCurrency";
+import { ContractForm } from "@/models/forms/ContractForm";
+
+
+const initialValues = {
+    idForm: 0,
+    situacao: "",
+    nomeCliente: "",
+    celularCliente: "",
+    emailCliente: "",
+    documento: "",
+    cep: "",
+    endereco: "",
+    numero: "",
+    cidade: "",
+    uf: "",
+    status: false,
+    valorRecebido: 0,
+    valorPendente: 0,
+    valorTotal: 0,
+    tipoDoContrato: "",
+    dataHoraInicial: "",
+    dataHoraFinal: "",
+    duracao: 0,
+    quantidadeConvidados: 0,
+    observacoes: "",
+    listaAniversariantes: [],
+    itensContrato: [],
+    tipoPagemento: [],
+    pagamentos: [],
+    desconto: 0,
+    acrescimo: 0,
+}
 
 
 export default function PageEditCustomer() {
     const params = useParams();
     const id = params.id;
-    const [initialValues, setInitialValues] = useState<any>({
-        idForm: 0,
-        situacao: "",
-        nomeCliente: "",
-        celularCliente: "",
-        emailCliente: "",
-        documento: "",
-        cep: "",
-        endereco: "",
-        numero: "",
-        cidade: "",
-        uf: "",
-        status: false,
-        valorRecebido: 0,
-        valorPendente: 0,
-        valorTotal: 0,
-        tipoDoContrato: "",
-        dataHoraInicial: "",
-        dataHoraFinal: "",
-        duracao: 0,
-        quantidadeConvidados: 0,
-        observacoes: "",
-        listaAniversariantes: [],
-        itensContrato: [],
-        tipoPagemento: [],
-        pagamentos: [],
-        desconto: 0,
-        acrescimo: 0,
-    });
+    const [contract, setInitialValues] = useState<ContractForm>(initialValues);
 
     useEffect(() => {
         if (id) {
@@ -111,6 +115,9 @@ export default function PageEditCustomer() {
         try {
             if (id) {
 
+                const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
+                const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
+
                 await putContractById(Number(id), {
                     cliente: values.cliente.id,
                     valorRecebido: Number(values.valorRecebido),
@@ -122,8 +129,8 @@ export default function PageEditCustomer() {
                     duracao: values.duracao,
                     quantidadeConvidados: values.quantidadeConvidados,
                     observacoes: values.observacoes,
-                    desconto: unmaskCurrency(values.desconto),
-                    acrescimo: unmaskCurrency(values.acrescimo),
+                    desconto,
+                    acrescimo,
                     itensContrato: values.itensContrato.map((item: any) => item.id),
                     listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id),
                     situacao: 'EM_ANDAMENTO',
@@ -143,6 +150,8 @@ export default function PageEditCustomer() {
                 await postPayments(Number(id), mapPayments)
             }
         } catch (error: any) {
+            console.log(error);
+            
             const messageErro = error ? error.response.data.error : 'Algo inesperado aconteceu em nosso sistema.'
             toast.error(messageErro);
         }
@@ -152,7 +161,7 @@ export default function PageEditCustomer() {
     return (
         <div>
             <PageBreadcrumb pageTitle="Edição Contrato" />
-            <Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize>
+            <Formik initialValues={contract} onSubmit={handleSubmit} enableReinitialize>
                 {({ handleSubmit, isValid, dirty }) => {
                     return (
                         <ComponentCard title="Edição Contrato">

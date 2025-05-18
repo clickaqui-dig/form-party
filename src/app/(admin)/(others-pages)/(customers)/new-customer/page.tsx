@@ -1,13 +1,14 @@
 'use client';
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import React, { useState } from "react";
+import React from "react";
 import FormCustomer from "@/components/form/customer";
 import { Formik, Form } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
 import { validationSchema } from "@/components/form/customer/validation";
 import { postCustomer } from "@/services/customer/postCustomer";
 import { useRouter } from "next/navigation";
-import { Customer } from "@/models/Customer";
+import { mapFormToCustomer } from "@/models/Customer";
+import { toast } from "react-toastify";
 
 const initialValues = {
   id: 0,
@@ -28,19 +29,19 @@ const initialValues = {
 
 export default function PageNewCustomer() {
   const router = useRouter();
-  const [submitError, setSubmitError] = useState<string | null>(null);
   
   const handleSubmit = async (values: typeof initialValues) => {
     try {
-      const body = values as unknown as Customer;
-      const response = await postCustomer(body);
-      if (response === true) {
+      const payload = mapFormToCustomer(values);
+      const response = await postCustomer(payload);
+      if (response) {
+        toast.success("Cliente cadastrado com sucesso !");
         router.push('/search-customer');
       } else {
-        setSubmitError("Erro ao salvar cliente. Tente novamente.");
+        toast.error("Erro ao salvar cliente. Tente novamente.");
       }
     } catch (error) {
-      setSubmitError("Ocorreu um erro. Verifique os dados e tente novamente.");
+      toast.error("Ocorreu um erro. Verifique os dados e tente novamente.");
       console.error("Erro ao enviar formulário:", error);
     }
   }
@@ -48,11 +49,6 @@ export default function PageNewCustomer() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Novo Cliente" />
-      {submitError && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
-          {submitError}
-        </div>
-      )}
       <Formik 
         initialValues={initialValues} 
         onSubmit={handleSubmit} 
