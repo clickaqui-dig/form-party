@@ -66,6 +66,7 @@ export const FormContract = () => {
   }, 500);
 
   const valuePending = useMemo(() => {
+    // setFieldValue("valorPendente", values.valorTotal - Number(values.valorRecebido));
     return values.valorTotal - Number(values.valorRecebido);
   }, [values.valorRecebido, values.valorTotal]);
 

@@ -31,12 +31,13 @@ export const PaymentsContract = () => {
 
     const [discount, setDiscount] = useState(0);
     const [addition, setAddition] = useState(0);
-   
+
+
     const { values, setFieldValue } = useFormikContext<any>();
 
     useEffect(() => {
         setPaymentsItems(values.pagamentos);
-        setFieldValue('valorRecebido', paymentsItems.reduce((total: any, item: any) => total + Number(item.valor), 0).toFixed(2))
+        setFieldValue('valorRecebido', paymentsItems.reduce((total, item) => Number(unmaskCurrency(total.toString())) + Number(unmaskCurrency(item.valor)), 0).toFixed(2))
     }, [values]);
 
 
@@ -56,7 +57,11 @@ export const PaymentsContract = () => {
 
     useEffect(() => {
         setFieldValue('valorTotal', Number(finalCurrency));
-    }, [finalCurrency])
+    }, [finalCurrency]);
+
+    const valueTotal = useMemo(() => {
+        return paymentsItems.reduce((total, item) => Number(unmaskCurrency(total.toString())) + Number(unmaskCurrency(item.valor)), 0).toFixed(2);
+    }, [paymentsItems]);
 
     const handleAddPaymentItem = (newItem: PaymentItem) => {
         const newEntry = {
@@ -84,16 +89,17 @@ export const PaymentsContract = () => {
     };
 
 
-    const handleRemoveBirthday = () => {
+    const handleRemovePayments = () => {
         if (selectedPayments.length === 0) {
-            alert("Selecione pelo menos um aniversariante para remover.");
+            alert("Selecione pelo menos um pagamento para remover.");
             return;
         }
 
-        const updatedBirthdays = paymentsItems.filter(
+        const updatedPayments = paymentsItems.filter(
             (payment) => !selectedPayments.includes(payment.id)
         );
-        setPaymentsItems(updatedBirthdays);
+        setPaymentsItems(updatedPayments);
+        setFieldValue("pagamentos", updatedPayments)
         setSelectedPayments([]);
     };
 
@@ -175,7 +181,7 @@ export const PaymentsContract = () => {
 
                 {/* Botões de Remover e Adicionar Pagamento */}
                 <div className="flex flex-wrap items-center gap-4 mt-4">
-                    <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition" onClick={handleRemoveBirthday}>
+                    <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 transition" onClick={handleRemovePayments}>
                         ✖ Remover
                     </button>
                     <button className="flex items-center bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition"
@@ -254,7 +260,7 @@ export const PaymentsContract = () => {
                         <tfoot className="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
-                                    Total: {paymentsItems.reduce((total, item) => total + Number(item.valor), 0).toFixed(2)}
+                                    Total: {valueTotal}
                                 </td>
                             </tr>
                         </tfoot>

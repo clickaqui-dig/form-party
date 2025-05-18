@@ -10,6 +10,8 @@ import FormContract from "@/components/form/contract";
 import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
 import { postPayments } from "@/services/payments/postPayments";
+import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
+import { maskCurrency } from "@/utils/masks/maskCurrency";
 
 
 export default function PageEditCustomer() {
@@ -67,6 +69,18 @@ export default function PageEditCustomer() {
                         idadeNoEvento: item.idadeNoEvento,
                     }
                 })
+
+                const mapPayments = response.pagamentos.map((item: any) => {
+                    return {
+                        valor: maskCurrency(item.valor.toString()),
+                        meioPagamento: validationTypePayments(item.meioPagamento),
+                        dataPagamento: item.dataPagamento,
+                        recebido: item.recebido,
+                        observacoes: item.observacoes,
+                        contratoId: Number(id)
+                    }
+                })
+
                 setInitialValues({
                     ...response,
                     idForm: response.id,
@@ -82,7 +96,8 @@ export default function PageEditCustomer() {
                     tipoDoContrato: response.tipoDoContrato,
                     listaAniversariantes,
                     itensContrato: response.itensContrato,
-                    situacao: response.situacao === 'CANCELADO' ? "Cancelado" : "Em Andamento"
+                    situacao: response.situacao === 'CANCELADO' ? "Cancelado" : "Em Andamento",
+                    pagamentos: mapPayments
                 })
             }
         } catch (error) {
@@ -95,41 +110,41 @@ export default function PageEditCustomer() {
     ) => {
         try {
             if (id) {
-                console.log("teste pagamentos ===>>", values)
 
-                // await putContractById(Number(id),{
-                //   cliente: values.cliente.id,
-                //   valorRecebido: values.valorRecebido,
-                //   valorPendente:values.valorPendente,
-                //   valorTotal:values.valorTotal,
-                //   tipoDoContrato:values.tipoDoContrato,
-                //   dataHoraInicial:values.dataHoraInicial,
-                //   dataHoraFinal:values.dataHoraFinal,
-                //   duracao:values.duracao,
-                //   quantidadeConvidados:values.quantidadeConvidados,
-                //   observacoes:values.observacoes,
-                //   desconto:0,
-                //   acrescimo:0,
-                //   itensContrato: values.itensContrato.map((item: any) => item.id),
-                //   listaAniversariantes:values.listaAniversariantes.map((item: any) => item.id),
-                //   situacao: 'EM_ANDAMENTO',
-                // });
+                await putContractById(Number(id), {
+                    cliente: values.cliente.id,
+                    valorRecebido: Number(values.valorRecebido),
+                    valorPendente: values.valorPendente,
+                    valorTotal: values.valorTotal,
+                    tipoDoContrato: values.tipoDoContrato,
+                    dataHoraInicial: values.dataHoraInicial,
+                    dataHoraFinal: values.dataHoraFinal,
+                    duracao: values.duracao,
+                    quantidadeConvidados: values.quantidadeConvidados,
+                    observacoes: values.observacoes,
+                    desconto: unmaskCurrency(values.desconto),
+                    acrescimo: unmaskCurrency(values.acrescimo),
+                    itensContrato: values.itensContrato.map((item: any) => item.id),
+                    listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id),
+                    situacao: 'EM_ANDAMENTO',
+                });
 
-                await postPayments(Number(id), {
-                    valor:values.pagamentos[0].valor,
-                    meioPagamento: 'PIX',
-                    dataPagamento: values.pagamentos[0].dataPagamento,
-                    recebido: values.pagamentos[0].recebido,
-                    observacoes: values.pagamentos[0].observacoes,
-                    contratoId: Number(id),
+                const mapPayments = values.pagamentos.map((item: any) => {
+                    return {
+                        valor: unmaskCurrency(item.valor),
+                        meioPagamento: validationTypePayments(item.meioPagamento),
+                        dataPagamento: item.dataPagamento,
+                        recebido: item.recebido,
+                        observacoes: item.observacoes,
+                        contratoId: Number(id)
+                    }
                 })
 
+                await postPayments(Number(id), mapPayments)
             }
-
-
         } catch (error: any) {
             const messageErro = error ? error.response.data.error : 'Algo inesperado aconteceu em nosso sistema.'
-            toast.error(messageErro)
+            toast.error(messageErro);
         }
 
     }
