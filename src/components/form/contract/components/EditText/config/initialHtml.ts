@@ -15,8 +15,8 @@ export const headerHtml = (data: headerHtmlProps) => {
     const address = `${data.street} ${data.number} - CEP ${data.cep} na cidade de ${data.city}-${data.state}`;
 
     const inicio = formatIso(data.dateInit);
-    const fim    = formatIso(data.dateEnd);
-  
+    const fim = formatIso(data.dateEnd);
+
     const dateSpan = `${inicio.date} das ${inicio.time} às ${fim.time}.`;
     return `
     <p style="text-align:center;">
@@ -51,42 +51,42 @@ export const headerHtml = (data: headerHtmlProps) => {
   `;
 }
 
-const formatIso =(iso: string) =>  {
+const formatIso = (iso: string) => {
     const d = new Date(iso);
     const pad = (n: number) => n.toString().padStart(2, '0');
-  
-    const dia   = pad(d.getDate());
-    const mes   = pad(d.getMonth() + 1);
-    const ano   = d.getFullYear();
-  
+
+    const dia = pad(d.getDate());
+    const mes = pad(d.getMonth() + 1);
+    const ano = d.getFullYear();
+
     const horas = pad(d.getHours());
-    const mins  = pad(d.getMinutes());
-  
+    const mins = pad(d.getMinutes());
+
     return {
-      date: `${dia}/${mes}/${ano}`, 
-      time: `${horas}:${mins}h`,        
+        date: `${dia}/${mes}/${ano}`,
+        time: `${horas}:${mins}h`,
     };
 }
 
 const formatBrl = (v: number) =>
     new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2,
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
     }).format(v);
 
 interface contractItemHtmlProps {
     id: number;
     descricao: string;
-    valor: number; 
-  }
-  
+    valor: number;
+}
+
 export const contractItemHtml = (data: contractItemHtmlProps[]) => {
     if (!data.length) return '';
 
     const linhas = data
-      .map(
-        (it) => `
+        .map(
+            (it) => `
           <tr>
             <td>
               <span style="font-size:12px;">${it.descricao}</span>
@@ -95,27 +95,27 @@ export const contractItemHtml = (data: contractItemHtmlProps[]) => {
               <span style="font-size:12px;">${formatBrl(it.valor)}</span>
             </td>
           </tr>`,
-      )
-      .join('');
-  
+        )
+        .join('');
+
     const total = data.reduce((s, it) => s + it.valor, 0);
-  
+
     return `
       <p>
         <span style="font-size:12px;"><strong>Itens do contrato</strong>:</span><br>
         &nbsp;
       </p>
   
-      <figure class="table">
-        <table style="table-layout:auto;border-collapse:collapse;width:100%;">
-          <thead>
+      <figure class="table" style="width:100%;">
+        <table style="table-layout:fixed;border-collapse:collapse;width:100%;">
+        <thead>
             <tr>
-              <th style="width:450px;">
-                <span style="font-size:12px;">Descricao</span>
-              </th>
-              <th>
-                <span style="font-size:12px;">Valor</span>
-              </th>
+                <th style="width:70%;">
+                    <span style="font-size:12px;">Descricao</span>
+                </th>
+                <th style="width:30%;">
+                    <span style="font-size:12px;">Valor</span>
+                </th>
             </tr>
           </thead>
   
@@ -139,18 +139,18 @@ export const contractItemHtml = (data: contractItemHtmlProps[]) => {
 interface valuesHtmlProps {
     addition: number;
     discount: number;
-    valor: number; 
+    valor: number;
     amountAlreadyPaid: number;
     amountToPay: number;
-  }
+}
 
 export const valuesHtml = (data: valuesHtmlProps) => {
     return `<p>
     <br>
     <span style="font-size:12px;"><strong>Valores</strong>:</span>
 </p>
-<figure class="table" style="float:left;height:100px;width:456px;">
-    <table>
+<figure class="table" style="width:100%;">
+      <table style="width:100%; table-layout:fixed;">
         <tbody>
             <tr>
                 <td>
@@ -204,20 +204,20 @@ interface Installments {
     dataPagamentos: string;
     recebido: boolean;
     observacoes?: string;
-  }
-  
-  const brDate = (iso: string) =>
+}
+
+const brDate = (iso: string) =>
     new Date(iso).toLocaleDateString('pt-BR');
-  
-  const toNumber = (valor: string) =>
+
+const toNumber = (valor: string) =>
     Number(valor.replace(/[^\d,]/g, '').replace(',', '.'));
 
 export const installmentsHtml = (installments: Installments[]) => {
     if (!installments.length) return '';
 
     const row = installments
-      .map(
-        (p, idx) => `
+        .map(
+            (p, idx) => `
           <tr>
             <td><span style="font-size:12px;">${idx + 1}</span></td>
             <td><span style="font-size:12px;">${brDate(p.dataPagamentos)}</span></td>
@@ -225,16 +225,16 @@ export const installmentsHtml = (installments: Installments[]) => {
             <td><span style="font-size:12px;">${p.recebido ? 'Sim' : 'Não'}</span></td>
             <td><span style="font-size:12px;">${p.valor}</span></td>
           </tr>`
-      )
+        )
         .join('');
-    
-        const total = installments.reduce((s, p) => s + toNumber(p.valor), 0);
-        const totalFmt = new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        }).format(total);
-      
-        return `
+
+    const total = installments.reduce((s, p) => s + toNumber(p.valor), 0);
+    const totalFmt = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(total);
+
+    return `
           <tbody>
             ${row}
             <tr>
@@ -258,11 +258,11 @@ export const clauseHtml = (data: clauseHtmlProps) => {
     const birthdayBoy = data.birthday.map((it: any) => {
         return `
             <p>
-                <span style="font-size:12px;">Tema ${it.tema.descricao} - ${it.nome} ${it.idadeNoEvento} anos &nbsp;</span>
+                <span style="font-size:12px;">Tema ${it.tema} - ${it.nome} ${it.idadeNoEvento} anos &nbsp;</span>
             </p>
         `
     }).join('');
-    const installments =  installmentsHtml(data.installments)
+    const installments = installmentsHtml(data.installments)
     return `
     <p>
         CHAVE PIX: CNPJ 31774785000183
@@ -278,8 +278,8 @@ export const clauseHtml = (data: clauseHtmlProps) => {
         <span style="font-size:12px;"><strong>Parágrafo Primeiro:</strong> Fica acordado que o(a) <strong>CONTRATANTE </strong>realizará o pagamento do evento em favor da <strong>CONTRATADA </strong>conforme cronograma abaixo:</span><br>
         &nbsp;
     </p>
-    <figure class="table">
-        <table>
+<figure class="table" style="width:100%;">
+  <table style="width:100%; table-layout:fixed;">
             <thead>
                 <tr>
                     <th>
@@ -366,15 +366,22 @@ export const clauseHtml = (data: clauseHtmlProps) => {
         <span style="font-size:12px;">Caso o evento contratado não possa ser realizado devido a pandemia do Covid-19 o mesmo poderá ser remarcado no prazo de até 12 meses sem alteração de valores, no caso de CANCELAMENTO será cobrado a multa acima estipulada e o pagamento será de acordo com a medida provisória 948/2020 na Lei 14.046, o consumidor será restituido no prazo de até 12 meses contado a partir do encerramento do estado de calamidade pública.</span>
     </p>
     <p style="text-align:justify;">
-        <span style="font-size:12px;">O CONTRATADO solicita permissão do uso das imagens para a divulgação de seu trabalho em seu site, redes sociais e meios de comunicação por tempo indeterminado.&nbsp;&nbsp;(&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) AUTORIZO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) NÃO AUTORIZO</span>
+        <span style="font-size:12px;">O CONTRATADO solicita permissão do uso das imagens para a divulgação de seu trabalho em seu site, redes sociais e meios de comunicação por tempo indeterminado. (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) AUTORIZO &nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) NÃO AUTORIZO</span>
     </p>
     <p>
         <span style="font-size:12px;">E por estarem assim, justas e contratadas, as partes de pleno acordo em tudo que se encontra disposto neste instrumento particular, firmam o presente instrumento, em 02 (duas) vias de igual teor e forma, transcritas apenas no anverso para maior validade jurídica.</span>
     </p>
+    <p>
+        <span style="font-size:12px;"></span>
+    </p>
     `
 }
 
-export const signatureHtml = () => {
+interface signatureHtmlProps {
+    name: string;
+}
+
+export const signatureHtml = ({ name }: signatureHtmlProps) => {
     return `
     <figure class="table" style="float:left;width:500px;">
     <table>
@@ -409,7 +416,7 @@ export const signatureHtml = () => {
             </tr>
             <tr>
                 <td>
-                    <span style="font-size:12px;"><strong>SABRINA FERREIRA ROMAY SKABA</strong></span>
+                    <span style="font-size:12px;"><strong>${name}</strong></span>
                 </td>
                 <td>
                     &nbsp;

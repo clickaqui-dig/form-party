@@ -40,13 +40,13 @@ export const WriteContract = () => {
         addition: values.acrescimo,
         discount: values.desconto,
         valor: values.valorTotal,
-        amountAlreadyPaid: values.valorPendente,
-        amountToPay: values.valorRecebido
+        amountAlreadyPaid: values.valorRecebido,
+        amountToPay: values.valorPendente
       })
 
       const clause = clauseHtml({ birthday: values.listaAniversariantes, installments: values.pagamentos })
 
-      const signature = signatureHtml();
+      const signature = signatureHtml({name:values.nomeCliente});
 
       return header + itens + value + clause + signature;
     },
