@@ -113,7 +113,7 @@ export default function PageEditCustomer() {
     ) => {
         try {
             if (id) {
-
+                console.log("teste ===>>", values)
                 const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
 
@@ -132,7 +132,7 @@ export default function PageEditCustomer() {
                     acrescimo,
                     itensContrato: values.itensContrato.map((item: any) => item.id),
                     listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id),
-                    situacao: values.situacao,
+                    situacao: values.situacao === 'Em Andamento ' ? 'EM_ANDAMENTO' : 'CANCELADO',
                 });
 
                 const mapPayments = values.pagamentos.map((item: any) => {
