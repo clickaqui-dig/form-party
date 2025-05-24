@@ -13,7 +13,7 @@ import Tooltip from "../form/Tooltip";
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import { useRouter } from "next/navigation";
 import { getCalendar } from "@/services/contract/getCalendar";
-import { fetchFeriadosNacionais, getFeriadosEstaduaisMunicipais, loadFeriados } from "@/services/calendar/getHolidays";
+import { fetchFeriadosNacionais, getFeriadosEstaduaisMunicipais } from "@/services/calendar/getHolidays";
 
 interface CalendarEvent extends EventInput {
   extendedProps: {
