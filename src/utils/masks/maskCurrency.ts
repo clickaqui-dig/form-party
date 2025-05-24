@@ -1,22 +1,18 @@
-export function maskCurrency(raw: string): string {
-  if (!raw) return '';
+export const maskCurrency = (value: string | number | null | undefined): string => {
+  if (value === null || value === undefined) return 'R$ 0,00';
+  const digitsOnly =
+    typeof value === 'number'
+      ? String(value).replace(/\D/g, '')
+      : value.replace(/\D/g, '');
 
-  const cleaned = raw.replace(/[^\d.,-]/g, '');
+  if (digitsOnly.length === 0) return 'R$ 0,00';
 
-  let normalized = cleaned;
-  if (cleaned.includes(',') && cleaned.includes('.')) {
-    normalized = cleaned.replace(/\./g, '').replace(',', '.');
-  } else if (cleaned.includes(',')) {
-    normalized = cleaned.replace(',', '.');
-  }
+  const number = parseInt(digitsOnly, 10) / 100;
 
-  const value = parseFloat(normalized);
-  if (Number.isNaN(value)) return '';
-
-  return new Intl.NumberFormat('pt-BR', {
+  return number.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
-}
+  });
+};
