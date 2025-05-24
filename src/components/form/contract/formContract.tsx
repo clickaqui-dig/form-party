@@ -16,6 +16,16 @@ export const FormContract = () => {
           setFieldValue('valorRecebido', payments.reduce((total: any, item: any) => total + Number(unmaskCurrency(item.valor)), 0).toFixed(2))
         }
 
+        const subtotal = values.itensContrato.reduce((acum: any, item: any) => acum + item.valor, 0);
+        if (subtotal) {
+          const applyDiscount = Math.min(Math.max(values.desconto, 0), subtotal);
+
+          const applyAddition = Math.max(values.acrescimo, 0);
+
+          const total = Math.max(subtotal - applyDiscount + applyAddition, 0);
+          setFieldValue('valorTotal', total.toFixed(2));
+        }
+
       }, [setFieldValue, values]);
 
   return (

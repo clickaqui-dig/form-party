@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useFormikContext } from "formik";
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ItemsContractModal } from "../../Modals/ItemsContractModal";
+import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 interface ContractItem {
     id: number;
@@ -21,44 +22,38 @@ export const ItemsContract = () => {
     const { values, setFieldValue} = useFormikContext<any>();
 
     useEffect(() => {
-        setContractItems(values.itensContrato)
+        setContractItems(values.itensContrato);
     }, [values]);
 
-    const handleAddContractItem = (newItem: ContractItem) => {
+    const valorTotal = useMemo(() => {
+        return contractItems.reduce((acum: any, item: any) => acum + item.valor, 0);
+    }, [contractItems])
 
-        const newEntry = {
-            id: newItem.id,
-            descricao: newItem.descricao,
+    const handleAddContractItem = (newItem: ContractItem) => {
+        console.log(newItem);
+        const newEntry: ContractItem = {
+            ...newItem,
             valor: newItem.valor,
         };
-        setContractItems(prevItems => [...prevItems, newEntry]);
-        setFieldValue("itensContrato",[...values.itensContrato, newEntry])
 
-        const totalValue = [...values.itensContrato, newEntry].reduce((total, item) => total + Number(item.valor), 0).toFixed(2);
-        setFieldValue("valorTotal",totalValue)
+        const updatedItems = [...contractItems, newEntry];
+
+        setContractItems(updatedItems);
+        setFieldValue('itensContrato', updatedItems);
 
         setModalOpen(false);
-    }
+      };
 
     const handleRemoveItemContract = () => {
-        if (selectedItemContract.length === 0) {
-            //!TODO Colocar o toast
-            //alert("Selecione pelo menos um item para remover.");
-            return;
-        }
-        const selected = selectedItemContract.map((item) => item.index)
+        if (selectedItemContract.length === 0) return;
+        const toRemove = new Set(selectedItemContract.map((i) => i.index));
 
-        const updatedItemContract = contractItems.filter(
-            (item, index) => !selected.includes(index)
-        );
+        const updatedItems = contractItems.filter((_, idx) => !toRemove.has(idx));
 
+        setContractItems(updatedItems);
+        setFieldValue('itensContrato', updatedItems);
 
-        setContractItems(updatedItemContract);
-        setFieldValue("itensContrato",updatedItemContract)
-
-        const totalValue = contractItems.reduce((total, item) => total - Number(item.valor), 0).toFixed(2);
-        setFieldValue("valorTotal",totalValue)
-    };
+      };
 
     const handleSelectItemContract = (id: number, index: number) => {
         if (!handleFindItem(index)) {
@@ -70,7 +65,6 @@ export const ItemsContract = () => {
     
     const handleFindItem = (index: number) => {
         const existItem = selectedItemContract.find((item) => item.index === index)
-
         return existItem ? true : false;
     }
 
@@ -115,7 +109,7 @@ export const ItemsContract = () => {
                                             {item.descricao}
                                         </td>
                                         <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80 text-right">
-                                            {item.valor}
+                                            {maskCurrencyFromUnits(item.valor)}
                                         </td>
                                     </tr>
                                 ))
@@ -131,7 +125,7 @@ export const ItemsContract = () => {
                         <tfoot className="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
-                                    Total: {values.valorTotal}
+                                    Total: {maskCurrencyFromUnits(valorTotal)}
                                 </td>
                             </tr>
                         </tfoot>

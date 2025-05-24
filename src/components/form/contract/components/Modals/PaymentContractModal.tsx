@@ -10,7 +10,7 @@ import { FC, useState } from "react";
 interface PaymentModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onAddItem: (item: { id: number, valor: string; meioPagamento: string, dataPagamentos: string, recebido: boolean, observacoes: string }) => void;
+    onAddItem: (item: { id: number, valor: number; meioPagamento: string, dataPagamentos: string, recebido: boolean, observacoes: string }) => void;
   }
 
 export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem }) => {
@@ -22,7 +22,7 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
         recebido: false,
         observacoes: ''
     });
-    const { values, setFieldValue } = useFormikContext<any>();
+    const { values } = useFormikContext<any>();
 
     if (!isOpen) return null;
 
@@ -43,7 +43,7 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
         e.preventDefault();
         onAddItem({
             id: Date.now(),
-            valor: formData.valor,
+            valor: unmaskCurrency(formData.valor),
             meioPagamento: formData.meioPagamento,
             dataPagamentos: formData.dataPagamento,
             recebido: formData.recebido,

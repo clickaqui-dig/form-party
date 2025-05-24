@@ -3,6 +3,8 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { Modal } from "@/components/ui/modal";
 import { getItemContract } from "@/services/item-contract/getItemContract";
+import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
+import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 import debounce from "lodash.debounce";
 import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
 
@@ -97,7 +99,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
             ...prevState,
             [name]: value
         }));
-        if (name === "descricao") setPage(0); // Reset paginação
+        if (name === "descricao") setPage(0);
     };
 
     const handleSuggestionClick = (item: any) => {
@@ -105,7 +107,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
         setFormData({
             id: item.id,
             descricao: item.descricao,
-            valor: item.valor?.toString() ?? ''
+            valor: maskCurrencyFromUnits(item.valor?.toString())  ?? ''
         });
         setSuggestions([]);
         setHasMore(false);
@@ -120,7 +122,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
         onAddItem({
             id: formData.id,
             descricao: formData.descricao,
-            valor: parseFloat(formData.valor)
+            valor: unmaskCurrency(formData.valor)
         });
         setFormData({
             id: 0,
@@ -190,8 +192,9 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
                         Valor (R$) <span className="text-red-500">*</span>
                     </Label>
                     <Input
-                        type="number"
+                        type="text"
                         name="valor"
+                        disabled
                         value={formData.valor}
                         onChange={handleChange}
                         placeholder="Valor da parcela"
