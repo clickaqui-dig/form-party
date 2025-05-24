@@ -10,9 +10,10 @@ import { useEffect, useState } from 'react';
 
 export const FormItemContract: React.FC<{ lastResetAt: number | null }> = ({ lastResetAt }) => {
     const { errors, setFieldValue } = useFormikContext<{descricao: string, valor: number}>();
-    const [currency, setCurrency] = useState('');
+    const [currency, setCurrency] = useState('R$ 0,00');
 
     const handleChangeCurrency = (value: any) => {
+
         const maskedValue = maskCurrency(value);
         setCurrency(maskedValue);
 

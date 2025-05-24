@@ -6,15 +6,16 @@ import { Field, FieldProps, useFormikContext } from "formik";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useMemo, useState, } from "react";
 import { PaymentsContractModal } from "../../Modals/PaymentContractModal";
-import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 import { toast } from "react-toastify";
 import { formatDate } from "@/utils/toDates";
 import { maskCurrencyWithLimit } from "@/utils/masks/limityValue";
+import { maskCurrency } from "@/utils/masks/maskCurrency";
+import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 interface PaymentItem {
     id: number;
-    valor: string;
+    valor: number;
     meioPagamento: string,
     dataPagamentos: string,
     recebido: boolean,
@@ -31,8 +32,8 @@ export const PaymentsContract = () => {
     const [selectedPayments, setSelectedPayments] = useState<any[]>([]);
     const [useDiscount, setUseDiscount] = useState("fechado");
 
-    const [discount, setDiscount] = useState(0);
-    const [addition, setAddition] = useState(0);
+    const [discount, setDiscount] = useState('');
+    const [addition, setAddition] = useState('');
 
 
     const { values, setFieldValue } = useFormikContext<any>();
@@ -43,14 +44,13 @@ export const PaymentsContract = () => {
 
 
     const finalCurrency = useMemo(() => {
-        const newCurrency = (values.valorTotal + addition - discount).toFixed(2);
-        return newCurrency;
-    }, [values.valorTotal, addition, discount]);
+        return values.valorTotal;
+    }, [values.valorTotal]);
 ;
 
-    const valueTotal = useMemo(() => {
+    const totalValue = useMemo(() => {
         const total = paymentsItems.reduce((total, item) => total + Number(unmaskCurrency(item.valor)), 0).toFixed(2)
-        return maskCurrency(total);
+        return maskCurrencyWithLimit(total);
     }, [paymentsItems]);
 
     const handleAddPaymentItem = (newItem: PaymentItem) => {
@@ -65,7 +65,7 @@ export const PaymentsContract = () => {
 
         };
 
-        const total = Number(values.valorRecebido) + Number(unmaskCurrency(newEntry.valor));
+        const total = Number(values.valorRecebido) + newEntry.valor;
 
         if (values.valorTotal - total < 0) {
             toast.warning('O valor do pagamento supera o valor faltante.');
@@ -84,7 +84,6 @@ export const PaymentsContract = () => {
         );
     };
 
-
     const handleRemovePayments = () => {
         if (selectedPayments.length === 0) {
             toast.warning("Selecione pelo menos um pagamento para remover.");
@@ -100,26 +99,24 @@ export const PaymentsContract = () => {
     };
 
     const handleChangeCurrency = (e: any, type: string) => {
-        if (/[A-Za-zÀ-ÖØ-öø-ÿ]/.test(e.key)) {
-            e.preventDefault();           
-        }
 
-        const currency = unmaskCurrency(e.target.value)
+        const currency = e.target.value;
 
-        const maskedValue = maskCurrencyWithLimit(String(currency), values.valorTotal);
-        setFieldValue(type, maskedValue);
+        const maskedValue = maskCurrency(currency);
+
+        const naturalValue = unmaskCurrency(maskedValue);
+        setFieldValue(type, naturalValue);
 
         if (type === 'desconto') {
-            setDiscount(currency);
-            setFieldValue('valorTotal', (values.valorTotal + addition - currency).toFixed(2));
+            setDiscount(maskedValue);
         }
 
         if (type === 'acrescimo') {
-            setAddition(currency);
-            setFieldValue('valorTotal', (values.valorTotal + currency - discount).toFixed(2));
+            setAddition(maskedValue);
         }
 
     };
+    
     return (
         <>
             <div className="mt-4">
@@ -150,7 +147,7 @@ export const PaymentsContract = () => {
                                 <Input
                                     {...field}
                                     type="text"
-                                    
+                                    value={discount}
                                     onChange={(e) => {
                                         handleChangeCurrency(e, "desconto")
                                     }}
@@ -167,7 +164,7 @@ export const PaymentsContract = () => {
                                 <Input
                                     {...field}
                                     type="text"
-                                   
+                                    value={addition}
                                     onChange={(e) => {
                                         handleChangeCurrency(e, "acrescimo")
                                     }}
@@ -179,7 +176,7 @@ export const PaymentsContract = () => {
                     {/* Valor Total */}
                     <div className="w-full md:w-1/3">
                         <Label>Valor Total</Label>
-                        <p className="text-lg text-green-600 font-bold mt-2">R$ {finalCurrency}</p>
+                        <p className="text-lg text-green-600 font-bold mt-2">{maskCurrencyFromUnits(finalCurrency)}</p>
                     </div>
                 </div>
 
@@ -233,7 +230,7 @@ export const PaymentsContract = () => {
                                         </td>
 
                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                                            {item.valor}
+                                            {maskCurrencyFromUnits(item.valor)}
                                         </td>
                                         <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                                             {formatDate(item.dataPagamentos)}
@@ -262,7 +259,7 @@ export const PaymentsContract = () => {
                         <tfoot className="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
-                                    Total: {valueTotal}
+                                    Total: {maskCurrencyFromUnits(totalValue)}
                                 </td>
                             </tr>
                         </tfoot>
