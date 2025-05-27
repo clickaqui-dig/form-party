@@ -113,7 +113,6 @@ export default function PageEditCustomer() {
     ) => {
         try {
             if (id) {
-                console.log("teste ===>>", values)
                 const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
 
