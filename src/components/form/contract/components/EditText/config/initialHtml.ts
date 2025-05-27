@@ -210,7 +210,7 @@ const brDate = (iso: string) =>
     new Date(iso).toLocaleDateString('pt-BR');
 
 const toNumber = (valor: string) =>
-    Number(valor.replace(/[^\d,]/g, '').replace(',', '.'));
+    Number(valor);
 
 export const installmentsHtml = (installments: Installments[]) => {
     if (!installments.length) return '';
