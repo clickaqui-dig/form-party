@@ -11,9 +11,9 @@ import {
 } from "@fullcalendar/core";
 import Tooltip from "../form/Tooltip";
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
-import api from "@/config/apiConfig";
 import { useRouter } from "next/navigation";
 import { getCalendar } from "@/services/contract/getCalendar";
+import { fetchFeriadosNacionais, getFeriadosEstaduaisMunicipais } from "@/services/calendar/getHolidays";
 
 interface CalendarEvent extends EventInput {
   extendedProps: {
@@ -23,7 +23,16 @@ interface CalendarEvent extends EventInput {
     valorRecebido: number;
     valorPendente: number;
     calendar: string;
+    isFeriado?: boolean;
+    tipoFeriado?: string;
   };
+}
+
+// Interface para os feriados
+interface Feriado {
+  date: string;
+  name: string;
+  type: 'nacional' | 'estadual' | 'municipal';
 }
 
 const Calendar: React.FC = () => {
@@ -32,15 +41,72 @@ const Calendar: React.FC = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState(false);
+  const [feriados, setFeriados] = useState<Feriado[]>([]);
 
   const calendarRef = useRef<FullCalendar>(null);
+
+  const loadFeriados = async () => {
+    const currentYear = new Date().getFullYear();
+
+    try {
+      const [nacionais, estaduais] = await Promise.all([
+        fetchFeriadosNacionais(currentYear),
+        getFeriadosEstaduaisMunicipais(currentYear),
+      ]);
+
+      const todosFeriados = [...nacionais, ...estaduais,];
+      setFeriados(todosFeriados);
+
+      const feriadosEvents: CalendarEvent[] = todosFeriados.map((feriado) => ({
+        id: `feriado-${feriado.date}-${feriado.type}`,
+        title: feriado.name,
+        start: feriado.date,
+        allDay: true,
+        display: 'background',
+        backgroundColor: getFeriadoColor(feriado.type),
+        extendedProps: {
+          situacao: 'Feriado',
+          nomeCliente: '',
+          valorTotal: 0,
+          valorRecebido: 0,
+          valorPendente: 0,
+          calendar: 'Feriado',
+          isFeriado: true,
+          tipoFeriado: feriado.type
+        },
+      }));
+
+      return feriadosEvents;
+    } catch (error) {
+      console.error("Erro ao carregar feriados:", error);
+      return [];
+    }
+  };
+
+  // Função para definir cores diferentes para cada tipo de feriado
+  const getFeriadoColor = (tipo: string): string => {
+    switch (tipo) {
+      case 'nacional':
+        return 'rgba(255, 0, 0, 0.2)'; // Vermelho transparente
+      case 'estadual':
+        return 'rgba(0, 0, 255, 0.2)'; // Azul transparente
+      case 'municipal':
+        return 'rgba(0, 128, 0, 0.2)'; // Verde transparente
+      default:
+        return 'rgba(128, 128, 128, 0.2)'; // Cinza transparente
+    }
+  };
 
   const fetchCalendar = useCallback(
     async () => {
       try {
+        // Carrega os feriados de APIs externas
+        const feriadosEvents = await loadFeriados();
+
+        // Carrega os eventos normais
         const response = await getCalendar({ page: 0, size: 50 });
         const paginated = response;
-        const responseEvents: CalendarEvent[] = paginated.content.map((item: any) => ({
+        const responseEvents: CalendarEvent[] = paginated.content.filter((item: any) => item.situacao !== 'CANCELADO').map((item: any) => ({
           id: item.id,
           title: item.nomeCliente,
           start: item.dataHoraInicial,
@@ -54,7 +120,9 @@ const Calendar: React.FC = () => {
             calendar: handleSituation(item),
           },
         }));
-        setEvents(responseEvents);
+
+        // Combina os eventos normais com os feriados
+        setEvents([...responseEvents, ...feriadosEvents]);
         setPage(paginated.number);
         setLastPage(paginated.last ?? false);
       } catch (error) {
@@ -62,14 +130,14 @@ const Calendar: React.FC = () => {
       }
     },
     []
-  )
+  );
 
-  const handleSituation = (item : any) =>{
-    if(item.valorTotal === item.valorRecebido){
+  const handleSituation = (item: any) => {
+    if (item.valorTotal === item.valorRecebido) {
       return "Success"
     } else if (item.valorRecebido === 0 && item.valorPendente === 0) {
       return "Primary"
-    } else{
+    } else {
       return "Danger"
     }
   }
@@ -81,6 +149,10 @@ const Calendar: React.FC = () => {
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const event = clickInfo.event;
+    // Não navegar para edição se for um feriado
+    if (event.extendedProps.isFeriado) {
+      return;
+    }
     router.push(`/edit-contract/${event.id}`)
   };
 
@@ -104,13 +176,29 @@ const Calendar: React.FC = () => {
           eventContent={renderEventContent}
         />
       </div>
+
+      {/* Legenda para os feriados */}
+      <div className="flex flex-wrap gap-4 p-3 border-t border-gray-200 dark:border-gray-800">
+        <div className="flex items-center">
+          <div className="w-4 h-4 mr-2 rounded" style={{ backgroundColor: 'rgba(255, 0, 0, 0.2)' }}></div>
+          <span className="text-sm">Feriado Nacional</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 mr-2 rounded" style={{ backgroundColor: 'rgba(0, 0, 255, 0.2)' }}></div>
+          <span className="text-sm">Feriado Estadual</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 mr-2 rounded" style={{ backgroundColor: 'rgba(0, 128, 0, 0.2)' }}></div>
+          <span className="text-sm">Feriado Municipal</span>
+        </div>
+      </div>
     </div>
   );
 };
 
-const formatDate = (date: Date) =>{
+const formatDate = (date: Date) => {
   const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+  const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   const hour = String(date.getHours()).padStart(2, '0');
   const minute = String(date.getMinutes()).padStart(2, '0');
@@ -118,6 +206,16 @@ const formatDate = (date: Date) =>{
 }
 
 const renderEventContent = (eventInfo: EventContentArg) => {
+  // Se for um feriado, renderiza de forma diferente
+  if (eventInfo.event.extendedProps.isFeriado) {
+    return (
+      <div className="w-full text-center text-xs font-semibold">
+        {eventInfo.event.title}
+      </div>
+    );
+  }
+
+  // Renderização normal para eventos não-feriados
   const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar?.toLowerCase()}`;
   const event = {
     id: eventInfo.event.id,
@@ -132,7 +230,7 @@ const renderEventContent = (eventInfo: EventContentArg) => {
   }
   return (
     <Tooltip event={event} >
-      <div 
+      <div
         className={`event-fc-color fc-event-main flex ${colorClass}  rounded-sm p-1`}
       >
         <div className="fc-daygrid-event-dot"></div>
