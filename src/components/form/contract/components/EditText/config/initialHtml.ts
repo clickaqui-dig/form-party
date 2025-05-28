@@ -157,7 +157,7 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>NO Acréscimo</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.addition)}</span>
+                    <span style="font-size:12px;">${formatBrl(data.addition)}</span>
                 </td>
             </tr>
             <tr>
@@ -165,7 +165,7 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Desconto</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.discount)}</span>
+                    <span style="font-size:12px;">${formatBrl(data.discount)}</span>
                 </td>
             </tr>
             <tr>
@@ -173,7 +173,7 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Total</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.valor)}</span>
+                    <span style="font-size:12px;">${formatBrl(data.valor)}</span>
                 </td>
             </tr>
             <tr>
@@ -181,7 +181,7 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Valor já pago</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.amountAlreadyPaid)}</span>
+                    <span style="font-size:12px;">${formatBrl(data.amountAlreadyPaid)}</span>
                 </td>
             </tr>
             <tr>
@@ -189,7 +189,7 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Valor a pagar</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">R$&nbsp;${formatBrl(data.amountToPay)}</span>
+                    <span style="font-size:12px;">${formatBrl(data.amountToPay)}</span>
                 </td>
             </tr>
         </tbody>

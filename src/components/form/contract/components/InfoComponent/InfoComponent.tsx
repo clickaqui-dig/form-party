@@ -13,6 +13,7 @@ import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { putSituationById } from "@/services/contract/putUpdateSituation";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { resolve } from "path";
 
 const optionsContract = [
     { value: "ANIVERSARIO", label: "Aniversário" },
@@ -47,8 +48,9 @@ export const InfoComponent = () => {
     }, [conflictContract, setFieldError, values.idContrato])
 
     const valuePending = useMemo(() => {
-        const result = Number(values.valorTotal) - Number(values.valorRecebido)
-        return maskCurrency(String(result));
+        const result = Number(values.valorTotal) - Number(values.valorRecebido);
+        const resultWithTwoCases = Number(result).toFixed(2);
+        return maskCurrency(String(resultWithTwoCases));
     }, [values.valorRecebido, values.valorTotal]);
 
     const valueRecept = useMemo(() => {
@@ -63,8 +65,10 @@ export const InfoComponent = () => {
         try {
             await putSituationById(values.idContrato,'CANCELADO')
             router.push('/search-contract');
-        } catch (error) {
-            toast.error("Erro ao cancelar contrato.")
+        } catch (error: any) {
+            toast.error("Erro ao cancelar contrato.");
+            console.error(error);
+
         }
        
         setFieldValue('situacao','CANCELADO')
@@ -262,7 +266,7 @@ export const InfoComponent = () => {
             </div>
 
             {/* quarta linha */}
-            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div>
                     <Label htmlFor="tipoDoContrato">Tipo do Contrato</Label>
                     <div className="relative">
@@ -270,7 +274,8 @@ export const InfoComponent = () => {
                             {({ field }: any) => (
                                 <Select
                                     {...field}
-                                    options={[optionsContract][0]}
+                                    options={optionsContract}
+                                    defaultValue="ANIVERSARIO"
                                     onChange={handleSelectChangeContract}
                                     className="dark:bg-dark-700"
                                 // disable={true}
@@ -285,7 +290,7 @@ export const InfoComponent = () => {
                         </span>
                     </div>
                 </div>
-                <div>
+                <div className="col-span-1">
                     <Label htmlFor="dataHoraInicial">Data Início</Label>
                     <div className="relative">
                         <Field id="dataHoraInicial" name="dataHoraInicial">
@@ -294,6 +299,7 @@ export const InfoComponent = () => {
                                     type="datetime-local"
                                     id="dataHoraInicial"
                                     name="dataHoraInicial"
+                                    step={1800}
                                     value={field.value ?? ""}
                                     onChange={(event) => {
                                         setFieldValue("dataHoraInicial", event.target.value);
@@ -306,7 +312,7 @@ export const InfoComponent = () => {
                         )}
                     </div>
                 </div>
-                <div>
+                <div className="col-span-1">
                     <Label htmlFor="dataHoraFinal">Data Final</Label>
                     <div className="relative">
                         <Field id="dataHoraFinal" name="dataHoraFinal">
@@ -314,6 +320,7 @@ export const InfoComponent = () => {
                                 <Input
                                     type="datetime-local"
                                     id="dataHoraFinal"
+                                    step={1800}
                                     name="dataHoraFinal"
                                     value={field.value ?? ""}
                                     onChange={(event) => {
@@ -331,6 +338,8 @@ export const InfoComponent = () => {
                     <Label>Duração</Label>
                     <Label>{durationHours ? `${durationHours} horas` : '--'}</Label>
                 </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div>
                     <Label htmlFor="quantidadeConvidados">Quant. de convidados</Label>
                     <Field id="quantidadeConvidados" name="quantidadeConvidados" >
@@ -348,8 +357,6 @@ export const InfoComponent = () => {
                         <div className="text-red-500 text-sm mt-1">{errors.quantidadeConvidados}</div>
                     )}
                 </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div className="w-96">
                     <Label htmlFor="observacoes"> Observações</Label>
                     <Field id="observacoes" name="observacoes">
