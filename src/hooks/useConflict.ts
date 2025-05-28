@@ -17,13 +17,13 @@ export function useConflict(values: { dataHoraInicial: string, dataHoraFinal: st
 
   const checkDateTimeIsExist = useCallback(
     async (dateInicial: string, dateFinal: string): Promise<ConflictInfo> => {
-    const response = await getContractByDate(dateInicial, dateFinal);
+      const response = await getContractByDate(dateInicial, dateFinal);
+      const filterResponse = response.filter((item: any) => item.situacao !== 'CANCELADO')
+      if (filterResponse.length > 0) {
 
-      if (response.length > 0) {
-    
         return {
           exists: true,
-          info: { id: response[0].id, dataHoraInicial: response[0].dataHoraInicial },
+          info: { id: filterResponse[0].id, dataHoraInicial: filterResponse[0].dataHoraInicial },
         };
       }
 
@@ -31,27 +31,27 @@ export function useConflict(values: { dataHoraInicial: string, dataHoraFinal: st
     },
     []
   );
-    
+
   useEffect(() => {
     if (values.dataHoraInicial === "" || values.dataHoraFinal === "") {
       setConflictContract(initialConflict);
       return;
     }
-   
+
     const fetchCheckedDates = async () => {
-        try {
-          const response = await checkDateTimeIsExist(
-            values.dataHoraInicial,
-            values.dataHoraFinal
-          );
-          setConflictContract(response);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-    
-      fetchCheckedDates();
-      
+      try {
+        const response = await checkDateTimeIsExist(
+          values.dataHoraInicial,
+          values.dataHoraFinal
+        );
+        setConflictContract(response);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCheckedDates();
+
   }, [values.dataHoraInicial, values.dataHoraFinal, checkDateTimeIsExist]);
 
   return conflictContract;

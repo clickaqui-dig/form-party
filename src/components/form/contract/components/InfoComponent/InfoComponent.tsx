@@ -143,7 +143,7 @@ export const InfoComponent = () => {
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div>
                     <Label htmlFor="idForm">Código</Label>
-                    <Field id="idForm" name="idForm">
+                    <Field id="idContrato" name="idContrato">
                         {({ field }: any) => (
                             <Input
                                 {...field}
@@ -174,7 +174,7 @@ export const InfoComponent = () => {
                     <button
                         type="button"
                         className="btn btn-danger flex w-full justify-center rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 sm:w-auto disabled:bg-gray-300 disabled:cursor-not-allowed "
-                        disabled={values.idContrato === 0 ? true : false}
+                        disabled={values.idContrato === 0 || values.situacao === 'Cancelado' ? true : false}
                         onClick={() => {
                             handleCancelContract();
                         }}
