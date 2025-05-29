@@ -142,7 +142,7 @@ export const InfoComponent = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
                 <div>
-                    <Label htmlFor="idForm">Código</Label>
+                    <Label htmlFor="idContrato">Código</Label>
                     <Field id="idContrato" name="idContrato">
                         {({ field }: any) => (
                             <Input

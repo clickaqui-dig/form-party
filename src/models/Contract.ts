@@ -76,7 +76,7 @@ export interface ContractForm {
     valorRecebido: Number(values.valorRecebido) || 0,
     valorPendente: Number(values.valorPendente) || 0,
     valorTotal: Number(values.valorTotal),
-    tipoDoContrato: values.tipoDoContrato,
+    tipoDoContrato: "ANIVERSARIO",
     dataHoraInicial: values.dataHoraInicial,
     dataHoraFinal: values.dataHoraFinal,
     duracao: Number(values.duracao),

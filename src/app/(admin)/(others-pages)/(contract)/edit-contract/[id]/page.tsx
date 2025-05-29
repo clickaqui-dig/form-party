@@ -121,7 +121,7 @@ export default function PageEditCustomer() {
                     valorRecebido: Number(values.valorRecebido),
                     valorPendente: values.valorTotal - Number(values.valorRecebido),
                     valorTotal: values.valorTotal,
-                    tipoDoContrato: values.tipoDoContrato,
+                    tipoDoContrato: "ANIVERSARIO",
                     dataHoraInicial: values.dataHoraInicial,
                     dataHoraFinal: values.dataHoraFinal,
                     duracao: values.duracao,

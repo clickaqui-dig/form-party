@@ -43,7 +43,7 @@ export default function FormElements() {
 
       if (response) {
         toast.success("Contrato cadastrado com sucesso !");
-        router.push('/search-contract');
+        router.push(`/edit-contract/${response.data.id}`);
       } else {
         toast.error("Error ao salvar contrato, revise o formulario.")
       }

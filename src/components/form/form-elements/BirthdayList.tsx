@@ -29,7 +29,6 @@ const BirthdayList =() => {
   }, [values]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {
-    console.log("newItem.nome === >", newItem.nome)
     if (newItem.nome) {
       const newEntry = {
         ...newItem,
