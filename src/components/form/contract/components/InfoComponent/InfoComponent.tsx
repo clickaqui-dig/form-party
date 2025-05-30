@@ -13,7 +13,7 @@ import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { putSituationById } from "@/services/contract/putUpdateSituation";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { resolve } from "path";
+import { CustomerModal } from "../Modals/CustomerModal";
 
 const optionsContract = [
     { value: "ANIVERSARIO", label: "Aniversário" },
@@ -22,6 +22,8 @@ const optionsContract = [
 export const InfoComponent = () => {
     const { setFieldValue, values, errors, setFieldError } = useFormikContext<ContractForm>();
     const [clientSuggestions, setClientSuggestions] = useState<any[]>([]);
+    const [isModalOpen, setModalOpen] = useState(false);
+
     const conflictContract = useConflict(values);
     const router = useRouter();
 
@@ -186,7 +188,7 @@ export const InfoComponent = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div className="relative">
-                    <Label htmlFor="nomeCliente">Cliente</Label>
+                    <Label htmlFor="nomeCliente">Cliente <a className="ml-2 underline cursor-pointer hover:text-blue-600" onClick={() => setModalOpen(true)}>Cadastrar novo cliente?</a> </Label>
                     <Field id="nomeCliente" name="nomeCliente">
                         {({ field }: any) => (
                             <Input
@@ -375,6 +377,7 @@ export const InfoComponent = () => {
                     )}
                 </div>
             </div>
+            <CustomerModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />            
         </>
     )
 }
