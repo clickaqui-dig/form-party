@@ -4,10 +4,11 @@ import { $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback } from "react";
 import jsPDF from 'jspdf';
+import { useFormikContext } from "formik";
 
 export const OptionsEditComponent = () => {
     const [editor] = useLexicalComposerContext();
-
+    const { values } = useFormikContext<any>();
 
     const generatePdf = useCallback(async (html: string) => {
         const wrapper = document.createElement('div');
@@ -17,6 +18,8 @@ export const OptionsEditComponent = () => {
         wrapper.style.boxSizing = 'border-box';
         wrapper.style.pointerEvents = 'none';
         document.body.appendChild(wrapper);
+        const nomeCliente = values.cliente.nome.replace(" ","-").toLowerCase()
+        const idContrato = values.idContrato
 
         const pdf = new jsPDF({ format: 'a4', unit: 'px' });
         await pdf.html(wrapper, {
@@ -29,7 +32,7 @@ export const OptionsEditComponent = () => {
                 letterRendering: true,
             },
         }).then(() => {
-            pdf.save(`Contrato-bolo-e-balao.pdf`);
+            pdf.save(`${idContrato}-${nomeCliente}`);
             document.body.removeChild(wrapper);
         });
     }, []);
