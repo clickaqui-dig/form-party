@@ -46,28 +46,28 @@ export const WriteContract = () => {
 
       const clause = clauseHtml({ birthday: values.listaAniversariantes, installments: values.pagamentos })
 
-      const signature = signatureHtml({name:values.nomeCliente});
+      const signature = signatureHtml({ name: values.nomeCliente });
 
       return header + itens + value + clause + signature;
     },
     [values]
   );
 
-    return (
-      <LexicalComposer key={templateHtml} initialConfig={editorConfig}>
-        <OptionsEditComponent />
-            <ToolbarPlugin />
-            <RichTextPlugin
-                contentEditable={<ContentEditable className="border border-gray-300 rounded-md p-4 min-h-[600px] focus:outline-blue-500" />}
-                placeholder={<span className="absolute left-4 top-4 text-gray-400 select-none">Digite o contrato…</span>}
-          ErrorBoundary={LexicalErrorBoundary}
-            />
-            <HistoryPlugin />
-            <LinkPlugin />
-            <ListPlugin />
-            <TablePlugin />
-        <PrepopulatedFromHtmlPlugin
-          html={templateHtml} />
-        </LexicalComposer>
-    )
+  return (
+    <LexicalComposer key={templateHtml} initialConfig={editorConfig}>
+      <OptionsEditComponent />
+      <ToolbarPlugin />
+      <RichTextPlugin
+        contentEditable={<ContentEditable className="border border-gray-300 rounded-md p-4 min-h-[600px] focus:outline-blue-500" />}
+        placeholder={<span className="absolute left-4 top-4 text-gray-400 select-none">Digite o contrato…</span>}
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <HistoryPlugin />
+      <LinkPlugin />
+      <ListPlugin />
+      <TablePlugin />
+      <PrepopulatedFromHtmlPlugin
+        html={templateHtml} />
+    </LexicalComposer>
+  )
 }

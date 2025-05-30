@@ -17,7 +17,7 @@ interface PaymentItem {
     id: number;
     valor: number;
     meioPagamento: string,
-    dataPagamentos: string,
+    dataPagamento: string,
     recebido: boolean,
     observacoes: string
 }
@@ -59,7 +59,7 @@ export const PaymentsContract = () => {
             id: newItem.id,
             valor: newItem.valor,
             meioPagamento: newItem.meioPagamento,
-            dataPagamentos: newItem.dataPagamentos,
+            dataPagamento: newItem.dataPagamento,
             recebido: newItem.recebido,
             observacoes: newItem.observacoes
 
@@ -233,7 +233,7 @@ export const PaymentsContract = () => {
                                             {maskCurrencyFromUnits(item.valor)}
                                         </td>
                                         <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                                            {formatDate(item.dataPagamentos)}
+                                            {formatDate(item.dataPagamento)}
                                         </td>
                                         <td className="px-10 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                                             {item.recebido === true ? "Sim" : "Não"}

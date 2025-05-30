@@ -73,9 +73,11 @@ export default function PageEditCustomer() {
                     }
                 })
 
+                console.log("response.pagamentos ===>> ", response.pagamentos)
+
                 const mapPayments = response.pagamentos.map((item: any) => {
                     return {
-                        valor: maskCurrency(item.valor.toString()),
+                        valor: Number(item.valor).toFixed(2),
                         meioPagamento: validationTypePayments(item.meioPagamento),
                         dataPagamento: item.dataPagamento,
                         recebido: item.recebido,
