@@ -18,8 +18,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   const [formData, setFormData] = useState<BirthDayItem>({
     id: 0,
     nome: "",
-    dataNascimento: "",
-    tema: "",
     idade: 0,
     idadeNoEvento: 0
   });
@@ -110,8 +108,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     setFormData({
       id: person.id,
       nome: person.nome,
-      dataNascimento: person.dataNascimento || "",
-      tema: person.tema?.descricao || "",
       idade: person.idade || 0,
       idadeNoEvento: person.idadeNoEvento || 0
     });
@@ -119,7 +115,7 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     setHasMore(false);
     
     // Limpa os erros relacionados aos campos preenchidos
-    const fieldsToCheck = ['nome', 'dataNascimento', 'tema', 'idade', 'idadeNoEvento'];
+    const fieldsToCheck = ['nome','idade', 'idadeNoEvento'];
     const fieldsWithValues = fieldsToCheck.filter(field => !!person[field]);
     
     if (fieldsWithValues.length > 0) {
@@ -172,8 +168,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     setFormData({
       id: 0,
       nome: "",
-      dataNascimento: "",
-      tema: "",
       idade: 0,
       idadeNoEvento: 0
     });
@@ -204,65 +198,38 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           <Input
             type="text"
             name="nome"
-            value={inputValue}
+            value={formData.nome}
             onChange={handleInputChange}
             placeholder="Digite para buscar aniversariante..."
             className={`w-full ${formErrors.nome ? 'border-red-500' : ''}`}
           />
           {renderError('nome')}
-          
-          {isLoading && (
-            <div className="absolute left-0 top-full bg-white border border-gray-200 w-full p-2 rounded-b shadow z-20">
-              <span className="text-gray-600 text-sm">Carregando...</span>
-            </div>
-          )}
-          {!!suggestions.length && (
-            <ul className="absolute left-0 top-full w-full bg-white border border-gray-200 rounded-b shadow max-h-48 overflow-y-auto z-20">
-              {suggestions.map((person) => (
-                <li
-                  key={person.id}
-                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-sm transition"
-                  onClick={() => handleSuggestionClick(person)}
-                >
-                  {person.nome}
-                </li>
-              ))}
-              {hasMore && (
-                <li
-                  className="py-2 text-center bg-gray-100 text-sm cursor-pointer hover:bg-gray-200"
-                  onClick={handleLoadMore}
-                >
-                  Carregar mais...
-                </li>
-              )}
-            </ul>
-          )}
         </div>
 
         <div className="mb-4">
-          <Label>Data de nascimento</Label>
+          <Label>Idade Atual</Label>
           <Input
-            type="date"
-            name="dataNascimento"
-            value={formData.dataNascimento}
+            type="number"
+            name="idade"
+            value={formData.idade}
             onChange={handleChange}
-            placeholder="Data de Nascimento"
+            placeholder="Idade atual"
             className={formErrors.dataNascimento ? 'border-red-500' : ''}
           />
-          {renderError('dataNascimento')}
+          {renderError('idade')}
         </div>
 
         <div className="mb-4">
-          <Label>Tema</Label>
+          <Label>Idade no Evento</Label>
           <Input
-            type="text"
-            name="tema"
-            value={formData.tema}
+            type="number"
+            name="idadeNoEvento"
+            value={formData.idadeNoEvento}
             onChange={handleChange}
-            placeholder="Tema"
-            className={formErrors.tema ? 'border-red-500' : ''}
+            placeholder="Idade atual"
+            className={formErrors.dataNascimento ? 'border-red-500' : ''}
           />
-          {renderError('tema')}
+          {renderError('idade')}
         </div>
 
         <div className="flex justify-end mt-4">

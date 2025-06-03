@@ -28,7 +28,8 @@ const initialValues = {
   payments: [],
   desconto: 0,
   acrescimo: 0,
-  situacao: 'EM_ANDAMENTO'
+  situacao: 'EM_ANDAMENTO',
+  temas: [],
 };
 
 export default function FormElements() {

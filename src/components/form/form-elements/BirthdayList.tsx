@@ -10,8 +10,6 @@ import { toast } from "react-toastify";
 export interface BirthDayItem {
   id: number;
   nome: string,
-  dataNascimento: string;
-  tema: string
   idade: number;
   idadeNoEvento:number;
 }
@@ -106,16 +104,10 @@ const BirthdayList =() => {
                   Nome
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Nasc.
-                </th>
-                <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                   Idade
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                   Idade Evento
-                </th>
-                <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Tema
                 </th>
               </tr>
             </thead>
@@ -135,22 +127,11 @@ const BirthdayList =() => {
                         {birthday.nome}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.dataNascimento}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                         {birthday.idade}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                         {birthday.idadeNoEvento}
                       </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.tema}
-                      </td>
-
-                      {/* <td className="dark:text-gray-200 border border-gray-300 px-2 py-1">
-                        {birthday.tema}
-                      </td> */}
                     </tr>
                   ))
               ) : (

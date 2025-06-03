@@ -29,6 +29,11 @@ export interface ContractResponse {
     pagamentos: Payments[];
 }
 
+interface aniversariante {
+  nomeAniversariante : string;
+  idade : number;
+  idadeNoEvento : number;
+}
 
 export interface ContractRequest {
     cliente: number;
@@ -41,8 +46,9 @@ export interface ContractRequest {
     duracao: number;
     quantidadeConvidados: string | number;
     observacoes: string;
-    listaAniversariantes: number[];
+    aniversariante: aniversariante[];
     itensContrato: number[];
+    temas : number[]
     desconto: number;
     acrescimo: number;
     situacao : string;
@@ -62,16 +68,14 @@ export interface ContractForm {
   observacoes: string;
   listaAniversariantes: any[];
   itensContrato: any[];
+  temas : any[];
   payments: any[];
   desconto: number;
   acrescimo: number;
   situacao: string;
   }
 
-  export const mapContractFormToRequest = (
-    values: ContractForm,
-    clienteId: number
-  ): ContractRequest => ({
+  export const mapContractFormToRequest = ( values: ContractForm, clienteId: number ): ContractRequest => ({
     cliente: clienteId,
     valorRecebido: Number(values.valorRecebido) || 0,
     valorPendente: Number(values.valorPendente) || 0,
@@ -82,9 +86,10 @@ export interface ContractForm {
     duracao: Number(values.duracao),
     quantidadeConvidados: values.quantidadeConvidados,
     observacoes: values.observacoes || '',
-    listaAniversariantes: values.listaAniversariantes.map((a) => a.id),
+    aniversariante: values.listaAniversariantes.map((a) => a.id),
     itensContrato: values.itensContrato.map((i) => i.id),
     desconto: Number(values.desconto) || 0,
     acrescimo: Number(values.acrescimo) || 0,
-    situacao: values.situacao
+    situacao: values.situacao,
+    temas: [0]
   });
