@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Customer } from "@/models/Customer";
 import api from '@/config/apiConfig';
 

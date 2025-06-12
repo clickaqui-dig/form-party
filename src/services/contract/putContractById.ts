@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import api from "@/config/apiConfig";
 import { ContractRequest, ContractResponse } from "@/models/Contract";
 

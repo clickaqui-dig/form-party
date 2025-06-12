@@ -11,13 +11,11 @@ import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
 import { postPayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
-import { maskCurrency } from "@/utils/masks/maskCurrency";
-import { ContractForm } from "@/models/forms/ContractForm";
-
 
 const initialValues = {
     idContrato: 0,
     situacao: "",
+    cliente:0,
     nomeCliente: "",
     celularCliente: "",
     emailCliente: "",
@@ -49,7 +47,7 @@ const initialValues = {
 export default function PageEditCustomer() {
     const params = useParams();
     const id = params.id;
-    const [contract, setInitialValues] = useState<ContractForm>(initialValues);
+    const [contract, setInitialValues] = useState<any>(initialValues);
 
     useEffect(() => {
         if (id) {
@@ -62,7 +60,7 @@ export default function PageEditCustomer() {
         try {
             const response = await getContractById({ id });
             if (response) {
-                const listaAniversariantes = response.listaAniversariantes.map((item) => {
+                const listaAniversariantes = response.listaAniversariantes === undefined ? [] : response.listaAniversariantes.map((item) => {
                     return {
                         id: item.id,
                         nome: item.nome,
@@ -71,11 +69,9 @@ export default function PageEditCustomer() {
                         idade: item.idade,
                         idadeNoEvento: item.idadeNoEvento,
                     }
-                })
+                });
 
-                console.log("response.pagamentos ===>> ", response.pagamentos)
-
-                const mapPayments = response.pagamentos.map((item: any) => {
+                const mapPayments = response.pagamentos === undefined ? [] : response.pagamentos.map((item: any) => {
                     return {
                         valor: Number(item.valor).toFixed(2),
                         meioPagamento: validationTypePayments(item.meioPagamento),
@@ -84,11 +80,12 @@ export default function PageEditCustomer() {
                         observacoes: item.observacoes,
                         contratoId: Number(id)
                     }
-                })
+                });
 
                 setInitialValues({
                     ...response,
                     idContrato: response.id,
+                    cliente: response.cliente.id,
                     nomeCliente: response.cliente.nome,
                     emailCliente: response.cliente.email,
                     documento: response.cliente.documento,
@@ -103,7 +100,7 @@ export default function PageEditCustomer() {
                     itensContrato: response.itensContrato,
                     situacao: response.situacao === 'CANCELADO' ? "Cancelado" : "Em Andamento",
                     pagamentos: mapPayments
-                })
+                });
             }
         } catch (error) {
             console.log(error);
@@ -119,7 +116,7 @@ export default function PageEditCustomer() {
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
 
                 const responsePutContract = await putContractById(Number(id), {
-                    cliente: values.cliente.id,
+                    cliente: values.cliente,
                     valorRecebido: Number(values.valorRecebido),
                     valorPendente: values.valorTotal - Number(values.valorRecebido),
                     valorTotal: values.valorTotal,

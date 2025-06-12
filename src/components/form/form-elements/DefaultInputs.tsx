@@ -1,14 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import ComponentCard from "../../common/ComponentCard";
 import Label from "../Label";
 import Input from "../input/InputField";
 import Select from "../Select";
-import { CalenderIcon, ChevronDownIcon, EyeCloseIcon, EyeIcon, TimeIcon } from "../../../icons";
+import { ChevronDownIcon} from "../../../icons";
 import PhoneInput from "../group-input/PhoneInput";
 
 export default function DefaultInputs() {
-  const [showPassword, setShowPassword] = useState(false);
   const options = [
     { value: "sp", label: "São Paulo" },
     { value: "mg", label: "Minas Gerais" },

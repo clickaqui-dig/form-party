@@ -41,4 +41,3 @@ yarn.lock
 
 # env 
 .env.local
-.env.prod

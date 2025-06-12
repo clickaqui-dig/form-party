@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
@@ -18,10 +17,10 @@ export interface BirthDayItem {
 
 
 const BirthdayList =() => {
-  const [birthdays, setBirthdays] = useState([]);
+  const [birthdays, setBirthdays] = useState<any>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBirthdays, setSelectedBirthdays] = useState([]);
-  const { values, setFieldValue, errors} = useFormikContext<any>();
+  const [selectedBirthdays, setSelectedBirthdays] = useState<any>([]);
+  const { values, setFieldValue } = useFormikContext<any>();
 
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const BirthdayList =() => {
         idadeNoEvento: newItem.idadeNoEvento,
       }
 
-      const allBirthdays = birthdays;
+      const allBirthdays : any = birthdays;
 
       allBirthdays.push(newEntry);
       setBirthdays(allBirthdays);
@@ -57,7 +56,7 @@ const BirthdayList =() => {
     }
 
     const updatedBirthdays = birthdays.filter(
-      (birthday) => !selectedBirthdays.includes(birthday.id)
+      (birthday : any) => !selectedBirthdays.includes(birthday.id)
     );
 
     setBirthdays(updatedBirthdays);
@@ -65,9 +64,9 @@ const BirthdayList =() => {
   };
 
   const handleSelectBirthday = (id: any) => {
-    setSelectedBirthdays((prev) =>
+    setSelectedBirthdays((prev : any) =>
       prev.includes(id)
-        ? prev.filter((selectedId) => selectedId !== id)
+        ? prev.filter((selectedId : any) => selectedId !== id)
         : [...prev, id]
     );
   };

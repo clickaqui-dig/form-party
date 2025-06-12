@@ -4,12 +4,10 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
 
 function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   e.stopPropagation();

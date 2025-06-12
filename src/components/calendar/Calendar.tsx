@@ -45,43 +45,42 @@ const Calendar: React.FC = () => {
 
   const calendarRef = useRef<FullCalendar>(null);
 
-  const loadFeriados = async () => {
-    const currentYear = new Date().getFullYear();
+const loadFeriados = useCallback(async () => {
+  const currentYear = new Date().getFullYear();
 
-    try {
-      const [nacionais, estaduais] = await Promise.all([
-        fetchFeriadosNacionais(currentYear),
-        getFeriadosEstaduaisMunicipais(currentYear),
-      ]);
+  try {
+    const [nacionais, estaduais] = await Promise.all([
+      fetchFeriadosNacionais(currentYear),
+      getFeriadosEstaduaisMunicipais(currentYear),
+    ]);
 
-      const todosFeriados = [...nacionais, ...estaduais,];
-      setFeriados(todosFeriados);
+    const todosFeriados = [...nacionais, ...estaduais];
+    setFeriados(todosFeriados);
 
-      const feriadosEvents: CalendarEvent[] = todosFeriados.map((feriado) => ({
-        id: `feriado-${feriado.date}-${feriado.type}`,
-        title: feriado.name,
-        start: feriado.date,
-        allDay: true,
-        display: 'background',
-        backgroundColor: getFeriadoColor(feriado.type),
-        extendedProps: {
-          situacao: 'Feriado',
-          nomeCliente: '',
-          valorTotal: 0,
-          valorRecebido: 0,
-          valorPendente: 0,
-          calendar: 'Feriado',
-          isFeriado: true,
-          tipoFeriado: feriado.type
-        },
-      }));
+    return todosFeriados.map<CalendarEvent>((feriado) => ({
+      id: `feriado-${feriado.date}-${feriado.type}`,
+      title: feriado.name,
+      start: feriado.date,
+      allDay: true,
+      display: 'background',
+      backgroundColor: getFeriadoColor(feriado.type),
+      extendedProps: {
+        situacao: 'Feriado',
+        nomeCliente: '',
+        valorTotal: 0,
+        valorRecebido: 0,
+        valorPendente: 0,
+        calendar: 'Feriado',
+        isFeriado: true,
+        tipoFeriado: feriado.type,
+      },
+    }));
+  } catch (err) {
+    console.error('Erro ao carregar feriados:', err);
+    return [];
+  }
+}, []);
 
-      return feriadosEvents;
-    } catch (error) {
-      console.error("Erro ao carregar feriados:", error);
-      return [];
-    }
-  };
 
   // Função para definir cores diferentes para cada tipo de feriado
   const getFeriadoColor = (tipo: string): string => {
@@ -129,7 +128,7 @@ const Calendar: React.FC = () => {
         console.log(error);
       }
     },
-    []
+    [loadFeriados]
   );
 
   const handleSituation = (item: any) => {

@@ -1,4 +1,4 @@
-// src/validations/birthdayModalValidation.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Yup from 'yup';
 
 export const birthdayModalSchema = Yup.object().shape({

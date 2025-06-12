@@ -1,6 +1,6 @@
 import Input from '@/components/form/input/InputField';
 import Label from '@/components/form/Label';
-import { Field, ErrorMessage, FieldProps, useFormikContext } from 'formik';
+import { Field, FieldProps, useFormikContext } from 'formik';
 
 export const FormTheme = () => {
     const {errors} = useFormikContext<{ descricao: string; observacoes: string; }>();

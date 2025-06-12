@@ -77,7 +77,7 @@ export const FormBirthDayPerson = () => {
             {({ field }: FieldProps) => <Input {...field} type="text" />}
           </Field>
           {errors.nome && (
-            <div className="text-red-500 text-sm mt-1">{errors.nome}</div>
+            <div className="text-red-500 text-sm mt-1">{String(errors.nome)}</div>
           )}
         </div>
 
@@ -89,7 +89,7 @@ export const FormBirthDayPerson = () => {
             )}
           </Field>
                     {errors.dataNascimento && (
-            <div className="text-red-500 text-sm mt-1">{errors.dataNascimento}</div>
+            <div className="text-red-500 text-sm mt-1">{String(errors.dataNascimento)}</div>
           )}
         </div>
 
@@ -99,7 +99,7 @@ export const FormBirthDayPerson = () => {
             {({ field }: FieldProps) => <Input {...field} type="number" min='0' max='100' />}
           </Field>
           {errors.idade && values.idade == 0 && (
-            <div className="text-red-500 text-sm mt-1">{errors.idade}</div>
+            <div className="text-red-500 text-sm mt-1">{String(errors.idade)}</div>
           )}
         </div>
 
@@ -109,7 +109,7 @@ export const FormBirthDayPerson = () => {
             {({ field }: FieldProps) => <Input {...field} type="number" min='0' max='100' />}
           </Field>
           {errors.idadeNoEvento && (
-            <div className="text-red-500 text-sm mt-1">{errors.idadeNoEvento}</div>
+            <div className="text-red-500 text-sm mt-1">{String(errors.idadeNoEvento)}</div>
           )}
         </div>
 
@@ -160,7 +160,7 @@ export const FormBirthDayPerson = () => {
           </div>
           {/* Corrigido o name do ErrorMessage para 'tema' (não 'temas') */}
           {  errors.tema && (
-            <div className="text-red-500 text-sm mt-1">{errors.tema}</div>
+            <div className="text-red-500 text-sm mt-1">{String(errors.tema)}</div>
           )}
         </div>
       </div>

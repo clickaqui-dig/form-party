@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import SearchInput from "@/components/input/SearchInput";
@@ -58,7 +58,6 @@ export default function BasicTables() {
   useEffect(() => {
     fetchContracts(1, debouncedSearchTerm); // sempre página 1 na busca
     setState(prev => ({ ...prev, currentPage: 1 }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   // Mudança de página
@@ -79,8 +78,9 @@ export default function BasicTables() {
           loading: false,
         });
       }
-    } catch (error) {
+    } catch (error : any) {
       setState(prev => ({ ...prev, loading: false }));
+      console.error(error);
     }
   };
 

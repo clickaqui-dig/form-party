@@ -8,7 +8,6 @@ import {
   CalenderIcon,
   ChevronDownIcon,
   HorizontaLDots,
-  ListIcon,
   UserCircleIcon,
   DocsIcon
 } from "../icons/index";

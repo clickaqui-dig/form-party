@@ -4,7 +4,7 @@ import FormSignin from "@/components/form/signin";
 import { validationSchema } from "@/components/form/signin/validation";
 import Button from "@/components/ui/button/Button";
 import { handleLogin } from "@/services/login/login";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { useState } from "react";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ const initialValues = {
 
 
 export default function SignIn() {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked] = useState(false);
   const router = useRouter();
 
 
@@ -68,18 +68,6 @@ export default function SignIn() {
                 <div className="space-y-6">
                   <FormSignin />
                   <div className="flex items-center justify-between">
-                    {/* <div className="flex items-center gap-3">
-                      <Checkbox checked={isChecked} onChange={setIsChecked} />
-                      <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                        Keep me logged in
-                      </span>
-                    </div>
-                    <Link
-                      href="/reset-password"
-                      className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                    >
-                      Forgot password?
-                    </Link> */}
                   </div>
                   <div>
                     <Button type="submit" onClick={() => handleSubmit()} className="w-full" size="sm" disabled={!(isValid && dirty)}>

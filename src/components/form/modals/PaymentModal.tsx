@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal } from "@/components/ui/modal";
 import React, { FC, useState } from "react";
 import Label from "../Label";

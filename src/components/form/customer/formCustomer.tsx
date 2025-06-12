@@ -89,7 +89,7 @@ export const FormCustomer = () => {
                         )}
                     </Field>
                     {errors.nome && (
-                        <div className="text-red-500 text-sm mt-1">{errors.nome}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.nome)}</div>
                     )}
                 </div>
                 <div>
@@ -104,7 +104,7 @@ export const FormCustomer = () => {
                         )}
                     </Field>
                     {errors.email && (
-                        <div className="text-red-500 text-sm mt-1">{errors.email}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.email)}</div>
                     )}
                 </div>
                 <div>
@@ -123,7 +123,7 @@ export const FormCustomer = () => {
                         )}    
                     </Field>
                     {errors.celular && (
-                        <div className="text-red-500 text-sm mt-1">{errors.celular}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.celular)}</div>
                     )}
                 </div>
                 <div>
@@ -138,7 +138,7 @@ export const FormCustomer = () => {
                         )}
                     </Field>
                     {errors.documento && (
-                        <div className="text-red-500 text-sm mt-1">{errors.documento}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.documento)}</div>
                     )}
                 </div>
             </div>
@@ -155,7 +155,7 @@ export const FormCustomer = () => {
                         )}
                     </Field>
                     {errors.cep && (
-                        <div className="text-red-500 text-sm mt-1">{errors.cep}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.cep)}</div>
                     )}
                 </div>
                 <div className="col-span-2">
@@ -169,7 +169,7 @@ export const FormCustomer = () => {
                         )}    
                     </Field>
                     {errors.endereco && (
-                        <div className="text-red-500 text-sm mt-1">{errors.endereco}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.endereco)}</div>
                     )}
                 </div>
                 <div>
@@ -183,7 +183,7 @@ export const FormCustomer = () => {
                         )}    
                     </Field>
                     {errors.numero && (
-                        <div className="text-red-500 text-sm mt-1">{errors.numero}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.numero)}</div>
                     )}
                 </div>
                 <div>
@@ -197,7 +197,7 @@ export const FormCustomer = () => {
                         )}    
                     </Field>
                     {errors.cidade && (
-                        <div className="text-red-500 text-sm mt-1">{errors.cidade}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.cidade)}</div>
                     )}
                 </div>
                 <div>
@@ -215,7 +215,7 @@ export const FormCustomer = () => {
                         )}
                     </Field>
                     {errors.uf && (
-                        <div className="text-red-500 text-sm mt-1">{errors.uf}</div>
+                        <div className="text-red-500 text-sm mt-1">{String(errors.uf)}</div>
                     )}
                     <div className='relative'>
                         <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 bottom-1/2 dark:text-gray-400">

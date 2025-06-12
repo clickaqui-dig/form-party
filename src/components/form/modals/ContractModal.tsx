@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState, ChangeEvent, FormEvent, useRef, useEffect } from "react";
 import { Modal } from "@/components/ui/modal";
 import Label from "../Label";
@@ -60,6 +61,7 @@ const ContractModal: FC<ContractModalProps> = ({ isOpen, onClose, onAddItem }) =
     } catch (error) {
       setSuggestions([]);
       setHasMore(false);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

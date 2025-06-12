@@ -1,18 +1,23 @@
-# Imagem base com Node.js
-FROM node:lts-alpine
-
-# Define o diretório de trabalho
+FROM node:22 AS deps
 WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Copia os arquivos de dependência
-COPY package*.json ./
-RUN yarn install
-
-# Copia o restante do código
+FROM node:22 AS builder
+WORKDIR /app
+ENV NODE_ENV=production
 COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+RUN yarn build
 
-# Expõe a porta padrão do Next.js
+FROM node:22 AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.env.prod .env
+
 EXPOSE 3000
-
-# Comando para rodar em modo dev
-CMD ["yarn", "dev"]
+CMD ["node", "server.js"]

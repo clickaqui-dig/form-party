@@ -35,7 +35,7 @@ export const OptionsEditComponent = () => {
             pdf.save(`${idContrato}-${nomeCliente}`);
             document.body.removeChild(wrapper);
         });
-    }, []);
+    }, [values.cliente.nome, values.idContrato]);
 
     const handleClick = () => {
         editor.getEditorState().read(() => {

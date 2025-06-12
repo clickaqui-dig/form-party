@@ -1,4 +1,4 @@
-// src/components/BirthDayModal.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal } from "@/components/ui/modal";
 import React, { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
 import Label from "../Label";
@@ -61,6 +61,7 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     } catch (error) {
       setSuggestions([]);
       setHasMore(false);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

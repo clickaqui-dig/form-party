@@ -5,7 +5,6 @@ import { Formik, FormikHelpers, FormikProps } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
 import { FormTheme } from "@/components/form/theme/formTheme";
 import { postTheme } from "@/services/theme/postTheme";
-import Cookies from 'js-cookie';
 
 const initialValues = {
   descricao: "",
