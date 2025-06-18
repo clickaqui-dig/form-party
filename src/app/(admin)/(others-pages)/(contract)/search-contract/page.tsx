@@ -21,13 +21,14 @@ export interface Contract {
   duracao: number,
   quantidadeConvidados?: number;
   observacoes?: string;
-  listaAniversariantes?: any[];
+  aniversariantes?: any[];
   itensContrato?: any[];
   tipoPagemento?: any[];
   desconto?: number;
   acrescimo?:number
   pagamentos?: any[];
   situacao?: string;
+  temas : any[];
 }
 
 interface ContractState {
