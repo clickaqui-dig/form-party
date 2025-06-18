@@ -71,48 +71,6 @@ export const FormBirthDayPerson = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div>
-          <Label htmlFor="nome">Nome</Label>
-          <Field id="nome" name="nome">
-            {({ field }: FieldProps) => <Input {...field} type="text" />}
-          </Field>
-          {errors.nome && (
-            <div className="text-red-500 text-sm mt-1">{String(errors.nome)}</div>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="dataNascimento">Data de Nascimento</Label>
-          <Field id="dataNascimento" name="dataNascimento">
-            {({ field }: FieldProps) => (
-              <Input {...field} type="date" placeholder="Data de Nascimento" />
-            )}
-          </Field>
-                    {errors.dataNascimento && (
-            <div className="text-red-500 text-sm mt-1">{String(errors.dataNascimento)}</div>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="idade">Idade</Label>
-          <Field id="idade" name="idade">
-            {({ field }: FieldProps) => <Input {...field} type="number" min='0' max='100' />}
-          </Field>
-          {errors.idade && values.idade == 0 && (
-            <div className="text-red-500 text-sm mt-1">{String(errors.idade)}</div>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="idadeNoEvento">Idade no Evento</Label>
-          <Field id="idadeNoEvento" name="idadeNoEvento">
-            {({ field }: FieldProps) => <Input {...field} type="number" min='0' max='100' />}
-          </Field>
-          {errors.idadeNoEvento && (
-            <div className="text-red-500 text-sm mt-1">{String(errors.idadeNoEvento)}</div>
-          )}
-        </div>
-
         {/* Campo Tema com autocomplete */}
         <div>
           <Label htmlFor="tema">Tema</Label>

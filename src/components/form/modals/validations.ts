@@ -6,17 +6,6 @@ export const birthdayModalSchema = Yup.object().shape({
     .required('O nome é obrigatório')
     .min(2, 'O nome deve ter pelo menos 2 caracteres'),
   
-  dataNascimento: Yup.string()
-    .required('A data de nascimento é obrigatória')
-    .matches(
-      /^\d{4}-\d{2}-\d{2}$/,
-      'A data deve estar no formato correto (DD-MM-AAAA)'
-    ),
-  
-  tema: Yup.string()
-    .required('O tema é obrigatório')
-    .min(2, 'O tema deve ter pelo menos 2 caracteres'),
-  
   idade: Yup.number()
     .required('A idade é obrigatória')
     .min(0, 'A idade não pode ser negativa'),

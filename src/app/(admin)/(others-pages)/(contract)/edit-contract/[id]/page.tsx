@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
 import { postPayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
+import { mapAniversariantes } from "@/models/Contract";
 
 const initialValues = {
     idContrato: 0,
@@ -35,12 +36,13 @@ const initialValues = {
     duracao: 0,
     quantidadeConvidados: 0,
     observacoes: "",
-    listaAniversariantes: [],
+    aniversariantes: [],
     itensContrato: [],
     tipoPagemento: [],
     pagamentos: [],
     desconto: 0,
     acrescimo: 0,
+    temas: []
 }
 
 
@@ -60,12 +62,10 @@ export default function PageEditCustomer() {
         try {
             const response = await getContractById({ id });
             if (response) {
-                const listaAniversariantes = response.listaAniversariantes === undefined ? [] : response.listaAniversariantes.map((item) => {
+                const listaAniversariantes = response.aniversariantes === undefined ? [] : response.aniversariantes.map((item) => {
                     return {
                         id: item.id,
-                        nome: item.nome,
-                        dataNascimento: item.dataNascimento,
-                        tema: item.tema.descricao,
+                        nomeAniversariante: item.nomeAniversariante,
                         idade: item.idade,
                         idadeNoEvento: item.idadeNoEvento,
                     }
@@ -82,6 +82,14 @@ export default function PageEditCustomer() {
                     }
                 });
 
+                const mapThema = response.temas === undefined ? [] : response.temas.map((item :any) => {
+                    return {
+                        id: item.id,
+                        descricao: item.descricao,
+                        observacoes: item.observacoes
+                    }
+                })
+
                 setInitialValues({
                     ...response,
                     idContrato: response.id,
@@ -96,10 +104,11 @@ export default function PageEditCustomer() {
                     celularCliente: response.cliente.celular,
                     uf: response.cliente.uf,
                     tipoDoContrato: response.tipoDoContrato,
-                    listaAniversariantes,
+                    aniversariantes: listaAniversariantes,
                     itensContrato: response.itensContrato,
                     situacao: response.situacao === 'CANCELADO' ? "Cancelado" : "Em Andamento",
-                    pagamentos: mapPayments
+                    pagamentos: mapPayments,
+                    temas: mapThema
                 });
             }
         } catch (error) {
@@ -112,6 +121,7 @@ export default function PageEditCustomer() {
     ) => {
         try {
             if (id) {
+                console.log("values edit ===>>", values)
                 const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
 
@@ -129,8 +139,9 @@ export default function PageEditCustomer() {
                     desconto,
                     acrescimo,
                     itensContrato: values.itensContrato.map((item: any) => item.id),
-                    listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id),
+                    aniversariantes: mapAniversariantes(values.aniversariantes),
                     situacao: values.situacao === 'Em Andamento ' ? 'EM_ANDAMENTO' : 'CANCELADO',
+                    temas: values.temas.map((i : any)=> i.id),
                 });
 
                 const mapPayments = values.pagamentos.map((item: any) => {
