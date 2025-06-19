@@ -3,42 +3,40 @@
 import React, { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard";
 import { useFormikContext } from "formik";
-import BithdayModal from "../modals/BirthdayModal";
 import { toast } from "react-toastify";
+import ThemeModal from "../modals/ThemeModal";
 
-export interface BirthDayItem {
+export interface ThemeListItem {
   id: number;
-  nomeAniversariante: string,
-  idade: number;
-  idadeNoEvento:number;
+  observacoes: string,
+  descricao: string;
 }
 
 
-const BirthdayList =() => {
-  const [birthdays, setBirthdays] = useState<any>([]);
+const ThemeList =() => {
+  const [thema, setThema] = useState<any>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBirthdays, setSelectedBirthdays] = useState<any>([]);
+  const [selectedTheme, setSelectedTheme] = useState<any>([]);
   const { values, setFieldValue } = useFormikContext<any>();
 
 
   useEffect(() => {
-    setBirthdays(values.aniversariantes);
+    setThema(values.temas);
   }, [values]);
 
-  const handleAddBirthday = (newItem: BirthDayItem) => {
-    if (newItem.nomeAniversariante) {
+  const handleAddThema = (newItem: ThemeListItem) => {
+    if (newItem.descricao) {
       const newEntry = {
         id: newItem.id,
-        nomeAniversariante: newItem.nomeAniversariante,
-        idade: newItem.idade,
-        idadeNoEvento: newItem.idadeNoEvento,
+        descricao: newItem.descricao,
+        observacoes: newItem.observacoes,
       }
 
-      const allBirthdays : any = birthdays;
+      const allThema : any = thema;
 
-      allBirthdays.push(newEntry);
-      setBirthdays(allBirthdays);
-      setFieldValue("aniversariantes", allBirthdays)
+      allThema.push(newEntry);
+      setThema(allThema);
+      setFieldValue("temas", allThema)
       
       setIsModalOpen(false);
     } else {
@@ -47,22 +45,22 @@ const BirthdayList =() => {
     }
   };
 
-  const handleRemoveBirthday = () => {
-    if (selectedBirthdays.length === 0) {
-      alert("Selecione pelo menos um aniversariante para remover.");
+  const handleRemoveThema = () => {
+    if (selectedTheme.length === 0) {
+      alert("Selecione pelo menos um tema para remover.");
       return;
     }
 
-    const updatedBirthdays = birthdays.filter(
-      (birthday : any) => !selectedBirthdays.includes(birthday.id)
+    const updatedThema = thema.filter(
+      (birthday : any) => !selectedTheme.includes(birthday.id)
     );
 
-    setBirthdays(updatedBirthdays);
-    setSelectedBirthdays([]);
+    setThema(updatedThema);
+    setSelectedTheme([]);
   };
 
   const handleSelectBirthday = (id: any) => {
-    setSelectedBirthdays((prev : any) =>
+    setSelectedTheme((prev : any) =>
       prev.includes(id)
         ? prev.filter((selectedId : any) => selectedId !== id)
         : [...prev, id]
@@ -70,7 +68,7 @@ const BirthdayList =() => {
   };
 
   return (
-    <ComponentCard title="Aniversariantes">
+    <ComponentCard title="Tema">
       <div className="space-y-6">
         {/* Botões de ação e campo de busca */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
@@ -78,7 +76,7 @@ const BirthdayList =() => {
 
             <button
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              onClick={handleRemoveBirthday}
+              onClick={handleRemoveThema}
             >
               Remover
             </button>
@@ -100,39 +98,30 @@ const BirthdayList =() => {
                   Sel
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Nome
+                  Descricao
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Idade
+                  Observação
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Idade Evento
-                </th>
-                {/* <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Tema
-                </th> */}
               </tr>
             </thead>
             <tbody>
-              {birthdays.length > 0 ? (
-                birthdays
+              {thema.length > 0 ? (
+                thema
                   .map((birthday: any) => (
                     <tr key={birthday.id} className="bg-white dark:bg-gray-800">
                       <td className="px-10 py-3">
                         <input
                           type="checkbox"
-                          checked={selectedBirthdays.includes(birthday.id)}
+                          checked={selectedTheme.includes(birthday.id)}
                           onChange={() => handleSelectBirthday(birthday.id)}
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.nomeAniversariante}
+                        {birthday.descricao}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.idade}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.idadeNoEvento}
+                        {birthday.observacoes}
                       </td>
                     </tr>
                   ))
@@ -149,11 +138,11 @@ const BirthdayList =() => {
             </tbody>
           </table>
         </div>
-        <BithdayModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleAddBirthday} />
+        <ThemeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleAddThema} />
         
       </div>
     </ComponentCard>
   );
 };
 
-export default BirthdayList;
+export default ThemeList;

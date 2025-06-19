@@ -11,37 +11,61 @@ import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
 import { postPayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
+import { mapAniversariantes, mapContractFormToRequest } from "@/models/Contract";
+
+// const initialValues = {
+//     idContrato: 0,
+//     situacao: "",
+//     cliente:0,
+//     nomeCliente: "",
+//     celularCliente: "",
+//     emailCliente: "",
+//     documento: "",
+//     cep: "",
+//     endereco: "",
+//     numero: "",
+//     cidade: "",
+//     uf: "",
+//     status: false,
+//     valorRecebido: 0,
+//     valorPendente: 0,
+//     valorTotal: 0,
+//     tipoDoContrato: "",
+//     dataHoraInicial: "",
+//     dataHoraFinal: "",
+//     duracao: 0,
+//     quantidadeConvidados: 0,
+//     observacoes: "",
+//     aniversariantes: [],
+//     itensContrato: [],
+//     tipoPagemento: [],
+//     pagamentos: [],
+//     desconto: 0,
+//     acrescimo: 0,
+//     temas: []
+// }
 
 const initialValues = {
-    idContrato: 0,
-    situacao: "",
-    cliente:0,
-    nomeCliente: "",
-    celularCliente: "",
-    emailCliente: "",
-    documento: "",
-    cep: "",
-    endereco: "",
-    numero: "",
-    cidade: "",
-    uf: "",
-    status: false,
-    valorRecebido: 0,
-    valorPendente: 0,
-    valorTotal: 0,
-    tipoDoContrato: "",
-    dataHoraInicial: "",
-    dataHoraFinal: "",
-    duracao: 0,
-    quantidadeConvidados: 0,
-    observacoes: "",
-    listaAniversariantes: [],
-    itensContrato: [],
-    tipoPagemento: [],
-    pagamentos: [],
-    desconto: 0,
-    acrescimo: 0,
-}
+  idContrato: 0,
+  cliente: 0,
+  valorRecebido: 0,
+  valorPendente: 0,
+  valorTotal: 0,
+  tipoDoContrato: "",
+  dataHoraInicial: "",
+  dataHoraFinal: "",
+  duracao: 0,
+  quantidadeConvidados: 0,
+  observacoes: "",
+  aniversariantes: [],
+  itensContrato: [],
+  payments: [],
+  temas: [],
+  desconto: 0,
+  acrescimo: 0,
+  situacao: '',
+  pagamentos: []
+};
 
 
 export default function PageEditCustomer() {
@@ -60,12 +84,10 @@ export default function PageEditCustomer() {
         try {
             const response = await getContractById({ id });
             if (response) {
-                const listaAniversariantes = response.listaAniversariantes === undefined ? [] : response.listaAniversariantes.map((item) => {
+                const listaAniversariantes = response.aniversariantes === undefined ? [] : response.aniversariantes.map((item) => {
                     return {
                         id: item.id,
-                        nome: item.nome,
-                        dataNascimento: item.dataNascimento,
-                        tema: item.tema.descricao,
+                        nomeAniversariante: item.nomeAniversariante,
                         idade: item.idade,
                         idadeNoEvento: item.idadeNoEvento,
                     }
@@ -82,6 +104,14 @@ export default function PageEditCustomer() {
                     }
                 });
 
+                const mapThema = response.temas === undefined ? [] : response.temas.map((item :any) => {
+                    return {
+                        id: item.id,
+                        descricao: item.descricao,
+                        observacoes: item.observacoes
+                    }
+                })
+
                 setInitialValues({
                     ...response,
                     idContrato: response.id,
@@ -96,10 +126,11 @@ export default function PageEditCustomer() {
                     celularCliente: response.cliente.celular,
                     uf: response.cliente.uf,
                     tipoDoContrato: response.tipoDoContrato,
-                    listaAniversariantes,
+                    aniversariantes: listaAniversariantes,
                     itensContrato: response.itensContrato,
                     situacao: response.situacao === 'CANCELADO' ? "Cancelado" : "Em Andamento",
-                    pagamentos: mapPayments
+                    pagamentos: mapPayments,
+                    temas: mapThema
                 });
             }
         } catch (error) {
@@ -112,26 +143,11 @@ export default function PageEditCustomer() {
     ) => {
         try {
             if (id) {
+                
                 const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
-
-                const responsePutContract = await putContractById(Number(id), {
-                    cliente: values.cliente,
-                    valorRecebido: Number(values.valorRecebido),
-                    valorPendente: values.valorTotal - Number(values.valorRecebido),
-                    valorTotal: values.valorTotal,
-                    tipoDoContrato: "ANIVERSARIO",
-                    dataHoraInicial: values.dataHoraInicial,
-                    dataHoraFinal: values.dataHoraFinal,
-                    duracao: values.duracao,
-                    quantidadeConvidados: values.quantidadeConvidados,
-                    observacoes: values.observacoes,
-                    desconto,
-                    acrescimo,
-                    itensContrato: values.itensContrato.map((item: any) => item.id),
-                    listaAniversariantes: values.listaAniversariantes.map((item: any) => item.id),
-                    situacao: values.situacao === 'Em Andamento ' ? 'EM_ANDAMENTO' : 'CANCELADO',
-                });
+                const payload = mapContractFormToRequest(values, values.cliente);
+                const responsePutContract = await putContractById(Number(id), {...payload, situacao: 'EM_ANDAMENTO', desconto:desconto, acrescimo: acrescimo});
 
                 const mapPayments = values.pagamentos.map((item: any) => {
                     return {
@@ -144,12 +160,17 @@ export default function PageEditCustomer() {
                     }
                 })
 
-                const responsePayments = await postPayments(Number(id), mapPayments)
+                let responsePayments = false;
 
-                if(responsePutContract && responsePayments){
-                    toast.success("Contrato editado com sucesso !")
+                if (responsePutContract) {
+                    responsePayments = await postPayments(Number(id), mapPayments)
+                    if (responsePayments) {
+                        toast.success("Contrato editado com sucesso !")
+                    } else {
+                        toast.error("Erro ao cadsaatrar pagamento");
+                    }
                 } else {
-                    toast.error("Erro: verificar formulario");
+                    toast.error("Erro ao editar contrato");
                 }
             }
         } catch (error: any) {

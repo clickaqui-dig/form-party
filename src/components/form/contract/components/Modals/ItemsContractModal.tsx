@@ -3,10 +3,13 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { Modal } from "@/components/ui/modal";
 import { getItemContract } from "@/services/item-contract/getItemContract";
+import { postItemContract } from "@/services/item-contract/postItemContract";
+import { maskCurrencyWithLimit } from "@/utils/masks/limityValue";
 import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 import debounce from "lodash.debounce";
 import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface ContractModalProps {
     isOpen: boolean;
@@ -92,15 +95,27 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
 
     if (!isOpen) return null;
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        if (name === "descricao") setInputValue(value);
+    const handleChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        const maskedValue = maskCurrencyWithLimit(value, 10000);
+
         setFormData((prevState: any) => ({
             ...prevState,
-            [name]: value
-        }));
-        if (name === "descricao") setPage(0);
+            id: null,
+            valor: maskedValue
+        }))
     };
+
+    const handleChangeDescription = (e: ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setInputValue(value);
+        setFormData((prevState: any) => ({
+            ...prevState,
+            id: null,
+            descricao: value
+        }));
+        setPage(0);
+    }
 
     const handleSuggestionClick = (item: any) => {
         setInputValue(item.descricao);
@@ -117,23 +132,43 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
         fetchItemContract(inputValue, page, false);
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onAddItem({
-            id: formData.id,
-            descricao: formData.descricao,
-            valor: unmaskCurrency(formData.valor)
-        });
+
+        if (formData.descricao == '' || formData.valor == '') {
+            toast.warn("Campos obrigatórios não preenchidos. Preencha todos para adicionar.");
+            return;
+        }
+        if (formData.id) {
+            onAddItem({
+                id: formData.id,
+                descricao: formData.descricao,
+                valor: unmaskCurrency(formData.valor)
+            });
+            setInputValue('');
+            setSuggestions([]);
+            setHasMore(false);
+            setPage(0);
+            onClose();
+        } else {
+            const response = await postItemContract({ descricao: formData.descricao, valor: unmaskCurrency(formData.valor) })
+           
+            if (response) {
+                const { data } = response;
+                onAddItem({
+                    id: data.id,
+                    descricao: data.descricao,
+                    valor: data.valor
+                });
+            }
+        
+        }
+      
         setFormData({
             id: 0,
             descricao: '',
             valor: '',
         });
-        setInputValue('');
-        setSuggestions([]);
-        setHasMore(false);
-        setPage(0);
-        onClose();
     };
 
     return (
@@ -155,7 +190,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
                         type="text"
                         name="descricao"
                         value={inputValue}
-                        onChange={handleChange}
+                        onChange={handleChangeDescription}
                         placeholder="Digite para buscar o Item..."
                         className="w-full"
                     />
@@ -194,9 +229,8 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
                     <Input
                         type="text"
                         name="valor"
-                        disabled
                         value={formData.valor}
-                        onChange={handleChange}
+                        onChange={handleChangePrice}
                         placeholder="Valor da parcela"
                     />
                 </div>

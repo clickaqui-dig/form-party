@@ -43,8 +43,8 @@ export const WriteContract = () => {
         amountAlreadyPaid: values.valorRecebido,
         amountToPay: values.valorPendente
       })
-
-      const clause = clauseHtml({ birthday: values.listaAniversariantes, installments: values.pagamentos })
+      
+      const clause = clauseHtml({ birthday: values.aniversariantes, installments: values.pagamentos, temas: values.temas})
 
       const signature = signatureHtml({ name: values.nomeCliente });
 

@@ -115,9 +115,12 @@ export const validationSchemaContract = Yup.object().shape({
         }
       ),
     quantidadeConvidados: Yup.number()
-        .min(5,'Quantidade tem que ser maior que 5')
-        .max(60,"Lotação maxima é 60 pessoas")
-        .required("Quantidade de convidados deve ser informado."),
+    .notRequired()
+    .test(
+      'zero-ou-entre-5-60',
+      'Quantidade deve ser 0 ou entre 5 e 60 pessoas',
+      value => value == null || value === 0 || (value >= 5 && value <= 60)
+    ),
     // observacoes: Yup.string().required("Escreva uma observação"),
     
 });
