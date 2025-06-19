@@ -252,13 +252,22 @@ export const installmentsHtml = (installments: Installments[]) => {
 interface clauseHtmlProps {
     birthday: any[];
     installments: Installments[]
+    temas : any[];
 }
 
 export const clauseHtml = (data: clauseHtmlProps) => {
     const birthdayBoy = data.birthday.map((it: any) => {
         return `
             <p>
-                <span style="font-size:12px;">Tema ${it.tema} - ${it.nome} ${it.idadeNoEvento} anos &nbsp;</span>
+                <span style="font-size:12px;">${it.nomeAniversariante} ${it.idadeNoEvento} anos</span>
+            </p>
+        `
+    }).join('');
+
+     const themaParty = data.temas.map((it: any) => {
+        return `
+            <p>
+                <span style="font-size:12px;">${it.descricao} </span>
             </p>
         `
     }).join('');
@@ -267,7 +276,17 @@ export const clauseHtml = (data: clauseHtmlProps) => {
     <p>
         CHAVE PIX: CNPJ 31774785000183
     </p>
-    ${birthdayBoy}
+    <p>
+        <span style="font-size:12px;"><strong>Aniversariantes:</strong></span>
+        ${birthdayBoy}
+    </p>
+
+    <p>
+        <span style="font-size:12px;"><strong>Temas:</strong></span>
+        ${themaParty}
+    </p>
+
+
     <p>
         <span style="font-size:12px;"><strong>Parágrafo Primeiro:</strong> A <strong>CONTRATADA</strong> se obriga a fornecer os produtos referentes ao escolhido, a fornecer pessoal qualificado proporcional ao número de convidados ao evento, a fornecer as instalações em bom estado de conservação e limpeza, no caso que se aplicar a contratação do espaço para a realização do evento.</span><br>
         <span style="font-size:12px;"><strong>Parágrafo Segundo: </strong>A <strong>CONTRATADA</strong> não fornece produtos ou alimentos para viagem.</span><br>

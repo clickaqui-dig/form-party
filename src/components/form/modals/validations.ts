@@ -2,7 +2,7 @@
 import * as Yup from 'yup';
 
 export const birthdayModalSchema = Yup.object().shape({
-  nome: Yup.string()
+  nomeAniversariante: Yup.string()
     .required('O nome é obrigatório')
     .min(2, 'O nome deve ter pelo menos 2 caracteres'),
   

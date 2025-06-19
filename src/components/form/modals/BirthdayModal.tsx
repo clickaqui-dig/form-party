@@ -15,7 +15,7 @@ interface BirthDayProps {
 const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   const [formData, setFormData] = useState<BirthDayItem>({
     id: 0,
-    nome: "",
+    nomeAniversariante: "",
     idade: 0,
     idadeNoEvento: 0
   });
@@ -41,11 +41,13 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log("name ===>>", name)
+    console.log("value ===>>", value)
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-    if (name === "nome") setInputValue(value);
+    if (name === "nomeAniversariante") setInputValue(value);
     
     // Limpa o erro quando o usuário começa a digitar
     if (formErrors[name]) {
@@ -75,7 +77,7 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
     onAddItem(formData);
     setFormData({
       id: 0,
-      nome: "",
+      nomeAniversariante: "",
       idade: 0,
       idadeNoEvento: 0
     });
@@ -103,13 +105,13 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           <Label>Nome</Label>
           <Input
             type="text"
-            name="nome"
+            name="nomeAniversariante"
             value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Digite para buscar aniversariante..."
+            onChange={handleChange}
+            placeholder="Nome"
             className={`w-full ${formErrors.nome ? 'border-red-500' : ''}`}
           />
-          {renderError('nome')}
+          {renderError('nomeAniversariante')}
         </div>
 
         <div className="mb-4">
@@ -137,19 +139,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           />
           {renderError('idadeNoEvento')}
         </div>
-
-        {/* <div className="mb-4">
-          <Label>Tema</Label>
-          <Input
-            type="text"
-            name="tema"
-            value={formData.tema}
-            onChange={handleChange}
-            placeholder="Tema"
-            className={formErrors.tema ? 'border-red-500' : ''}
-          />
-          {renderError('tema')}
-        </div> */}
 
         <div className="flex justify-end mt-4">
           <button

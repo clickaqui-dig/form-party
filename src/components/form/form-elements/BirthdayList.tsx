@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 export interface BirthDayItem {
   id: number;
-  nome: string,
+  nomeAniversariante: string,
   idade: number;
   idadeNoEvento:number;
 }
@@ -26,10 +26,10 @@ const BirthdayList =() => {
   }, [values]);
 
   const handleAddBirthday = (newItem: BirthDayItem) => {
-    if (newItem.nome) {
+    if (newItem.nomeAniversariante) {
       const newEntry = {
         id: newItem.id,
-        nome: newItem.nome,
+        nomeAniversariante: newItem.nomeAniversariante,
         idade: newItem.idade,
         idadeNoEvento: newItem.idadeNoEvento,
       }
@@ -126,7 +126,7 @@ const BirthdayList =() => {
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.nome}
+                        {birthday.nomeAniversariante}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                         {birthday.idade}
