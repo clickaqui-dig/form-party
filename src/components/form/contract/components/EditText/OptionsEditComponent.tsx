@@ -18,7 +18,7 @@ export const OptionsEditComponent = () => {
         wrapper.style.boxSizing = 'border-box';
         wrapper.style.pointerEvents = 'none';
         document.body.appendChild(wrapper);
-        const nomeCliente = values.cliente.nome.replace(" ","-").toLowerCase()
+        const nomeCliente = values.nomeCliente.replace(" ","-").toLowerCase()
         const idContrato = values.idContrato
 
         const pdf = new jsPDF({ format: 'a4', unit: 'px' });

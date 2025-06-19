@@ -4,6 +4,7 @@ import { ContractRequest, ContractResponse } from "@/models/Contract";
 
 export const putContractById = async (id: number, body: ContractRequest): Promise<ContractResponse | boolean> => {
     try {
+        console.log("json ==>>", body)
         const response = await api.put(`/contrato/${id}`, body);
 
         return true;

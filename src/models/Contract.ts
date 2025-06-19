@@ -99,9 +99,11 @@ export const mapContractFormToRequest = (
 
 export const mapAniversariantes = (value: any): aniversariante[] => {
   const aniversariante = value.map((x: any) =>{
-    return { nome: x.nome,
-    idade: x.idade,
-    idadeNoEvento: x.idadeNoEvento}
+    return { 
+      nomeAniversariante: x.nomeAniversariante,
+      idade: x.idade,
+      idadeNoEvento: x.idadeNoEvento
+    }
   })
   return aniversariante;
 };
