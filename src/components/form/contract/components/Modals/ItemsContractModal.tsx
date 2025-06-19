@@ -9,6 +9,7 @@ import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 import debounce from "lodash.debounce";
 import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface ContractModalProps {
     isOpen: boolean;
@@ -133,7 +134,11 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData)
+
+        if (formData.descricao == '' || formData.valor == '') {
+            toast.warn("Campos obrigatórios não preenchidos. Preencha todos para adicionar.");
+            return;
+        }
         if (formData.id) {
             onAddItem({
                 id: formData.id,
