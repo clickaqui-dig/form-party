@@ -147,7 +147,6 @@ export default function PageEditCustomer() {
                 const desconto = typeof values.desconto === 'string' ? unmaskCurrency(values.desconto) : values.desconto;
                 const acrescimo = typeof values.acrescimo === 'string' ? unmaskCurrency(values.acrescimo) : values.acrescimo;
                 const payload = mapContractFormToRequest(values, values.cliente);
-                console.log("payload edit ===>>", payload)
                 const responsePutContract = await putContractById(Number(id), {...payload, situacao: 'EM_ANDAMENTO', desconto:desconto, acrescimo: acrescimo});
 
                 const mapPayments = values.pagamentos.map((item: any) => {
@@ -161,12 +160,17 @@ export default function PageEditCustomer() {
                     }
                 })
 
-                const responsePayments = await postPayments(Number(id), mapPayments)
+                let responsePayments = false;
 
-                if(responsePutContract && responsePayments){
-                    toast.success("Contrato editado com sucesso !")
+                if (responsePutContract) {
+                    responsePayments = await postPayments(Number(id), mapPayments)
+                    if (responsePayments) {
+                        toast.success("Contrato editado com sucesso !")
+                    } else {
+                        toast.error("Erro ao cadsaatrar pagamento");
+                    }
                 } else {
-                    toast.error("Erro: verificar formulario");
+                    toast.error("Erro ao editar contrato");
                 }
             }
         } catch (error: any) {
