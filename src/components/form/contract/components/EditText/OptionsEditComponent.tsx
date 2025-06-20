@@ -5,6 +5,8 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useCallback } from "react";
 import jsPDF from 'jspdf';
 import { useFormikContext } from "formik";
+import { calcularDuracao, formatarData, subtrairDias } from "@/utils/masks";
+import { sendMessageWhatsapp } from "@/services/whatsapp/whatsappApi";
 
 export const OptionsEditComponent = () => {
     const [editor] = useLexicalComposerContext();
@@ -18,15 +20,15 @@ export const OptionsEditComponent = () => {
         wrapper.style.boxSizing = 'border-box';
         wrapper.style.pointerEvents = 'none';
         document.body.appendChild(wrapper);
-        const nomeCliente = values.nomeCliente.replace(" ","-").toLowerCase()
+        const nomeCliente = values.nomeCliente.replace(" ", "-").toLowerCase()
         const idContrato = values.idContrato
 
         const pdf = new jsPDF({ format: 'a4', unit: 'px' });
         await pdf.html(wrapper, {
             margin: [20, 20, 20, 20],
             autoPaging: 'text',
-            html2canvas: { 
-                scale: 0.21, 
+            html2canvas: {
+                scale: 0.21,
                 useCORS: true,
                 allowTaint: true,
                 letterRendering: true,
@@ -42,6 +44,10 @@ export const OptionsEditComponent = () => {
             const html = $generateHtmlFromNodes(editor, null);
             generatePdf(html);
         });
+    };
+
+    const handleSendWhatsapp = () => {
+        sendMessageWhatsapp(values);
     };
     return (
         <div className="mt-4">
@@ -63,7 +69,7 @@ export const OptionsEditComponent = () => {
                 <button className="flex items-center bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition" onClick={handleClick}>
                     📝 Gerar contrato
                 </button>
-                <button className="flex items-center bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition">
+                <button className="flex items-center bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition" onClick={handleSendWhatsapp}>
                     📱 Compartilhar no WhatsApp
                 </button>
             </div>
