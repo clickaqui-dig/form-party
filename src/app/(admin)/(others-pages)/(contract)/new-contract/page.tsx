@@ -38,9 +38,7 @@ export default function FormElements() {
     values: typeof initialValues
   ) => {
     try {
-      console.log("values aniversariantes,", values.aniversariantes)
       const payload = mapContractFormToRequest(values, values.cliente);
-      console.log("payload contract ===>>>", payload)
       const response = await postContract(payload);
 
       if (response) {

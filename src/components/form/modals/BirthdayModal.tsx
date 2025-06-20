@@ -41,8 +41,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log("name ===>>", name)
-    console.log("value ===>>", value)
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -60,14 +58,12 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    console.log("teste")
     e.preventDefault();
     
     // Validar o formulário antes de enviar
     const { isValid, errors } = await validateBirthdayForm(formData);
     
     if (!isValid) {
-      console.log("error ===>>", errors)
       setFormErrors(errors);
       return;
     }

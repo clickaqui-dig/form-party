@@ -4,7 +4,7 @@ export const sendMessageWhatsapp = async (values: any): Promise<void> => {
     try {
         const celularCliente = Number("55" + values.celularCliente.replace(/[\s()-]/g, ""));
 
-        const itensContrato = values.itensContrato || []; // Certifique-se de ter o array no estado `values`
+        const itensContrato = values.itensContrato || [];
 
         const itensFormatados = itensContrato
             .map((item: any) => `- ${item.descricao.toUpperCase()}: R$ ${item.valor}`)
