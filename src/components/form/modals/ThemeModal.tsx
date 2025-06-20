@@ -168,7 +168,6 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
     //   return;
     // }
 
-    console.log("hadleSubmit ===>>>", formData )
 
     // Se for válido, limpa os erros e continua
     setFormErrors({});

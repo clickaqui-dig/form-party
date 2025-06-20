@@ -9,7 +9,6 @@ export const postPayments = async (id: number, body: Payments[]): Promise<boolea
         return true;
     } catch (error: any) {
         console.log("Error ao cadasatrar pagamento: ", error);
-        alert(`${error.response.data}`)
         return false;
     }
 } 
