@@ -67,7 +67,7 @@ export const OptionsEditComponent = () => {
             {/* Botões de Ações */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
                 <button className="flex items-center bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition" onClick={handleClick}>
-                    📝 Gerar contrato
+                    📝 Baixar contrato
                 </button>
                 <button className="flex items-center bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition" onClick={handleSendWhatsapp}>
                     📱 Compartilhar no WhatsApp
