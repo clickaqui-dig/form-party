@@ -128,7 +128,8 @@ export const InfoComponent = () => {
         const diffMs = fin.getTime() - ini.getTime();
         if (diffMs < 0) return '';
         const diffHrs = diffMs / (1000 * 60 * 60);
-        return diffHrs.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        const duration = diffHrs.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        return duration;
     }, [values.dataHoraFinal, values.dataHoraInicial])
 
     return (

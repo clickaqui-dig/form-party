@@ -16,7 +16,7 @@ export const sendMessageWhatsapp = async (values: any): Promise<void> => {
         
 Segue os dados do seu contrato:
         
-Duração: Das ${formatarData(values.dataHoraInicial)} até ${formatarData(values.dataHoraFinal)} (${calcularDuracao(values.dataHoraInicial, values.dataHoraFinal)})
+Duração: Das ${formatarData(values.dataHoraInicial)} até ${formatarData(values.dataHoraFinal)} (${values.duracao} Horas)
 Número de convidados: ${values.quantidadeConvidados}
         
 Itens do seu contrato:

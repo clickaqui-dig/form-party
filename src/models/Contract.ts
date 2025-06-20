@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { calcularDuracao } from "@/utils/masks";
 import { BirthDayPerson } from "./BirthDayPerson";
 import { Customer } from "./Customer";
 import { ItemContract } from "./ItemContract";
@@ -86,7 +87,7 @@ export const mapContractFormToRequest = (
   tipoDoContrato: "ANIVERSARIO",
   dataHoraInicial: values.dataHoraInicial,
   dataHoraFinal: values.dataHoraFinal,
-  duracao: Number(values.duracao),
+  duracao: Number(calcularDuracao(values.dataHoraInicial,values.dataHoraFinal)),
   quantidadeConvidados: values.quantidadeConvidados,
   observacoes: values.observacoes || '',
   aniversariantes: mapAniversariantes(values.aniversariantes),

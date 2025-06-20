@@ -19,7 +19,8 @@ export const calcularDuracao = (dataInicial: string, dataFinal: string): string 
     const horas = Math.floor(diferencaMinutos / 60); // Horas completas
     const minutos = diferencaMinutos % 60; // Minutos restantes
 
-    return `${horas}h ${minutos}m`; // Formata a duração
+    // return `${horas}h ${minutos}m`; // Formata a duração
+    return `${horas}`; // Formata a duração
 };
 
 
