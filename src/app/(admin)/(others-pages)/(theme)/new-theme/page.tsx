@@ -8,10 +8,18 @@ import { FormTheme } from "@/components/form/theme/formTheme";
 import { postTheme } from "@/services/theme/postTheme";
 import { validationSchemaThema } from "@/components/form/theme/validation";
 import { toast } from "react-toastify";
+import { uploadThemeImages } from "@/services/theme/uploadTheme";
+
+interface ImageFile {
+  file: File;
+  preview: string;
+  descricao?: string;
+}
 
 const initialValues = {
   descricao: "",
   observacoes: "",
+  imagens: [] as ImageFile[],
 };
 
 export default function PageNewTheme() {
@@ -20,17 +28,30 @@ export default function PageNewTheme() {
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      const response = await postTheme(values);
+      const response = await postTheme({
+        descricao: values.descricao,
+        observacoes: values.observacoes
+      });
 
-      if (response) {
-        toast.success("Tema cadastrado com sucesso !")
-        formikHelpers.resetForm()
+      if (response && response.id) {
+        toast.success("Tema cadastrado com sucesso!");
+        
+        if (values.imagens && values.imagens.length > 0) {
+          try {
+            await uploadThemeImages(response.id, values.imagens);
+            toast.success("Imagens enviadas com sucesso!");
+          } catch (imageError: any) {
+            toast.warning("Tema criado, mas houve erro no upload das imagens: " + imageError.message);
+          }
+        }
+        
+        formikHelpers.resetForm();
       } else {
-        toast.error("Error ao criar tema, revise o formulario.")
+        toast.error("Erro ao criar tema, revise o formulário.");
       }
 
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
   }
   return (
@@ -43,9 +64,8 @@ export default function PageNewTheme() {
         validateOnChange={false}
         validateOnBlur={false}
         validateOnMount={false}
-        >
+      >
         {({ handleSubmit, validateForm }) => {
-
           const handleValidateAndSubmit = async () => {
             const errors = await validateForm();
 
@@ -68,7 +88,6 @@ export default function PageNewTheme() {
           )
         }}
       </Formik>
-
     </div>
   );
 }
