@@ -3,8 +3,8 @@ import Label from '@/components/form/Label';
 import { Field, FieldProps, useFormikContext } from 'formik';
 
 export const FormTheme = () => {
-    const {errors} = useFormikContext<{ descricao: string; observacoes: string; }>();
-
+     const { errors } = useFormikContext<{descricao: string, valor: number}>();
+ 
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
