@@ -57,7 +57,6 @@ export const ThemeForm: FC<ThemeFormProps> = ({ isEdit, dataTheme, onClose }) =>
         helpers: FormikHelpers<any>,
     ) => {
         try {
-            console.log(values);
             const resTheme = await createTheme(values);
             toast.success(isEdit ? 'Tema atualizado!' : 'Tema cadastrado!');
 
