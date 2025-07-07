@@ -114,8 +114,12 @@ export const ImageUpload: FC<ImageUploadProps> = ({
       {selectedImages.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {selectedImages.map((img, index) => {
-            console.log(img)
-            const src = img.preview ?? img.url ?? '';
+            let src = '';
+            if(img.isNew) {
+              src = img.preview  ?? '';
+            } else {
+              src = img.url ?? '';
+            }
             const isPersisted = !!img.id;
             return (
               <div key={index} className="relative border rounded-lg p-3 bg-gray-50">
