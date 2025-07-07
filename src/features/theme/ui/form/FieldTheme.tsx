@@ -7,6 +7,7 @@ import { ImageUpload } from "./ImageUpload";
 import { deleteThemeImages } from "@/services/themeServices";
 
 interface FormValues {
+    id?: number
     descricao: string;
     observacoes: string;
     imagens: ImageFile[];

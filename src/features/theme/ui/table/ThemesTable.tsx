@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import DefaultTable from "@/components/tables/DefaultTable";
 import { ThemesTableHeader } from "./ThemesTableHeader";
 import { ThemesTableRows } from "./ThemesTableRows";
@@ -11,9 +11,10 @@ import { fetchThemes as getThemes } from "@/services/themeServices";
 interface ThemeTableProps {
     handleOpenModal: () => void;
     handleSelect: (data: Theme) => void;
+    isOpenModal: boolean;
 }
 
-export const ThemesTable: FC<ThemeTableProps> = ({ handleOpenModal, handleSelect }) => {
+export const ThemesTable: FC<ThemeTableProps> = ({ handleOpenModal, handleSelect, isOpenModal }) => {
     const {
         items: themes,
         loading,
@@ -24,6 +25,10 @@ export const ThemesTable: FC<ThemeTableProps> = ({ handleOpenModal, handleSelect
         refresh,
         reset,
     } = usePaginatedSearch<Theme>(getThemes);
+
+    useEffect(() => {
+        refresh();
+    }, [isOpenModal, refresh])
     
     return (
         <DefaultTable

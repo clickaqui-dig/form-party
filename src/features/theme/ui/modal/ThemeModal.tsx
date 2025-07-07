@@ -8,7 +8,7 @@ interface ThemeModalProps {
     isOpen: boolean;
     onClose: () => void;
     isEdit: boolean;
-    dataTheme: Partial<Theme>;
+    dataTheme: Theme;
 }
 
 export const ThemeModal: FC<ThemeModalProps> = ({ isOpen, onClose, isEdit, dataTheme }) => {

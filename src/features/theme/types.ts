@@ -4,7 +4,8 @@ export type ImageFile = {
     url?: string;
     file?: File;
     preview?: string;
-    nomeArquivoOriginal: string;
+  nomeArquivoOriginal: string;
+  isNew?: boolean;
   };
   
   export type Theme = {

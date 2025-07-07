@@ -18,6 +18,7 @@ export default function PageTheme() {
   }
 
   const handleOpenModalWithItemSelect = (data: Theme) => {
+    console.log(data)
     setDataSelect(data);
     setIsEdit(() => true);
     setIsOpenModal(() => true);
@@ -29,7 +30,7 @@ export default function PageTheme() {
 
   return (
     <>
-      <ThemesTable handleSelect={handleOpenModalWithItemSelect} handleOpenModal={handleOpenModal} />
+      <ThemesTable isOpenModal={isOpenModal} handleSelect={handleOpenModalWithItemSelect} handleOpenModal={handleOpenModal} />
       <ThemeModal isOpen={isOpenModal} isEdit={isEdit} onClose={handleCloseModal} dataTheme={dataSelect}/>
     </>
   );

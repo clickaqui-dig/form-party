@@ -9,7 +9,7 @@ import { urlToImageFile } from "@/utils/urlToImageFile";
 
 interface ThemeFormProps {
     isEdit: boolean;
-    dataTheme: Partial<Theme>;
+    dataTheme: Theme;
     onClose: () => void;
 }
 
@@ -21,8 +21,6 @@ const initialValues = {
 };
 export const ThemeForm: FC<ThemeFormProps> = ({ isEdit, dataTheme, onClose }) => {
     const [theme, setTheme] = useState<any>(initialValues);
-
-
 
     useEffect(() => {
         const carregarImages = async () => {
@@ -41,6 +39,7 @@ export const ThemeForm: FC<ThemeFormProps> = ({ isEdit, dataTheme, onClose }) =>
                     ),
                 );
                 setTheme({
+                    id: dataTheme.id ?? 0,
                     descricao: dataTheme.descricao ?? '',
                     observacoes: dataTheme.observacoes ?? '',
                     imagens,
@@ -57,21 +56,31 @@ export const ThemeForm: FC<ThemeFormProps> = ({ isEdit, dataTheme, onClose }) =>
         helpers: FormikHelpers<any>,
     ) => {
         try {
-            const resTheme = await createTheme(values);
-            toast.success(isEdit ? 'Tema atualizado!' : 'Tema cadastrado!');
-
-            const novas = values.imagens.filter((img) => img.file);
-            if (novas.length) {
-                try {
-                    if (resTheme.id) {
-                        await uploadThemeImages(resTheme.id, novas);
-                        toast.success('Imagens enviadas com sucesso!'); 
-                    } 
-                } catch (err: any) {
-                    toast.warning(`Tema salvo, mas erro no upload: ${err.message}`);
-                }
+            let id = 0;
+            if (isEdit == false) {
+                const resTheme = await createTheme(values);
+                toast.success('Tema cadastrado!');
+                
+                    id = resTheme.id ? resTheme.id : 0;
+                
+            } else {
+                id = values.id;
             }
 
+            if (id !== 0) {
+                const novas = values.imagens.filter((img) => img.isNew);
+                if (novas.length) {
+                    try {
+                        if (id) {
+                            await uploadThemeImages(id, novas);
+                            toast.success('Imagens enviadas com sucesso!');
+                        }
+                    } catch (err: any) {
+                        toast.warning(`Tema salvo, mas erro no upload: ${err.message}`);
+                    }
+                }
+            }
+            onClose();
             helpers.resetForm();
         } catch (err: any) {
             toast.error(err.message);
@@ -93,12 +102,11 @@ export const ThemeForm: FC<ThemeFormProps> = ({ isEdit, dataTheme, onClose }) =>
                     const errs = await validateForm();
                     if (Object.keys(errs).length === 0) handleSubmit();
                 };
+              
                 return (
                     <Form>
                         <FieldTheme isEdit={isEdit} />
-                        {
-                            isEdit == false && 
-                            (
+                  
                                 <div className="flex justify-end mt-6">
                                     <button
                                         type="button"
@@ -115,8 +123,7 @@ export const ThemeForm: FC<ThemeFormProps> = ({ isEdit, dataTheme, onClose }) =>
                                         Adicionar
                                     </button>
                                 </div>
-                            )
-                        }
+                      
                     </Form>
                 );
             }}
