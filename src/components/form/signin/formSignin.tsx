@@ -1,29 +1,16 @@
-"use client";
-
-import { ErrorMessage, Field, FieldProps } from "formik";
-import Input from "../input/InputField";
+import { ErrorMessage, Field } from "formik";
 import Label from "../Label";
-import { useState } from "react";
-import { EyeCloseIcon, EyeIcon } from "@/icons";
+import { EmailInput, PasswordInput } from "./fields";
 
 
-export const FormSignin = () => {    
-    const [showPassword, setShowPassword] = useState(false);
-    
+export const FormSignin = () => {
     return (
         <>
             <div>
                 <Label htmlFor="email">
                     Email <span className="text-error-500">*</span>{" "}
                 </Label>
-                <Field id="email" name="email"
-                    render={({ field }: FieldProps) => (
-                        <Input
-                            {...field}
-                            type="text"
-                            placeholder="info@gmail.com"
-                        />
-                    )} />
+                <Field id="email" name="email" component={EmailInput} />
                 <ErrorMessage name="email" component="div" />
             </div>
             <div>
@@ -31,24 +18,7 @@ export const FormSignin = () => {
                     Password <span className="text-error-500">*</span>{" "}
                 </Label>
                 <div className="relative">
-                    <Field id="password" name="password" 
-                        render={({ field }: FieldProps) => (
-                            <Input 
-                                {...field}
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Enter your password"
-                    />
-                        )} />
-                    <span
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                    >
-                        {showPassword ? (
-                            <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                        ) : (
-                            <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                        )}
-                    </span>
+                    <Field id="password" name="password" component={PasswordInput} />
                 </div>
             </div>
         </>

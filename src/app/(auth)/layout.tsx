@@ -16,12 +16,13 @@ export default function AuthLayout({
             <div className="relative items-center justify-center  flex z-1">
               {/* <!-- ===== Common Grid Shape Start ===== --> */}
               <div className="flex flex-col items-center max-w-xs">
-                    <Image
-                      width={400}
-                      height={150}
-                      src="/images/logo/bolo-balao.png"
-                      alt="Logo"
-                    />
+                <Image
+                  width={400}
+                  height={150}
+                  src="/images/logo/bolo-balao.png"
+                  alt="Logo"
+                  priority
+                />
               </div>
             </div>
           </div>

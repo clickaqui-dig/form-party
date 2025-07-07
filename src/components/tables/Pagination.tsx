@@ -1,18 +1,29 @@
-type PaginationProps = {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({
+export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
-}) => {
-  const pagesAroundCurrent = Array.from(
-    { length: Math.min(3, totalPages) },
-    (_, i) => i + Math.max(currentPage - 1, 1)
-  );
+}: PaginationProps) => {
+  const getPagesAroundCurrent = (currentPage: number, totalPages: number, range = 3): number[] => {
+    const half = Math.floor(range / 2);
+
+    let start = Math.max(currentPage - half, 1);
+    let end = start + range - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(end - range + 1, 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+
+  const pages = getPagesAroundCurrent(currentPage, totalPages);
 
   return (
     <div className="flex items-center ">
@@ -25,15 +36,14 @@ const Pagination: React.FC<PaginationProps> = ({
       </button>
       <div className="flex items-center gap-2">
         {currentPage > 3 && <span className="px-2">...</span>}
-        {pagesAroundCurrent.map((page) => (
+        {pages.map((page) => (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`px-4 py-2 rounded ${
-              currentPage === page
-                ? "bg-brand-500 text-white"
-                : "text-gray-700 dark:text-gray-400"
-            } flex w-10 items-center justify-center h-10 rounded-lg text-sm font-medium hover:bg-blue-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500`}
+            className={`px-4 py-2 rounded ${currentPage === page
+              ? "bg-brand-500 text-white"
+              : "text-gray-700 dark:text-gray-400"
+              } flex w-10 items-center justify-center h-10 rounded-lg text-sm font-medium hover:bg-blue-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500`}
           >
             {page}
           </button>
@@ -50,5 +60,3 @@ const Pagination: React.FC<PaginationProps> = ({
     </div>
   );
 };
-
-export default Pagination;

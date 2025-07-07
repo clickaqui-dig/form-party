@@ -2,47 +2,75 @@
 import Label from "@/components/form/Label";
 import { Modal } from "@/components/ui/modal";
 import { postTheme } from "@/services/theme/postTheme";
-import { Form, Formik } from "formik";
-import { useState } from "react";
+import { Form, Formik, FormikHelpers } from "formik";
+import { FC, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { validationSchemaThema } from "../../validation";
-import { FormTheme } from "../../formTheme";
+import { FormTheme } from "../../../../../features/theme/ui/form/FieldTheme";
+import { ImageFile } from "@/models/ImageFile";
+import { uploadThemeImages } from "@/services/theme/uploadTheme";
 
 interface ThemeModalProps {
     isOpen: boolean;
     onClose: () => void;
+    dataTheme: any;
 }
 
 const initialValues = {
+    id: 0,
     descricao: "",
     observacoes: "",
+    imagens: [] as ImageFile[],
 };
-  
-export const ThemeModal: FC<ThemeModalProps> = ({ isOpen, onClose }) => {
-      const [lastResetAt, setLastResetAt] = useState<number | null>(null);
-      if (!isOpen) return null;
-    
-    
-      const handleSubmit = async (
+
+export const ThemeModal: FC<ThemeModalProps> = ({ isOpen, onClose, dataTheme }) => {
+    const [theme, setTheme] = useState<any>(initialValues);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (dataTheme.id !== 0) {
+            setIsEdit(true);
+            setTheme(dataTheme);
+        } else {
+            setIsEdit(false);
+        }
+   
+    }, [dataTheme, isEdit]);
+
+    if (!isOpen) return null;
+
+    const handleSubmit = async (
         values: typeof initialValues,
         formikHelpers: FormikHelpers<typeof initialValues>
-      ) => {
+    ) => {
         try {
-          const response = await postTheme(values)
-    
-          if (response) {
-            toast.success("Item cadastrado com sucesso !")
-            formikHelpers.resetForm();
-            setLastResetAt(Date.now());
-          } else {
-            toast.error("Error ao item, revise o formulario.")
-          }
-    
+            const response = await postTheme(values)
+
+            if (response) {
+                toast.success("Item cadastrado com sucesso !");
+
+                if (values.imagens && values.imagens.length > 0) {
+
+                    try {
+                        await uploadThemeImages(response.id, values.imagens);
+                        onClose();
+                        toast.success("Imagens enviadas com sucesso!");
+
+                    } catch (imageError: any) {
+                        toast.warning("Tema criado, mas houve erro no upload das imagens: " + imageError.message);
+                    }
+                }
+
+                formikHelpers.resetForm();
+            } else {
+                toast.error("Error ao item, revise o formulario.")
+            }
+
         } catch (error: any) {
-          toast.error(error.message);
+            toast.error(error.message);
         }
-      }
-    
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -50,10 +78,10 @@ export const ThemeModal: FC<ThemeModalProps> = ({ isOpen, onClose }) => {
             className="max-w-[800px] p-6 lg:p-5"
         >
             <div className="flex items-center justify-between px-4 py-2 border-b">
-                <Label className="text-2xl" >Adicionar Tema</Label>
+                <Label className="text-2xl" > {isEdit ? 'Atualizar' : 'Adicionar'} Tema</Label>
             </div>
             <Formik
-                initialValues={initialValues}
+                initialValues={theme}
                 onSubmit={handleSubmit}
                 validationSchema={validationSchemaThema}
                 validateOnChange={false}
@@ -71,29 +99,33 @@ export const ThemeModal: FC<ThemeModalProps> = ({ isOpen, onClose }) => {
                     return (
                         <Form>
 
-                            <FormTheme />
-
-                            <div className="flex justify-end mt-4">
-                                <button
-                                    type="button"
-                                    onClick={onClose}
-                                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300 mr-2"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    onClick={() => handleValidateAndSubmit()}
-                                    type="button"
-                                    className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
-                                >
-                                    Adicionar
-                                </button>
-                            </div>
+                            {/** Chamar form aqui */}
+                            {
+                                !isEdit &&
+                                (
+                                    <div className="flex justify-end mt-4">
+                                        <button
+                                            type="button"
+                                            onClick={onClose}
+                                            className="bg-gray-200 text-gray-700 px-4 py-2 rounded shadow hover:bg-gray-300 mr-2"
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            onClick={() => handleValidateAndSubmit()}
+                                            type="button"
+                                            className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
+                                        >
+                                            Adicionar
+                                        </button>
+                                    </div>
+                                )
+                            }
 
                         </Form>
                     )
                 }}
             </Formik>
         </Modal>
-      )
+    )
 }
