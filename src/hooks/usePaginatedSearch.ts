@@ -5,6 +5,7 @@ export interface PaginatedResponse<T> {
   page: number;
   total: number;
   limit: number;
+  last: boolean;
 }
 export function usePaginatedSearch<T>(
   fetcher: (term: string, page: number, size: number) => Promise<PaginatedResponse<T>>,

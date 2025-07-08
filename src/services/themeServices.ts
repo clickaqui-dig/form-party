@@ -16,7 +16,8 @@ export async function fetchThemes(  descricao: string,
     content: data.content,
     page,
     total: data.total,
-    limit: 10
+    limit: 10,
+    last: data.last
   };
 }
 

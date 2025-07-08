@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal } from "@/components/ui/modal";
 import React, { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
@@ -6,7 +7,8 @@ import Input from "../input/InputField";
 import debounce from "lodash.debounce";
 import { ThemeListItem } from "../form-elements/ThemaList";
 import { fetchThemes  } from "@/services/themeServices";
-import { useFormikContext } from "formik";
+import { ImageFile } from "@/features/theme";
+import { X } from "lucide-react";
 
 interface ThemeProps {
   isOpen: boolean;
@@ -30,6 +32,7 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
   const pageSize = 10;
   const fetchIdRef = useRef(0);
   const autocompleteRef = useRef<HTMLDivElement>(null);
+  const [selectedImages, setSelectedImages] = useState<ImageFile[]>([]);
 
   // Debounced fetch for autocomplete paginado
   const fetchPersons = debounce(async (query: string, pageNum: number = 0, reset: boolean = true) => {
@@ -51,7 +54,7 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
           setThemeSuggestions(prev => [...prev, ...response.content]);
         }
         setHasMore(!response.last);
-        setPage(response.number + 1);
+        setPage(response.page);
       } else {
         setThemeSuggestions([]);
         setHasMore(false);
@@ -104,19 +107,21 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
     }
   };
 
-  const handleSuggestionClick = (thema: any) => {
-    setInputValue(thema.descricao);
+  const handleSuggestionClick = (theme: any) => {
+    console.log(theme)
+    setInputValue(theme.descricao);
+    setSelectedImages(theme.imagens)
     setFormData({
-      id: thema.id,
-      descricao: thema.descricao,
-      observacoes: thema.observacoes || "",
+      id: theme.id,
+      descricao: theme.descricao,
+      observacoes: theme.observacoes || "",
     });
     setThemeSuggestions([]);
     setHasMore(false);
 
     // Limpa os erros relacionados aos campos preenchidos
     const fieldsToCheck = ['descricao', 'observacoes'];
-    const fieldsWithValues = fieldsToCheck.filter(field => !!thema[field]);
+    const fieldsWithValues = fieldsToCheck.filter(field => !!theme[field]);
 
     if (fieldsWithValues.length > 0) {
       setFormErrors(prev => {
@@ -156,16 +161,6 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validar o formulário antes de enviar
-    // const { isValid, errors } = await validateBirthdayForm(formData);
-
-    // if (!isValid) {
-    //   setFormErrors(errors);
-    //   return;
-    // }
-
-
-    // Se for válido, limpa os erros e continua
     setFormErrors({});
     onAddItem(formData);
     setFormData({
@@ -191,7 +186,7 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-lg p-6">
       <div className="flex items-center justify-between px-4 py-2 border-b">
-        <Label className="text-2xl">Adicionar Aniversariante</Label>
+        <Label className="text-2xl">Adicionar Tema</Label>
       </div>
       <form onSubmit={handleSubmit} className="relative p-4">
         <div>
@@ -249,6 +244,44 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
           />
           {/* {renderError('tema')} */}
         </div>
+
+        <div className="mb-4">
+          {selectedImages.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {selectedImages.map((img, index) => {
+            console.log(img.url)
+            const src  = img.url;
+            
+            return (
+              <div key={index} className="relative border rounded-lg p-3 bg-gray-50">
+                {/* Thumb */}
+                <div className="relative">
+                  <img
+                    src={src}
+                    alt={img.descricao ?? `Imagem ${index + 1}`}
+                    className="w-full h-32 object-cover rounded-md"
+                  />
+                </div>
+
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    placeholder="Descrição da imagem (opcional)"
+                    value={img.descricao ?? ''}
+                    disabled={true}
+                    className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                  />
+                </div>
+
+                <div className="mt-1 text-xs text-gray-500">
+                  {img.nomeArquivoOriginal}
+                </div>
+              </div>
+            );
+          })}
+            </div>
+          )}
+       </div>
 
         <div className="flex justify-end mt-4">
           <button
