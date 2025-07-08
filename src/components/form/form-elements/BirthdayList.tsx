@@ -105,12 +105,6 @@ const BirthdayList =() => {
                 <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                   Idade
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Idade Evento
-                </th>
-                {/* <th className="px-6 py-3 text-center text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                  Tema
-                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -118,7 +112,7 @@ const BirthdayList =() => {
                 birthdays
                   .map((birthday: any) => (
                     <tr key={birthday.id} className="bg-white dark:bg-gray-800">
-                      <td className="px-10 py-3">
+                      <td className="px-10 py-3 text-center ">
                         <input
                           type="checkbox"
                           checked={selectedBirthdays.includes(birthday.id)}
@@ -130,9 +124,6 @@ const BirthdayList =() => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
                         {birthday.idade}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-300/80">
-                        {birthday.idadeNoEvento}
                       </td>
                     </tr>
                   ))

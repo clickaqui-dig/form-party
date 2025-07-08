@@ -3,12 +3,9 @@ import { Modal } from "@/components/ui/modal";
 import React, { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
 import Label from "../Label";
 import Input from "../input/InputField";
-import { BirthDayItem } from "../form-elements/BirthdayList";
 import debounce from "lodash.debounce";
-import { getBirthDayPersonbyName } from "@/services/birthday-person/getBithdayPerson";
-import { validateBirthdayForm } from "./validations";
 import { ThemeListItem } from "../form-elements/ThemaList";
-import { getThemesByDescription } from "@/services/theme/getTheme";
+import { fetchThemes  } from "@/services/themeServices";
 import { useFormikContext } from "formik";
 
 interface ThemeProps {
@@ -25,7 +22,6 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
 
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const { setFieldValue, errors, values } = useFormikContext<any>();
   const [themeSuggestions, setThemeSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
@@ -46,7 +42,7 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
     setIsLoading(true);
     const currentFetchId = ++fetchIdRef.current;
     try {
-      const response = await getThemesByDescription(query, pageNum, pageSize);
+      const response = await fetchThemes(query, pageNum, pageSize);
       if (fetchIdRef.current !== currentFetchId) return; // descarta respostas antigas
       if (response && response.content) {
         if (reset) {

@@ -123,19 +123,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
           {renderError('idade')}
         </div>
 
-        <div className="mb-4">
-          <Label>Idade no Evento</Label>
-          <Input
-            type="text"
-            name="idadeNoEvento"
-            value={formData.idadeNoEvento.toString()}
-            onChange={handleChange}
-            placeholder="Idade no Evento"
-            className={formErrors.idadeNoEvento ? 'border-red-500' : ''}
-          />
-          {renderError('idadeNoEvento')}
-        </div>
-
         <div className="flex justify-end mt-4">
           <button
             type="button"

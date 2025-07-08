@@ -110,7 +110,7 @@ const ThemeList =() => {
                 thema
                   .map((birthday: any) => (
                     <tr key={birthday.id} className="bg-white dark:bg-gray-800">
-                      <td className="px-10 py-3">
+                      <td className="px-10 py-3 text-center ">
                         <input
                           type="checkbox"
                           checked={selectedTheme.includes(birthday.id)}

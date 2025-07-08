@@ -66,20 +66,20 @@ export const validationSchemaContract = Yup.object().shape({
     cidade: Yup.string().required('A cidade deve ser passado.'),
     numero: Yup.string().required('O Número deve ser passado.'),
     dataHoraInicial: Yup.string()
-      .required('Data inicial é obrigatória')
-      .test(
-        'is-future-date',
-        'A data não pode ser anterior à data atual',
-        function(value) {
-          if (!value) return true; // Deixe a validação required lidar com valores vazios
-          const inputDate = new Date(value);
-          const currentDate = new Date();
-          currentDate.setHours(0, 0, 0, 0);
-          const inputDateOnly = new Date(inputDate);
-          inputDateOnly.setHours(0, 0, 0, 0);
-          return inputDateOnly >= currentDate;
-        }
-      ),
+      .required('Data inicial é obrigatória'),
+      // .test(
+      //   'is-future-date',
+      //   'A data não pode ser anterior à data atual',
+      //   function(value) {
+      //     if (!value) return true; // Deixe a validação required lidar com valores vazios
+      //     const inputDate = new Date(value);
+      //     const currentDate = new Date();
+      //     currentDate.setHours(0, 0, 0, 0);
+      //     const inputDateOnly = new Date(inputDate);
+      //     inputDateOnly.setHours(0, 0, 0, 0);
+      //     return inputDateOnly >= currentDate;
+      //   }
+      // ),
     dataHoraFinal: Yup.string()
       .required('Informar data final.')
       .test(

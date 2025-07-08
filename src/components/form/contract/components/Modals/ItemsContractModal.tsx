@@ -169,6 +169,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
             descricao: '',
             valor: '',
         });
+        setInputValue('');
     };
 
     return (

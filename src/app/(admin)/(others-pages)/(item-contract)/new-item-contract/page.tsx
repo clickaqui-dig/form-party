@@ -19,7 +19,7 @@ interface ContractState {
 export default function PageNewItemContract() {
   const [state, setState] = useState<ContractState>({
     data: [],
-    currentPage: 1,
+    currentPage: 0,
     totalPages: 1,
     loading: false,
   });
@@ -35,8 +35,8 @@ export default function PageNewItemContract() {
   }, [searchTerm]);
 
   useEffect(() => {
-    fetchItemContract(1, debouncedSearchTerm);
-    setState(prev => ({ ...prev, currentPage: 1 }));
+    fetchItemContract(0, debouncedSearchTerm);
+    setState(prev => ({ ...prev, currentPage: 0}));
   }, [debouncedSearchTerm]);
 
 
@@ -44,7 +44,7 @@ export default function PageNewItemContract() {
     if (page) fetchItemContract(page, debouncedSearchTerm);
   };
 
-  const fetchItemContract = async (page: number = 1, descricao: string = "") => {
+  const fetchItemContract = async (page: number = 0, descricao: string = "") => {
     setState(prev => ({ ...prev, loading: true }));
     try {
       const response = await getItemContract(descricao, page);
@@ -64,7 +64,7 @@ export default function PageNewItemContract() {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setState(prevState => ({ ...prevState, currentPage: 1 }));
+    setState(prevState => ({ ...prevState, currentPage: 0 }));
   };
 
   return (
@@ -99,7 +99,7 @@ export default function PageNewItemContract() {
       </div>
       <ItemContractModal isOpen={isModalOpen} onClose={() => {
         setModalOpen(false);
-        fetchItemContract(1, "");
+        fetchItemContract(0, "");
       }}/>
     </div>
   );
