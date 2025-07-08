@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {} from "../../../../../../../public/images/logo/bolo-balao.png"
+
 interface headerHtmlProps {
     nameClient: string;
     documentClient: string;
@@ -398,13 +400,24 @@ export const clauseHtml = (data: clauseHtmlProps) => {
 
 interface signatureHtmlProps {
     name: string;
+    imageSrc?: string; // Novo parâmetro opcional para a imagem
 }
 
-export const signatureHtml = ({ name }: signatureHtmlProps) => {
+export const signatureHtml = ({ name, imageSrc }: signatureHtmlProps) => {
+    // Renderiza a imagem apenas se imageSrc for fornecido
+    const imageHtml = imageSrc ? `
+        <tr>
+            <td colspan="4" style="text-align: center; padding: 20px 0;">
+                <img src="../../../../../../../public/images/logo/bolo-balao.png" alt="Assinatura" style="max-width: 200px; max-height: 100px; object-fit: contain;" />
+            </td>
+        </tr>
+    ` : '';
+
     return `
     <figure class="table" style="float:left;width:500px;">
     <table>
         <tbody>
+            ${imageHtml}
             <tr>
                 <td>
                     <span style="font-size:12px;"><strong>__________________________________________</strong></span>
@@ -416,8 +429,11 @@ export const signatureHtml = ({ name }: signatureHtmlProps) => {
                     &nbsp;
                 </td>
                 <td>
-                    <span style="font-size:12px;"><strong>&nbsp;________________________________________</strong></span>
-                </td>
+                <p>
+    <img style="aspect-ratio:1359/1386;width:6.65%;" src="https://app.gestaofesta.com/public/fileManager/viewFile/3366/49153" width="1359" height="1386"><br>
+    <span style="color:#263238;font-family:Arial, Helvetica, sans-serif;"><strong>__________________________________________</strong></span><br>
+    <span style="color:#263238;font-family:Arial, Helvetica, sans-serif;"><strong>CONTRATADA</strong></span>
+</p>
             </tr>
             <tr>
                 <td>
@@ -450,6 +466,6 @@ export const signatureHtml = ({ name }: signatureHtmlProps) => {
         </tbody>
     </table>
 </figure>
-    `
+    `;
 }
 

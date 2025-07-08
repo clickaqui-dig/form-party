@@ -46,7 +46,7 @@ export const WriteContract = () => {
       
       const clause = clauseHtml({ birthday: values.aniversariantes, installments: values.pagamentos, temas: values.temas})
 
-      const signature = signatureHtml({ name: values.nomeCliente });
+      const signature = signatureHtml({ name: values.nomeCliente, imageSrc: "/images/logo/bolo-balao.png"});
 
       return header + itens + value + clause + signature;
     },
