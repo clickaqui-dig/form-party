@@ -84,7 +84,7 @@ export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps)
                 { align: 'right' })
         }
 
-        doc.save(`Contrato_${id}_${nameDoc}.pdf`);
+        doc.save(`Contrato_${id}_${nameDoc.trim()}.pdf`);
     }, [editor, id, logo, nameDoc]);
 
     const handleSendWhatsapp = () => {
