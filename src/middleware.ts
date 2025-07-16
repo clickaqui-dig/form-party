@@ -9,6 +9,10 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  if (pathname.startsWith('/logo.png')) {
+    return NextResponse.next();
+  }
+
   if (pathname.endsWith('/')) {
     return NextResponse.redirect(new URL('/signin', req.url));
   }
@@ -21,5 +25,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next|favicon.ico).*)'], // Protege tudo, exceto assets internos
+  matcher: ['/((?!_next|favicon.ico|logo.png).*)'], // Protege tudo, exceto assets internos
 }

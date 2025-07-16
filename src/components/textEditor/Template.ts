@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-interface headerHtmlProps {
+interface OneHtmlProps {
+    header : HeaderHtmlProps;
+    contractItem : ContractItemHtmlProps[];
+    valueHtml : ValuesHtmlProps;
+    installments : Installments[];
+    clauseHtmlProps : ClauseHtmlProps;
+    signatureHtmlProps : SignatureHtmlProps;
+}
+
+interface HeaderHtmlProps {
     nameClient: string;
     documentClient: string;
     street: string;
@@ -11,46 +20,45 @@ interface headerHtmlProps {
     dateEnd: string;
 }
 
-export const headerHtml = (data: headerHtmlProps) => {
-    const address = `${data.street} ${data.number} - CEP ${data.cep} na cidade de ${data.city}-${data.state}`;
-
-    const inicio = formatIso(data.dateInit);
-    const fim = formatIso(data.dateEnd);
-
-    const dateSpan = `${inicio.date} das ${inicio.time} às ${fim.time}.`;
-    return `
-    <p style="text-align:center;">
-      <span style="font-size:14px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong></span>
-    </p>
-
-    <p>&nbsp;</p>
-
-    <p>
-      <span style="font-size:12px;">
-        Pelo presente instrumento e na melhor forma de direito que fazem de um lado
-        ${data.nameClient} portador(a) do RG e inscrito(a) no CPF ${data.documentClient}
-        residente e domiciliado à ${address},
-        doravante designado(a) simplesmente <strong>CONTRATANTE</strong>, de outro,
-        KARIN PATRICIA ARAUJO ALECRIM inscrita no CNPJ 31.774.785/0001-83,
-        estabelecida na Rua José Veríssimo 143 – Vila Rio Branco – CEP 13215-430
-        na cidade de Jundiaí-SP, designada simplesmente <strong>CONTRATADA</strong>,
-        têm entre si justos e contratados o presente instrumento de prestação de serviços que se rege
-        conforme as cláusulas a seguir dispostas:
-      </span>
-    </p>
-
-    <p>
-      <span style="font-size:12px;">
-        <strong>Cláusula 1ª </strong>– A <strong>CONTRATADA</strong> se responsabiliza em prestar
-        ao(à) <strong>CONTRATANTE</strong> os serviços e produtos escolhidos conforme apresentados
-        abaixo, reservando os referidos serviços para o <strong>dia ${dateSpan}</strong>
-        Por outro lado, a <strong>CONTRATANTE</strong> reconhece na tabela abaixo todos os itens
-        junto à <strong>CONTRATADA</strong>.
-      </span>
-    </p>
-  `;
+interface ContractItemHtmlProps {
+    id: number;
+    descricao: string;
+    valor: number;
 }
 
+
+interface ValuesHtmlProps {
+    addition: number;
+    discount: number;
+    valor: number;
+    amountAlreadyPaid: number;
+    amountToPay: number;
+}
+
+interface Installments {
+    id: number;
+    valor: string;
+    meioPagamento: string;
+    dataPagamentos: string;
+    recebido: boolean;
+    observacoes?: string;
+}
+
+interface ClauseHtmlProps {
+    birthday: any[];
+    installments: Installments[]
+    temas : any[];
+}
+
+interface SignatureHtmlProps {
+    name: string;
+}
+
+const brDate = (iso: string) =>
+    new Date(iso).toLocaleDateString('pt-BR');
+
+const toNumber = (valor: string) =>
+    Number(valor);
 const formatIso = (iso: string) => {
     const d = new Date(iso);
     const pad = (n: number) => n.toString().padStart(2, '0');
@@ -75,16 +83,20 @@ const formatBrl = (v: number) =>
         minimumFractionDigits: 2,
     }).format(v);
 
-interface contractItemHtmlProps {
-    id: number;
-    descricao: string;
-    valor: number;
-}
 
-export const contractItemHtml = (data: contractItemHtmlProps[]) => {
-    if (!data.length) return '';
+export const initialHtml = ({header,contractItem, valueHtml , installments, clauseHtmlProps, signatureHtmlProps}: OneHtmlProps) => {
+    // ----------- header
+    const address = `${header.street} ${header.number} - CEP ${header.cep} na cidade de ${header.city}-${header.state}`;
 
-    const linhas = data
+    const inicio = formatIso(header.dateInit);
+    const fim = formatIso(header.dateEnd);
+
+    const dateSpan = `${inicio.date} das ${inicio.time} às ${fim.time}.`;
+
+    // ----------- contractItem
+    if (!contractItem.length) return '';
+
+    const linhas = contractItem
         .map(
             (it) => `
           <tr>
@@ -98,10 +110,81 @@ export const contractItemHtml = (data: contractItemHtmlProps[]) => {
         )
         .join('');
 
-    const total = data.reduce((s, it) => s + it.valor, 0);
+    const total = contractItem.reduce((s, it) => s + it.valor, 0);
+
+    
+    // ----------- installments
+    const row = installments
+        .map(
+            (p, idx) => `
+          <tr>
+            <td><span style="font-size:12px;">${idx + 1}</span></td>
+            <td><span style="font-size:12px;">${brDate(p.dataPagamentos)}</span></td>
+            <td><span style="font-size:12px;">${p.meioPagamento}</span></td>
+            <td><span style="font-size:12px;">${p.recebido ? 'Sim' : 'Não'}</span></td>
+            <td><span style="font-size:12px;">${p.valor}</span></td>
+          </tr>`
+        )
+        .join('');
+
+    const totalInstallments = installments.reduce((s, p) => s + toNumber(p.valor), 0);
+    const totalFmt = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(totalInstallments);
+        
+    // -------- clauseHtmlProps
+        const birthdayBoy = clauseHtmlProps.birthday.map((it: any) => {
+            return `
+                <p>
+                    <span style="font-size:12px;">${it.nomeAniversariante} ${it.idadeNoEvento} anos</span>
+                </p>
+            `
+        }).join('');
+    
+         const themaParty = clauseHtmlProps.temas.map((it: any) => {
+            return `
+                <p>
+                    <span style="font-size:12px;">${it.descricao} </span>
+                </p>
+            `
+        }).join('');
 
     return `
-      <p>
+    <div style="width:100%">
+    <p style="text-align:center;">
+      <span style="font-size:14px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong></span>
+    </p>
+
+    <p>&nbsp;</p>
+
+    <p>
+      <span style="font-size:12px;">
+        Pelo presente instrumento e na melhor forma de direito que fazem de um lado
+        ${header.nameClient} portador(a) do RG e inscrito(a) no CPF ${
+      header.documentClient
+    }
+        residente e domiciliado à ${address},
+        doravante designado(a) simplesmente <strong>CONTRATANTE</strong>, de outro,
+        KARIN PATRICIA ARAUJO ALECRIM inscrita no CNPJ 31.774.785/0001-83,
+        estabelecida na Rua José Veríssimo 143 – Vila Rio Branco – CEP 13215-430
+        na cidade de Jundiaí-SP, designada simplesmente <strong>CONTRATADA</strong>,
+        têm entre si justos e contratados o presente instrumento de prestação de serviços que se rege
+        conforme as cláusulas a seguir dispostas:
+      </span>
+    </p>
+
+    <p>
+      <span style="font-size:12px;">
+        <strong>Cláusula 1ª </strong>– A <strong>CONTRATADA</strong> se responsabiliza em prestar
+        ao(à) <strong>CONTRATANTE</strong> os serviços e produtos escolhidos conforme apresentados
+        abaixo, reservando os referidos serviços para o <strong>dia ${dateSpan}</strong>
+        Por outro lado, a <strong>CONTRATANTE</strong> reconhece na tabela abaixo todos os itens
+        junto à <strong>CONTRATADA</strong>.
+      </span>
+    </p>
+
+    <p>
         <span style="font-size:12px;"><strong>Itens do contrato</strong>:</span><br>
         &nbsp;
       </p>
@@ -127,25 +210,16 @@ export const contractItemHtml = (data: contractItemHtmlProps[]) => {
                 <span style="font-size:12px;"><strong>Total</strong></span>
               </td>
               <td>
-                <span style="font-size:12px;"><strong>${formatBrl(total)}</strong></span>
+                <span style="font-size:12px;"><strong>${formatBrl(
+                  total
+                )}</strong></span>
               </td>
             </tr>
           </tbody>
         </table>
       </figure>
-    `;
-}
 
-interface valuesHtmlProps {
-    addition: number;
-    discount: number;
-    valor: number;
-    amountAlreadyPaid: number;
-    amountToPay: number;
-}
-
-export const valuesHtml = (data: valuesHtmlProps) => {
-    return `<p>
+      <p>
     <br>
     <span style="font-size:12px;"><strong>Valores</strong>:</span>
 </p>
@@ -157,7 +231,9 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>NO Acréscimo</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">${formatBrl(data.addition)}</span>
+                    <span style="font-size:12px;">${formatBrl(
+                      valueHtml.addition
+                    )}</span>
                 </td>
             </tr>
             <tr>
@@ -165,7 +241,9 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Desconto</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">${formatBrl(data.discount)}</span>
+                    <span style="font-size:12px;">${formatBrl(
+                      valueHtml.discount
+                    )}</span>
                 </td>
             </tr>
             <tr>
@@ -173,7 +251,9 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Total</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">${formatBrl(data.valor)}</span>
+                    <span style="font-size:12px;">${formatBrl(
+                      valueHtml.valor
+                    )}</span>
                 </td>
             </tr>
             <tr>
@@ -181,7 +261,9 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Valor já pago</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">${formatBrl(data.amountAlreadyPaid)}</span>
+                    <span style="font-size:12px;">${formatBrl(
+                      valueHtml.amountAlreadyPaid
+                    )}</span>
                 </td>
             </tr>
             <tr>
@@ -189,91 +271,15 @@ export const valuesHtml = (data: valuesHtmlProps) => {
                     <span style="font-size:12px;"><strong>Valor a pagar</strong></span>
                 </td>
                 <td>
-                    <span style="font-size:12px;">${formatBrl(data.amountToPay)}</span>
+                    <span style="font-size:12px;">${formatBrl(
+                      valueHtml.amountToPay
+                    )}</span>
                 </td>
             </tr>
         </tbody>
     </table>
-</figure>`;
-}
-
-interface Installments {
-    id: number;
-    valor: string;
-    meioPagamento: string;
-    dataPagamentos: string;
-    recebido: boolean;
-    observacoes?: string;
-}
-
-const brDate = (iso: string) =>
-    new Date(iso).toLocaleDateString('pt-BR');
-
-const toNumber = (valor: string) =>
-    Number(valor);
-
-export const installmentsHtml = (installments: Installments[]) => {
-    if (!installments.length) return '';
-
-    const row = installments
-        .map(
-            (p, idx) => `
-          <tr>
-            <td><span style="font-size:12px;">${idx + 1}</span></td>
-            <td><span style="font-size:12px;">${brDate(p.dataPagamentos)}</span></td>
-            <td><span style="font-size:12px;">${p.meioPagamento}</span></td>
-            <td><span style="font-size:12px;">${p.recebido ? 'Sim' : 'Não'}</span></td>
-            <td><span style="font-size:12px;">${p.valor}</span></td>
-          </tr>`
-        )
-        .join('');
-
-    const total = installments.reduce((s, p) => s + toNumber(p.valor), 0);
-    const totalFmt = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    }).format(total);
-
-    return `
-          <tbody>
-            ${row}
-            <tr>
-              <td colspan="4">
-                <span style="font-size:12px;"><strong>Total</strong></span>
-              </td>
-              <td>
-                <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
-              </td>
-            </tr>
-          </tbody>
-        `;
-}
-
-interface clauseHtmlProps {
-    birthday: any[];
-    installments: Installments[]
-    temas : any[];
-}
-
-export const clauseHtml = (data: clauseHtmlProps) => {
-    const birthdayBoy = data.birthday.map((it: any) => {
-        return `
-            <p>
-                <span style="font-size:12px;">${it.nomeAniversariante} ${it.idadeNoEvento} anos</span>
-            </p>
-        `
-    }).join('');
-
-     const themaParty = data.temas.map((it: any) => {
-        return `
-            <p>
-                <span style="font-size:12px;">${it.descricao} </span>
-            </p>
-        `
-    }).join('');
-    const installments = installmentsHtml(data.installments)
-    return `
-    <p>
+</figure>
+           <p>
         CHAVE PIX: CNPJ 31774785000183
     </p>
     <p>
@@ -318,7 +324,17 @@ export const clauseHtml = (data: clauseHtmlProps) => {
                     </th>
                 </tr>
             </thead>
-            ${installments}
+            <tbody>
+            ${row}
+            <tr>
+              <td colspan="4">
+                <span style="font-size:12px;"><strong>Total</strong></span>
+              </td>
+              <td>
+                <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
+              </td>
+            </tr>
+          </tbody>
         </table>
     </figure>
     <p>
@@ -393,16 +409,9 @@ export const clauseHtml = (data: clauseHtmlProps) => {
     <p>
         <span style="font-size:12px;"></span>
     </p>
-    `
-}
 
-interface signatureHtmlProps {
-    name: string;
-}
 
-export const signatureHtml = ({ name }: signatureHtmlProps) => {
-    return `
-    <figure class="table" style="float:left;width:500px;">
+     <figure class="table" style="float:left;width:500px;">
     <table>
         <tbody>
             <tr>
@@ -435,7 +444,9 @@ export const signatureHtml = ({ name }: signatureHtmlProps) => {
             </tr>
             <tr>
                 <td>
-                    <span style="font-size:12px;"><strong>${name}</strong></span>
+                    <span style="font-size:12px;"><strong>${
+                      signatureHtmlProps.name
+                    }</strong></span>
                 </td>
                 <td>
                     &nbsp;
@@ -450,6 +461,6 @@ export const signatureHtml = ({ name }: signatureHtmlProps) => {
         </tbody>
     </table>
 </figure>
-    `
+</div>
+  `;
 }
-

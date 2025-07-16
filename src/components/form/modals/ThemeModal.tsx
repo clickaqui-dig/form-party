@@ -8,7 +8,6 @@ import debounce from "lodash.debounce";
 import { ThemeListItem } from "../form-elements/ThemaList";
 import { fetchThemes  } from "@/services/themeServices";
 import { ImageFile } from "@/features/theme";
-import { X } from "lucide-react";
 
 interface ThemeProps {
   isOpen: boolean;
@@ -108,7 +107,6 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
   };
 
   const handleSuggestionClick = (theme: any) => {
-    console.log(theme)
     setInputValue(theme.descricao);
     setSelectedImages(theme.imagens)
     setFormData({

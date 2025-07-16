@@ -39,7 +39,6 @@ export const CustomerModal: FC<CustomerModalProps> = ({ isOpen, onClose }) => {
         try {
             const payload = mapFormToCustomer(values);
             const response = await postCustomer(payload);
-            console.log(response)
             if (response) {
                 toast.success("Cliente cadastrado com sucesso !");
                 onClose();
