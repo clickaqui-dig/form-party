@@ -1,4 +1,5 @@
-import { calcularDuracao, formatarData, subtrairDias } from "@/utils/masks";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { formatarData, subtrairDias } from "@/utils/masks";
 
 export const sendMessageWhatsapp = async (values: any): Promise<void> => {
     try {

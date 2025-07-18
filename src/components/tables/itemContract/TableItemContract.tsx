@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React from "react";
 import {
@@ -9,7 +8,6 @@ import {
     TableRow,
 } from "../../ui/table";
 import { ItemContract } from "@/models/ItemContract";
-import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 

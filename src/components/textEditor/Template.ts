@@ -313,7 +313,17 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         </td>
                     </tr>
                 </thead>
-                ${installments}
+                <tbody>
+                    ${row}
+                    <tr>
+                    <td colspan="4">
+                        <span style="font-size:12px;"><strong>Total</strong></span>
+                    </td>
+                    <td>
+                        <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
+                    </td>
+                    </tr>
+                </tbody>
             </table>
         </figure>
         <p style="text-align:justify;">

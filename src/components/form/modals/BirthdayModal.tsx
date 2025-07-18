@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal } from "@/components/ui/modal";
 import React, { ChangeEvent, FC, FormEvent, useState } from "react";
 import Label from "../Label";
@@ -21,23 +20,6 @@ const BirthDayModal: FC<BirthDayProps> = ({ isOpen, onClose, onAddItem }) => {
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [inputValue, setInputValue] = useState<string>("");
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      nome: e.target.value,
-    }));
-    
-    // Limpa o erro quando o usuário começa a digitar
-    if (formErrors.nome) {
-      setFormErrors(prev => {
-        const newErrors = {...prev};
-        delete newErrors.nome;
-        return newErrors;
-      });
-    }
-  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

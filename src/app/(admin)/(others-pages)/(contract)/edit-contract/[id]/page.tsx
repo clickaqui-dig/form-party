@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
 import { postPayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
-import { mapAniversariantes, mapContractFormToRequest } from "@/models/Contract";
+import { mapContractFormToRequest } from "@/models/Contract";
 
 // const initialValues = {
 //     idContrato: 0,
