@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { useCallback } from "react";
-import { Button } from "../components/Button";
+import { Button } from "./Button";
 
 export function ToolbarPlugin() {
     const [editor] = useLexicalComposerContext();
@@ -33,7 +33,7 @@ export function ToolbarPlugin() {
             });
         },
         [editor],
-    );
+      );
 
     return (
         <div className="flex flex-wrap items-center gap-1 border-b bg-gray-50 p-2">

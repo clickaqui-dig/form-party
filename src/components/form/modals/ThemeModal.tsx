@@ -107,6 +107,7 @@ const ThemeModal: FC<ThemeProps> = ({ isOpen, onClose, onAddItem }) => {
   };
 
   const handleSuggestionClick = (theme: any) => {
+    console.log(theme)
     setInputValue(theme.descricao);
     setSelectedImages(theme.imagens)
     setFormData({

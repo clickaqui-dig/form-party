@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-import ComponentCard from "@/components/common/ComponentCard";
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "../../../../../../components/common/ComponentCard";
+import PageBreadcrumb from "../../../../../../components/common/PageBreadCrumb";
 import { Formik } from "formik";
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { getContractById } from "@/services/contract/getContractById";
-import FormContract from "@/components/form/contract";
+import { getContractById } from "../../../../../../services/contract/getContractById";
+import FormContract from "../../../../../../components/form/contract";
 import { toast } from "react-toastify";
-import { putContractById } from "@/services/contract/putContractById";
-import { postPayments } from "@/services/payments/postPayments";
-import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
-import { mapAniversariantes, mapContractFormToRequest } from "@/models/Contract";
+import { putContractById } from "../../../../../../services/contract/putContractById";
+import { postPayments } from "../../../../../../services/payments/postPayments";
+import { unmaskCurrency, validationTypePayments } from "../../../../../../utils/masks/unMaskCurrency";
+import { mapContractFormToRequest } from "../../../../../../models/Contract";
 
 // const initialValues = {
 //     idContrato: 0,

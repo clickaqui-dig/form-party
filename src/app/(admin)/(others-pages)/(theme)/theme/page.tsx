@@ -18,6 +18,7 @@ export default function PageTheme() {
   }
 
   const handleOpenModalWithItemSelect = (data: Theme) => {
+    console.log(data)
     setDataSelect(data);
     setIsEdit(() => true);
     setIsOpenModal(() => true);

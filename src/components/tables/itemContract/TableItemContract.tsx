@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React from "react";
 import {
@@ -9,8 +8,6 @@ import {
     TableRow,
 } from "../../ui/table";
 import { ItemContract } from "@/models/ItemContract";
-import { maskCurrency } from "@/utils/masks/maskCurrency";
-import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 
 interface TableCustomerProps {
@@ -61,7 +58,7 @@ export default function TableItemContract({ itemContract }: TableCustomerProps) 
                                         {item.descricao}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {maskCurrencyFromUnits(item.valor)}
+                                        {item.valor}
                                     </TableCell>
                                 
                                 </TableRow>

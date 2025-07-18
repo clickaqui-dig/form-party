@@ -1,5 +1,5 @@
 "use client";
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import PageBreadCrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { Formik } from "formik";
@@ -56,7 +56,7 @@ export default function FormElements() {
   }
   return (
     <div>
-      <PageBreadcrumb pageTitle="Novo Contrato" />
+      <PageBreadCrumb pageTitle="Novo Contrato" />
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
