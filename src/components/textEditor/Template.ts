@@ -1,3 +1,5 @@
+import { formatBr } from "./utils/formatBr";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface OneHtmlProps {
     header : HeaderHtmlProps;
@@ -152,315 +154,348 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
 
     return `
     <div style="width:100%">
-    <p style="text-align:center;">
-      <span style="font-size:14px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong></span>
-    </p>
-
-    <p>&nbsp;</p>
-
-    <p>
-      <span style="font-size:12px;">
-        Pelo presente instrumento e na melhor forma de direito que fazem de um lado
-        ${header.nameClient} portador(a) do RG e inscrito(a) no CPF ${
-      header.documentClient
-    }
-        residente e domiciliado à ${address},
-        doravante designado(a) simplesmente <strong>CONTRATANTE</strong>, de outro,
-        KARIN PATRICIA ARAUJO ALECRIM inscrita no CNPJ 31.774.785/0001-83,
-        estabelecida na Rua José Veríssimo 143 – Vila Rio Branco – CEP 13215-430
-        na cidade de Jundiaí-SP, designada simplesmente <strong>CONTRATADA</strong>,
-        têm entre si justos e contratados o presente instrumento de prestação de serviços que se rege
-        conforme as cláusulas a seguir dispostas:
-      </span>
-    </p>
-
-    <p>
-      <span style="font-size:12px;">
-        <strong>Cláusula 1ª </strong>– A <strong>CONTRATADA</strong> se responsabiliza em prestar
-        ao(à) <strong>CONTRATANTE</strong> os serviços e produtos escolhidos conforme apresentados
-        abaixo, reservando os referidos serviços para o <strong>dia ${dateSpan}</strong>
-        Por outro lado, a <strong>CONTRATANTE</strong> reconhece na tabela abaixo todos os itens
-        junto à <strong>CONTRATADA</strong>.
-      </span>
-    </p>
-
-    <p>
-        <span style="font-size:12px;"><strong>Itens do contrato</strong>:</span><br>
-        &nbsp;
-      </p>
-  
-      <figure class="table" style="width:100%;">
-        <table style="table-layout:fixed;border-collapse:collapse;width:100%;">
-        <thead>
-            <tr>
-                <th style="width:70%;">
-                    <span style="font-size:12px;">Descricao</span>
-                </th>
-                <th style="width:30%;">
-                    <span style="font-size:12px;">Valor</span>
-                </th>
-            </tr>
-          </thead>
-  
-          <tbody>
-            ${linhas}
-  
-            <tr>
-              <td>
-                <span style="font-size:12px;"><strong>Total</strong></span>
-              </td>
-              <td>
-                <span style="font-size:12px;"><strong>${formatBrl(
-                  total
-                )}</strong></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </figure>
-
-      <p>
-    <br>
-    <span style="font-size:12px;"><strong>Valores</strong>:</span>
-</p>
-<figure class="table" style="width:100%;">
-      <table style="width:100%; table-layout:fixed;">
-        <tbody>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>NO Acréscimo</strong></span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">${formatBrl(
-                      valueHtml.addition
-                    )}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>Desconto</strong></span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">${formatBrl(
-                      valueHtml.discount
-                    )}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>Total</strong></span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">${formatBrl(
-                      valueHtml.valor
-                    )}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>Valor já pago</strong></span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">${formatBrl(
-                      valueHtml.amountAlreadyPaid
-                    )}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>Valor a pagar</strong></span>
-                </td>
-                <td>
-                    <span style="font-size:12px;">${formatBrl(
-                      valueHtml.amountToPay
-                    )}</span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</figure>
-           <p>
-        CHAVE PIX: CNPJ 31774785000183
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Aniversariantes:</strong></span>
-        ${birthdayBoy}
-    </p>
-
-    <p>
-        <span style="font-size:12px;"><strong>Temas:</strong></span>
-        ${themaParty}
-    </p>
-
-
-    <p>
-        <span style="font-size:12px;"><strong>Parágrafo Primeiro:</strong> A <strong>CONTRATADA</strong> se obriga a fornecer os produtos referentes ao escolhido, a fornecer pessoal qualificado proporcional ao número de convidados ao evento, a fornecer as instalações em bom estado de conservação e limpeza, no caso que se aplicar a contratação do espaço para a realização do evento.</span><br>
-        <span style="font-size:12px;"><strong>Parágrafo Segundo: </strong>A <strong>CONTRATADA</strong> não fornece produtos ou alimentos para viagem.</span><br>
-        <span style="font-size:12px;"><strong>Parágrafo Terceiro:</strong> O(a) <strong>CONTRATANTE</strong> deverá fornecer à <strong>CONTRATADA</strong> todas as informações detalhadas necessárias à adequada realização do serviço.</span>
-    </p>
-    <p>
-        <strong>Cláusula 2ª </strong><span style="font-size:12px;">- O(a) </span><strong>CONTRATANTE </strong><span style="font-size:12px;">se responsabiliza em efetuar o pagamento no valor de R$ 2.330,00 pelos serviços prestados pela </span><strong>CONTRATADA</strong><span style="font-size:12px;">, conforme citados na cláusula 1. A </span><strong>CONTRATADA </strong><span style="font-size:12px;">não efetuará os serviços caso a cláusula 2º não estiver sido cumprida</span><br>
-        <span style="font-size:12px;"><strong>Parágrafo Primeiro:</strong> Fica acordado que o(a) <strong>CONTRATANTE </strong>realizará o pagamento do evento em favor da <strong>CONTRATADA </strong>conforme cronograma abaixo:</span><br>
-        &nbsp;
-    </p>
-<figure class="table" style="width:100%;">
-  <table style="width:100%; table-layout:fixed;">
+        <p style="text-align:center">
+            <span style="font-size:14px;"><strong>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</strong></span>
+        </p>
+        <p style="text-align:justify">
+            <span>
+                Pelo presente instrumento e na melhor forma de direito que fazem de um lado
+                ${header.nameClient} portador(a) do RG e inscrito(a) no CPF ${header.documentClient}
+                residente e domiciliado à ${address},
+                doravante designado(a) simplesmente <strong>CONTRATANTE</strong>, de outro,
+                KARIN PATRICIA ARAUJO ALECRIM inscrita no CNPJ 31.774.785/0001-83,
+                estabelecida na Rua José Veríssimo 143 – Vila Rio Branco – CEP 13215-430
+                na cidade de Jundiaí-SP, designada simplesmente <strong>CONTRATADA</strong>,
+                têm entre si justos e contratados o presente instrumento de prestação de serviços que se rege
+                conforme as cláusulas a seguir dispostas:
+            </span>
+        </p>
+        <p style="text-align:justify;">
+            <span>&nbsp;</span>
+        </p>
+        <p style="text-align:center">
+            <span><strong>CONDIÇÕES GERAIS</strong></span>  
+        </p>
+        <p style="text-align:justify;">
+            <span>&nbsp;</span>
+        </p>
+        <p>
+            <span>
+                <strong>1.&nbsp;&nbsp;OBJETO -</strong> O Presente contrato destina-se à prestação de serviços 
+                de buffet pela CONTRATADA e em sua sede, reservando os referidos serviços para o 
+                <strong>dia ${dateSpan}</strong>,bem como demais serviços descritos na planilha abaixo, 
+                em favor do(a) <strong>CONTRATANTE</strong>.&nbsp;
+            </span>
+            <br>
+        </p>
+        <p>
+            <span><strong>Itens do contrato</strong>:</span><br>
+        </p>
+        <figure>
+            <table>
             <thead>
                 <tr>
-                    <th>
-                        <span style="font-size:12px;">Parcela</span>
-                    </th>
-                    <th>
-                        <span style="font-size:12px;">Vencimento</span>
-                    </th>
-                    <th>
-                        <span style="font-size:12px;">Meio pagamento</span>
-                    </th>
-                    <th>
-                        <span style="font-size:12px;">Pago?</span>
-                    </th>
-                    <th>
-                        <span style="font-size:12px;">Valor</span>
-                    </th>
+                    <td>
+                        <span><strong>Descricao</strong></span>
+                    </td>                
+                    <td>
+                        <span><strong>Valor</strong></span>
+                    </td>
                 </tr>
             </thead>
+    
             <tbody>
-            ${row}
-            <tr>
-              <td colspan="4">
-                <span style="font-size:12px;"><strong>Total</strong></span>
-              </td>
-              <td>
-                <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-    </figure>
-    <p>
-        <span style="font-size:12px;"><strong>Cláusula 3ª </strong>- Se o(a) <strong>CONTRATANTE </strong>desistir unilateralmente da prestação de serviços que ora contrata, perderá em favor da <strong>CONTRATADA </strong>os valores pagos a título de sinal e princípio de pagamento correspondente a 30% do total do contrato, a título de indenização por perdas e danos, pela rescisão unilateral do presente CONTRATO.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Parágrafo Único: </strong>No caso do(a) <strong>CONTRATANTE </strong>desejar rescindir unilateralmente a presente prestação de serviços, em havendo efetuado o pagamento de mais de 30% (trinta por cento) do evento contratado, deverá avisar a <strong>CONTRATADA</strong>, com antecedência mínima de 60&nbsp;(sessenta) dias da data aprazada para o evento, recebendo, para tanto, da <strong>CONTRATADA </strong>os valores que excederem o montante do sinal e princípio de pagamento de que trata o parágrafo único da Cláusula 2ª .&nbsp;Desistindo com menos de 60 dias e com até 30 dias de antecedência, a multa será de 60% do valor da festa. Se a desistência for com menos de 15 dias de antecedência, a multa será de 100% do valor contratado. O CONTRATADO incidirá nas mesmas multas e prazos acima caso deixe de realizar a festa sem motivo justo.</span><br>
-        <span style="font-size:12px;"><strong>Parágrafo Segundo: </strong>Apenas poderá ser rescindido o presente instrumento por parte do(a) <strong>CONTRATANTE</strong>, com menos de 60&nbsp;(sessenta) dias de antecedência da data aprazada para o evento, por motivo inteiramente justificável, sendo-lhe devolvido pela <strong>CONTRATADA </strong>os montantes eventualmente efetuados, salvo o sinal e princípio de pagamento de que trata o parágrafo único da Cláusula 2ª.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Clausula 4ª</strong> - A <strong>CONTRATADA </strong>se obriga a efetuar o evento na opção de que trata a Cláusula 1ª, para o número de pessoas, convidados que excedam a este número, deverá ser efetuado pela(o) <strong>CONTRATANTE </strong>o pagamento da diferença de convidados imediatamente após o término do evento na forma à vista, por meio de dinheiro&nbsp;ou cartão de débito,VALOR CONVIDADO EXTRA&nbsp;no dia da festa R$ 70,00 (setenta reais), &nbsp;VALOR CONVIDADO EXTRA 7 dias antes R$ 50,00 ,&nbsp;sendo o valor total calculado no momento do pagamento. Caso o pagamento não seja efetuado imediatamente após término da festa, haverá um acréscimo de 10% no valor total de todos os excedentes.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Parágrafo Primeiro: </strong>Caso o número de convidados ultrapasse 15% do total contratado na Cláusula 4ª, a <strong>CONTRATANTE </strong>deverá efetuar pagamento antecipado à data do evento.</span><br>
-        <span style="font-size:12px;"><strong>Parágrafo Segundo:</strong> A falta de pagamento referente do Parágrafo Primeiro, desobriga a <strong>CONTRATADA </strong>a efetuar os serviços para mais do que 15% do total da Cláusula 4ª.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Cláusula 5ª</strong> - O(a) <strong>CONTRATANTE </strong>se responsabiliza, por si e pelos seus convidados, pelos pertences da <strong>CONTRATADA</strong>, em havendo quebra de quaisquer dos pertences da <strong>CONTRATADA </strong>pelo <strong>CONTRATANTE </strong>ou seus convidados, fica o(a) <strong>CONTRATANTE </strong>obrigado(a) a indenizar a <strong>CONTRATADA</strong>.&nbsp;<strong>NO CASO DE QUEBRA DE BRINQUEDOS DEVIDO USO INDEVIDO SERÁ COBRADO O VALOR DE UM NOVO, OU VALOR DA MANUTENÇÃO DO MESMO,&nbsp;VALOR DE MANUTENÇÃO R$ 150,00 + PEÇA A SER TROCADA.</strong></span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Parágrafo Primeiro:</strong> A <strong>CONTRATADA </strong>não se responsabiliza por objetos, vestuários ou calçados esquecidos no interior do estabelecimento. Os mesmos serão armazenados até o dia 30 de cada mês, não havendo procura serão entregues para Instituições de caridades da região.</span><br>
-        <span style="font-size:12px;"><strong>Parágrafo Segundo:</strong> A <strong>CONTRATADA </strong>não se responsabiliza por eventuais furtos ou extravios de objetos ocorridos no período do evento.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Cláusula 6ª </strong>- O serviço terá duração de 03h00min, com tolerância de 15 (quinze) minutos para a saída dos convidados, <strong><u>caso (o) CONTRATANTE ultrapasse este período, pagará uma taxa de 10% do valor total do evento para cada 15 (quinze) minutos, podendo ser fracionado.</u></strong></span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Parágrafo Primeiro:</strong> Em falta de algum item do serviço/produto contratado, será feita a substituição do item sem prévio aviso.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>Cláusula 7ª</strong> - A <strong>CONTRATADA </strong>não se responsabiliza por eventuais falhas de energia elétrica devido a problemas na rede pública ou intempéries,&nbsp;por danos ocorridos por força maior, tais como: tempestades, queda de energia elétrica, inundações, brinquedo&nbsp; que eventualmente não esteja funcionando (apesar de todos os esforços empreendidos para que tal fato não ocorra), seja pela impossibilidade de encontrar peças, seja pela dificuldade de encontrar técnicos com disponibilidade imediata para o conserto; objetos perdidos; lesões por fatos imprevisíveis; serviços de terceiros contratados particularmente PELO(A) <strong>CONTRATANTE</strong>, incidentes que venham ocorrer com alguém cujas condições especiais deveriam ter sido especificadas por escrito; bem como quaisquer outros incidentes alheios à vontade <strong>DA&nbsp;CONTRATADA</strong>. Caso<strong>&nbsp;A CONTRATADA</strong>&nbsp;tiver condições de antever qualquer fato grave que possa impedir a realização da festa, poderá alterar sua data, consultando <strong>O (A) CONTRATANTE</strong> sobre o melhor dia dentre as datas disponíveis.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"><strong>OBSERVAÇÕES IMPORTANTES</strong></span>
-    </p>
-    <p>
-        <span style="font-size:12px;">Todas as especificações do presente contrato deverão constar por escrito e ser assinadas por ambas as partes contratantes ou por seus procuradores.</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">A decoração será uma cortesia do Buffet (mesa, painel, bolo cenográfico,bandejas, personagens no tema escolhido) NÃO ESTÁ INCLUSO BALÕES, FLORES NATURAIS, DOCE PERSONALIZADO OU PAPELARIA PERSONALIZADA os itens mencionados são vendidos como adicionais.</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">NÃO É PERMITIDO TRAZER CHOPP DE FORA, COOLER OU BEBIBAS COMO WHISKY, VINHO, E DESTILADOS EM GERAL.</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">Cortesia&nbsp;<strong>20 lembrancinhas</strong> para as crianças kit amarelinha, lembrancinhas extra&nbsp;será cobrado o valor de R$ 3,00 cada, O CONTRATANTE precisa solicitar com 3 dias de antecedência caso precise de lembrancinha extra.</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">Pai, mãe e aniversariante cortesia em qualquer cardápio.&nbsp;</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;"><strong><u>O ingresso do (a) &nbsp;ANIVERSARIANTE, PAI, MÃE e IRMÃOS somente estará liberado 15 (quize) &nbsp;minutos antes do início da festa e o dos CONVIDADOS somente no horário da festa. Antes disso a porta de entrada permanecerá trancada e os funcionários estarão preparando o local para a realização do evento.</u></strong></span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">Cortesia de <strong>15 crianças</strong> <strong>até 8&nbsp;anos .</strong></span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">A data somente será confirmada após o pagamento da 1ª parcela. Caso não compareça a quantidade de convidados paga no pacote não haverá reembolso de valores vez que O CONTRATADO terá se preparado para receber o número de pessoas indicado. Não será permitido levar nenhuma sobra de alimentos/bebidas, a não ser que estas tenham sido levadas pelo (a) CONTRANTANTE, sob pena de ser cobrado deste o valor de um excedente por convidado que infringir a regra.</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;"><strong><u>O CONTRATADO conta com cadeiras para acomodar até sessenta pessoas (60) no salão, distribuídas entre 10 mesas.</u></strong></span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">Caso o evento contratado não possa ser realizado devido a pandemia do Covid-19 o mesmo poderá ser remarcado no prazo de até 12 meses sem alteração de valores, no caso de CANCELAMENTO será cobrado a multa acima estipulada e o pagamento será de acordo com a medida provisória 948/2020 na Lei 14.046, o consumidor será restituido no prazo de até 12 meses contado a partir do encerramento do estado de calamidade pública.</span>
-    </p>
-    <p style="text-align:justify;">
-        <span style="font-size:12px;">O CONTRATADO solicita permissão do uso das imagens para a divulgação de seu trabalho em seu site, redes sociais e meios de comunicação por tempo indeterminado. (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) AUTORIZO &nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) NÃO AUTORIZO</span>
-    </p>
-    <p>
-        <span style="font-size:12px;">E por estarem assim, justas e contratadas, as partes de pleno acordo em tudo que se encontra disposto neste instrumento particular, firmam o presente instrumento, em 02 (duas) vias de igual teor e forma, transcritas apenas no anverso para maior validade jurídica.</span>
-    </p>
-    <p>
-        <span style="font-size:12px;"></span>
-    </p>
-
-
-     <figure class="table" style="float:left;width:500px;">
-    <table>
-        <tbody>
-            <tr>
+                ${linhas}
+                <tr>
                 <td>
-                    <span style="font-size:12px;"><strong>__________________________________________</strong></span>
+                    <span><strong>Total</strong></span>
                 </td>
                 <td>
-                    &nbsp;
+                    <span><strong>${formatBr(
+                    total
+                    )}</strong></span>
                 </td>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    <span style="font-size:12px;"><strong>&nbsp;________________________________________</strong></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>CONTRATANTE</strong></span>
-                </td>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    <span style="font-size:12px;"><strong>CONTRATADA</strong></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span style="font-size:12px;"><strong>${
-                      signatureHtmlProps.name
-                    }</strong></span>
-                </td>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    <span style="font-size:12px;"><strong>KARIN PATRICIA ARAUJO ALECRIM</strong></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</figure>
-</div>
+                </tr>
+            </tbody>
+            </table>
+        </figure>
+        <p>
+            <span style="font-size:12px;"><strong>Valores</strong>:</span>
+        </p>
+        <figure class="table" style="width:100%;">
+            <table style="width:100%; table-layout:fixed;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>NO Acréscimo</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;">${formatBr(
+                            valueHtml.addition
+                            )}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>Desconto</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;">${formatBr(
+                            valueHtml.discount
+                            )}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>Total</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;">${formatBr(
+                            valueHtml.valor
+                            )}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>Valor já pago</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;">${formatBr(
+                            valueHtml.amountAlreadyPaid
+                            )}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>Valor a pagar</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;">${formatBr(
+                            valueHtml.amountToPay
+                            )}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+        <p>
+            CHAVE PIX: CNPJ 31774785000183
+        </p>
+        <p>
+            <span ><strong>Aniversariantes:</strong></span>
+            ${birthdayBoy}
+        </p>
+        <p>
+            <span ><strong>Temas:</strong></span>
+            ${themaParty}
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>2.&nbsp;DOS VALORES E PAGAMENTO -</strong> Pelos serviços prestados a CONTRATANTE pagará a CONTRATADA o valor de R$ ${formatBr( total)}, que deverá ser quitado conforme cronograma de pagamento abaixo:&nbsp;</span>
+        </p>
+        <figure class="table" style="width:100%;">
+            <table >
+                <thead>
+                    <tr>
+                        <td>
+                            <span><strong>Parcela</strong></span>
+                        </td>
+                        <td>
+                            <span><strong>Vencimento</strong></span>
+                        </td>
+                        <td>
+                            <span><strong>Meio pagamento</strong></span>
+                        </td>
+                        <td>
+                            <span><strong>Pago?</span>
+                        </td>
+                        <td>
+                            <span><strong>Valor</strong></span>
+                        </td>
+                    </tr>
+                </thead>
+                ${installments}
+            </table>
+        </figure>
+        <p style="text-align:justify;">
+            <span>2.1.&nbsp;&nbsp;&nbsp;&nbsp;O pagamento poderá ser realizado por meio de cartão de crédito em até 4X, salvo promoção realizada pela CONTRATADA por determinado, ou transferência bancária para a conta da CONTRATADA conforme convencionado no contrato e aqui descrito: CHAVE PIX: CNPJ 31774785000183.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>2.2.&nbsp;&nbsp;&nbsp;&nbsp;Para a reserva da data do evento a CONTRATANTE deverá pagar a CONTRATADA o valor equivalente a 20% do total do contrato a título de <i><u>sinal</u></i>.&nbsp;</span><br>
+            <span>Parágrafo único - Em caso de desistência da CONTRATANTE após 7 (sete) dias da assinatura do contrato ou do depósito do valor do <i><u>sinal</u></i>, a CONTRATADA realizará a retenção integral do referido valor.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>2.3.&nbsp;&nbsp;&nbsp;&nbsp;O contrato de prestação de serviços deverá ser integralmente quitado até 10 (dez) dias antecedentes a data do evento, sob pena da CONTRATADA não realizar o evento.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>2.4.&nbsp;&nbsp;&nbsp;&nbsp;Caso o pagamento não seja integralmente quitado no prazo supramencionado, os valores recebidos pela CONTRATADA serão integralmente retidos a titulo de dano material, haja vista que a CONTRATADA fica impedida de realizar novo evento devido a proximidade da data.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>3.&nbsp;&nbsp;&nbsp;&nbsp;DO CARDÁPIO - </strong>O(A) CONTRATANTE não poderá substituir o cardápio contratado por outro, nem tampouco requerer a devolução de valores já pago ou frustar pagamentos futuros em razão do número de convidados faltosos ao evento, bem como também não pode levar consigo, após o término da festa, alimentos, bebidas e demais ou serviços contratados.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>4.&nbsp;&nbsp;&nbsp;&nbsp;DURAÇÃO DO EVENTO - O serviço terá duração de 04h00min, com tolerância de 15 (quinze) minutos para a saída dos convidados. Não poderá haver prorrogação no horário estipulado para o término do evento, sendo que, caso ocorra a insistência e descumprimento por parte do(a) CONTRATANTE ou seus convidados, será cobrado uma taxa de R$ 150,00 (CENTO E CINQUENTA REAIS) para cada 15 (quinze) minutos.</strong></span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>5.&nbsp;&nbsp;&nbsp;&nbsp;ATRASOS - </strong>O evento iniciará no horário contratado, sendo que a CONTRATADA dará início aos serviços, independente da presença ou não do(a) CONTRATANTE ou do(a) aniversariante e demais convidados, não surtindo qualquer efeito no horário para encerramento do evento que se manterá inalterado.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>6.&nbsp;&nbsp;&nbsp;&nbsp;CONTROLE DE CONVIDADOS - </strong>O controle de presença será feito pela CONTRATADA no dia do evento, sendo que, havendo excesso na quantidade de pessoas presentes, além do estipulado no contrato, o(a) CONTRATANTE pagará a CONTRATADA a diferença de convidados imediatamente após o término do evento na forma à vista, por meio de dinheiro ou cartão de débito, assim abaixo estipulado:</span>
+        </p>
+        <ul>
+            <li>
+                <p style="text-align:justify;">
+                    <span>VALOR CONVIDADO EXTRA no dia da festa R$ 100,00 (cem reais);</span>
+                </p>
+            </li>
+            <li>
+                <p style="text-align:justify;">
+                    <span>VALOR CONVIDADO EXTRA 7 DIAS ANTES R$ 75,00 (setenta e cinco reais) (CARDÁPIO BARULHO), R$ 85 (oitenta e cinco reais) (CARDÁPIO DIVERSÃO) e R$ 50 (cinquenta reais) (CARDAPIO DA FELICIDADE) sendo o valor total calculado no momento do pagamento.&nbsp;</span>
+                </p>
+            </li>
+        </ul>
+        <p style="text-align:justify;">
+            <span>Parágrafo único: Caso o pagamento não seja efetuado concomitante ao término da festa, haverá um acréscimo de 10% no valor total de todos os excedentes.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>7.&nbsp;&nbsp;&nbsp;&nbsp;EXCESSO DE CONVIDADOS - </strong>O cardápio foi elaborado de acordo com o número de convidados determinados pelo(a) CONTRATANTE e de acordo com as solicitações deste(a). Portanto, a CONTRATADA não será responsabilizada se, atendidas as especificações contratadas, a insuficiência da comida e/ou da bebida resultar da entrada de numero maior do que até 15% (quinze por cento) ao previsto de pessoas no evento.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>8.&nbsp;&nbsp;&nbsp;&nbsp;OBRIGAÇÕES DA CONTRATANTE - </strong>O(A) CONTRATANTE deverá fornecer a CONTRATADA todas as informações necessárias a realização adequada do serviço de buffet, devendo especificar fornecimento dos serviço e a forma como este deverá ser prestado.</span><br>
+            <span>OBS: quantidade de convidados, tema da festa, pessoas com dificuldade de locomoção, pessoas e crianças com síndromes atípicas.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>9.&nbsp;&nbsp;&nbsp;&nbsp;OBRIGAÇÕES DA CONTRATADA &nbsp;-</strong> É dever da CONTRATADA oferecer um serviço de buffet de acordo com as especificações do(a) CONTRATANTE, fornecendo produtos de alta qualidade, que deverão ser preparados e servidos dentro de rigorosas normas de higiene e limpeza e de acordo com o cardápio escolhido pelo(a) CONTRATANTE, cujas especificações, encontram-se em documento anexo ao presente contrato, passando a entregar-lhe.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;INADIMPLEMENTO -</strong> O(A) CONTRATANTE deverá efetuar o pagamento na forma e condições estabelecidas na clausula 2, sendo que, em caso de inadimplemento, deverá incidir sobre o valor do presente instrumento, multa pecuniária de 10% (dez por cento) juros mora de 1% (um por cento) ao mês, correção monetária e honorários advocaticios de 15% (quinze por cento) para as cobranças extrajudiciais, servindo o presente como título executivo extrajudicial.</span>
+        </p>    
+        <p style="text-align:justify;">
+            <span><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;DEVOLUÇÃO -</strong> Todos os utensílios, enfeites das mesas e outros objetos fornecidos, bem como moveis, brinquedos e demais itens das dependencias da CONTRATADA, deverão ser devolvidos em perfeito estado de conservação, sob pena de o(a) CONTRATANTE arcar com os respectivos valores de reposição.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>11.1.&nbsp;&nbsp;&nbsp;<strong> Fica o(a) CONTRATANTE obrigado(a) a indenizar a CONTRATADA no caso de quebra de brinquedos devido uso indevido e inadequado, devendo ressarcir a CONTRATADA pelo valor de um novo, ou a manutenção do mesmo, valor de manutenção R$ 150,00 + peça a ser trocada.</strong></span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>12.&nbsp;&nbsp;&nbsp;&nbsp;RESPONSABILIDADE - </strong>A CONTRATADA não responderá, de forma alguma, por qualquer ocorrência acidentária do(a) CONTRATANTE ou de seus convidados quanto a quedas ou outros acidentes nas dependências da CONTRATADA, restando ciente o(a) CONTRATANTE de que o local possui alavrá Municipal, autorização de funcionamento do Corpo de Bombeiros, funcionários treinados, além de haver indicações de segurança para prevenção de acidentes no local.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>13.&nbsp;&nbsp;&nbsp;&nbsp;REMARCAÇÃO - </strong>O evento, objeto deste contrato somente poderá ser remarcado para outra data, desde que seja de comum acordo entre as partes e respeitando a disponibilidade da CONTRATADA, mediante as seguintes situações e condições:</span><br>
+            <span>a)&nbsp;&nbsp;&nbsp;&nbsp;em caso de acidente ou doenças infectocontagiosas com o(a) CONTRATANTE, com o(a) aniversariante e até pessoas de parentesco na linha de sucessão de primeiro grau (mãe, pai, irmãos e avós), desde que os impossibilite de locomover-se no dia do evento, devendo tal fato ser devidamente comprovado por meio de atestado médico e documentos comprobatórios pertinentes. Acidentes que não impedem a locomoção, não são considerados com gravidade suficiente para a remarcação de datas.&nbsp;</span><br>
+            <span>b)&nbsp;&nbsp;&nbsp;&nbsp;em caso de morte do(a) CONTRATANTE, com o(a) aniversariante e até pessoas de parentesco na linha de sucessão de primeiro grau (mãe, pai, irmãos e avós), mediante apresentação do documento comprobatório do óbito, sendo que neste caso, somente serão considerados os pedidos de remarcação se, o óbito ocorreu no máximo até 30 (trinta) dias anteriores ao avento.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>13.1.&nbsp;&nbsp;&nbsp;&nbsp;Nos casos previsto nas alíneas <i><u>a</u></i> e <i><u>b</u></i> será permitida uma única remarcação de data do evento, sendo que o prazo máximo será de 12 (doze) meses contados da data do pedido de remarcação.</span><br>
+            <span>Parágrafo Primeiro - o contrato em vigor não se interrompe, de forma que os pagamentos dos valores deverão ser rigorosamente quitados nas datas aprazadas pelo(a) CONTRATANTE.</span><br>
+            <span>Parágrafo Segundo - nos casos em que não haja culpa por parte da CONTRATADA para remarcação da data, fica o(a) CONTRATANTE responsável pelo pagamento da eventual diferença entre os valores dos serviços contratados inicialmente e os valores da tabela de preços à época da prestação dos serviços.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>13.2.&nbsp;&nbsp;&nbsp;&nbsp;A CONTRATADA se exime de qualquer responsabilidade por casos fortuitos ou força maior ocorridos anteriormente ou durante a execução do evento e que lhe impeça a prestação do serviço a contento, designadamente no caso de falta de energia, quebra de brinquedos ou outras situações que lhe obste de cumprir as obrigações assumidas neste contrato.</span><br>
+            <span>Parágrafo único - havendo remarcação do evento pelos motivos descritos na clausula 12.2. o(a) CONTRATANTE fará jus a um novo evento caso não tenha transcorrido 50% (cinquenta por cento) do tempo previsto.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>14.&nbsp;&nbsp;&nbsp;&nbsp;RESCISÃO - </strong>O presente contrato poder ser rescindido pelo seguintes motivos:</span><br>
+            <span>a)&nbsp;&nbsp;&nbsp;&nbsp;em caso de morte do(a) CONTRATANTE ou do aniversariante, madiante a apresentação da devida certidão de óbito, sendo que a CONTRATADA efetuará a devolução do equivalente a 70% (setenta por cento) do valor contrato, caso o mesmo já tenha sido pago em sua integralidade, ou da soma dos valores pagos até então, no prazo de até 90 (noventa) dias apos a comunicação oficial e apresentação dos documentos comprobatórios do falecimento.</span><br>
+            <span>b)&nbsp;&nbsp;&nbsp;&nbsp;Pela falta de pagamento dos serviços ora contratados.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>15.&nbsp;&nbsp;&nbsp;&nbsp;DESISTÊNCIA - </strong>O(A) CONTRATANTE poderá rescindir o presente contrato unilateralmente desde que observado os seguintes critérios:</span><br>
+            <span>a)&nbsp;&nbsp;&nbsp;&nbsp;o(a) CONTRATANTE deverá notificar por escrito a sua desistência no prazo antecedente de 60 (sessenta) dias para a data do evento;</span><br>
+            <span>b)&nbsp;&nbsp;&nbsp;&nbsp;não serão aceitas as notificações de rescisão unilateral após o prazo mencionado na alínea <i><u>a</u></i>, salvo as exceções prevista na cláusula 13;</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>15.1.&nbsp;&nbsp;&nbsp;&nbsp;Realizada a rescisão unilateral a pedido da CONTRATANTE e respeitado o prazo de notificação acima, a CONTRATADA fará a retenção de 30% (trinta por cento) do valor quitado a título de indenização por perdas e danos, e o saldo será depositado na conta indicada pelo CONTRATANTE no prazo de 90 (noventa) dias.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>15.2.&nbsp;&nbsp;&nbsp;&nbsp;Negada a rescisão unilateral pela CONTRATADA, e a CONTRATANTE não comparecer no dia, local e hora do evento, não serão devidos nenhum valor a CONTRATANTE &nbsp;a título de devolução ou reembolso.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;EXCLUI-SE DO PRESENTE CONTRATO -</strong> não estão incluídos toalhas de mesa, balões, &nbsp;flores &nbsp;naturais, &nbsp;doce &nbsp;personalizado, &nbsp;papelaria personalizada e esculturas os itens mencionados são vendidos como adicionais. Caso queira uma decoração nova que não consta em nossa lista, consultar valor que pode variar de R$ 250,00 à R$ 2.500,00 dependendo do tema.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>17.&nbsp;&nbsp;&nbsp;&nbsp;NÃO É PERMITIDO - </strong>trazer chopp de fora, cooler com bebidas como: &nbsp;whisky, vinho, e destilados em geral.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>18.&nbsp;&nbsp;&nbsp;&nbsp;CORTESIAS:</strong></span><br>
+            <span>- Decoração do Buffet, CONSULTAR LISTA DE TEMAS DISPONIVEIS, (incluso mesa, painel, bolo cenográfico, bandejas, personagens no tema escolhido de acordo com a lista de temas disponíveis)</span><br>
+            <span>- 20 (vinte) lembrancinhas para as crianças (kit amarelinha). As lembrancinhas extras será cobrado o valor de R$3,00 (três reais) a unidade, e deverá ser solicitada pelo(a) CONTRATANTE com antecedência de 3(três) dias da data do evento.</span><br>
+            <span>- Convites para Pai, mãe e aniversariantes em qualquer cardápio;&nbsp;</span><br>
+            <span>- 15 (quinze) crianças de 1 a 8 anos nos CARDÁPIOS FESTA DO BARULHO E DIVERSÃO.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>Parágrafo único: <strong><u>As crianças menores de 6 anos devem estar acompanhados de 1 adulto responsável (PAI OU MÃE).</u></strong></span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>19.&nbsp;&nbsp;&nbsp;&nbsp;FATORES EXTERNOS - </strong>O evento será realizado impreterivelmente no dia descrito neste contrato, independente de qualquer alteração climática, chuvas e outras intempéries do tempo, exceto nos casos de remarcação de data descritas nas clausulas acima, sendo que a CONTRATADA não se responsabiliza em hipótese alguma, nos casos em que o atraso do(a) CONTRATANTE ou do(a) aniversariante venha a provocar o cancelamento da festa, em decorrência de fatores externos ou culpa de terceiros.&nbsp;</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>20.&nbsp;&nbsp;&nbsp;&nbsp;IRREVOGABILIDADE E IRRETRATABILIDADE -</strong> O presente contrato é feito em caráter irrevogável e irretratável, obrigando as partes seu herdeiro e sucessores.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>21.&nbsp;&nbsp;&nbsp;&nbsp;DA OBSERVÂNCIA À LGPD - </strong>O(A) CONTRATANTE declara expresso CONSENTIMENTO que o CONTRATADO irá coletar, tratar e compartilhar os dados necessários ao cumprimento do contrato, nos termos do Art. 7º, inc. V da LGPD, os dados necessários para cumprimento de obrigações legais, nos termos do Art. 7º, inc. II da LGPD, bem como os dados, se necessários para proteção ao crédito, conforme autorizado pelo Art. 7º, inc. V da LGPD. Outros dados poderão ser coletados, conforme termo de consentimento específico.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>22.&nbsp;&nbsp;&nbsp;&nbsp;DAS DISPOSIÇÕES GERAIS&nbsp;</strong></span>
+        </p>
+        <p style="text-align:justify;">
+            <span>22.1.&nbsp;&nbsp;&nbsp;&nbsp;A tolerância, por qualquer das partes, com relação ao descumprimento de qualquer termo ou condição aqui ajustado, não será considerada como desistência em exigir o cumprimento de disposição nele contida, nem representará novação com relação à obrigação passada, presente ou futura, no tocante ao termo ou condição cujo descumprimento foi tolerado.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>22.2.&nbsp;&nbsp;&nbsp;&nbsp;A CONTRATADA não se responsabiliza por danos, furtos ou outras ocorrências relacionadas com quaisquer veículos estacionados na via pública, bem assim por objetos, roupas e sapatos deixados no interior do estabelecimento.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>22.3 O CONTRATADO solicita a permissão de uso das imagens para a divulgação de seu trabalho em seu site, redes sociais e meios de comunicação por tempo indeterminado.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>( &nbsp; ) AUTORIZADO &nbsp; &nbsp;( &nbsp; &nbsp;) NÃO AUTORIZO</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>22.4 <strong>O ingresso do (a) ANIVERSARIANTE, PAI, MÃE E IRMÃOS somente será liberado 15( quinze) MINUTOS ANTES &nbsp;do início da festa e os demais convidados SOMENTE NO HORÁRIO DA FESTA. Antes &nbsp;disso a porta de entrada permanecerá trancada e os funcionários estarão preparando o local para a realização do evento.</strong></span>
+        </p>
+        <p style="text-align:justify;">
+            <span><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;DA ASSINATURA DIGITAL - </strong>As partes, inclusive suas testemunhas, reconhecem a forma de contratação/assinatura por meios eletrônicos, digitais e informáticos como válida e plenamente eficaz, constituindo título executivo extrajudicial para todos os fins de direito, ainda que seja estabelecida com assinatura eletrônica ou certificação fora dos padrões ICPBRASIL, conforme disposto pelo art. 10 da Medida Provisória nº 2.200/2001 em vigor no Brasil.</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>&nbsp;</span>
+        </p>
+        <p>
+            <span><strong>Jundiaí, 14/07/2025.</strong></span>
+        </p>
+        <p style="text-align:justify;">
+            <span>&nbsp;</span>
+        </p>
+        <p style="text-align:justify;">
+            <span>&nbsp;</span>
+        </p>
+        <figure class="table" style="float:left;width:500px;">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>__________________________________________</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;"><strong>&nbsp;________________________________________</strong></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>CONTRATANTE</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;"><strong>CONTRATADA</strong></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="font-size:12px;"><strong>${signatureHtmlProps.name}</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;"><strong>KARIN PATRICIA ARAUJO ALECRIM</strong></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+    </div>
   `;
 }
