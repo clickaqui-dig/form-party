@@ -41,7 +41,7 @@ interface Installments {
     id: number;
     valor: string;
     meioPagamento: string;
-    dataPagamentos: string;
+    dataPagamento: string;
     recebido: boolean;
     observacoes?: string;
 }
@@ -121,7 +121,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             (p, idx) => `
           <tr>
             <td><span style="font-size:12px;">${idx + 1}</span></td>
-            <td><span style="font-size:12px;">${brDate(p.dataPagamentos)}</span></td>
+            <td><span style="font-size:12px;">${brDate(p.dataPagamento)}</span></td>
             <td><span style="font-size:12px;">${p.meioPagamento}</span></td>
             <td><span style="font-size:12px;">${p.recebido ? 'Sim' : 'Não'}</span></td>
             <td><span style="font-size:12px;">${p.valor}</span></td>
