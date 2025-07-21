@@ -2,12 +2,12 @@ import { formatBr } from "./utils/formatBr";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface OneHtmlProps {
-    header : HeaderHtmlProps;
-    contractItem : ContractItemHtmlProps[];
-    valueHtml : ValuesHtmlProps;
-    installments : Installments[];
-    clauseHtmlProps : ClauseHtmlProps;
-    signatureHtmlProps : SignatureHtmlProps;
+    header: HeaderHtmlProps;
+    contractItem: ContractItemHtmlProps[];
+    valueHtml: ValuesHtmlProps;
+    installments: Installments[];
+    clauseHtmlProps: ClauseHtmlProps;
+    signatureHtmlProps: SignatureHtmlProps;
 }
 
 interface HeaderHtmlProps {
@@ -49,7 +49,7 @@ interface Installments {
 interface ClauseHtmlProps {
     birthday: any[];
     installments: Installments[]
-    temas : any[];
+    temas: any[];
 }
 
 interface SignatureHtmlProps {
@@ -86,7 +86,7 @@ const formatBrl = (v: number) =>
     }).format(v);
 
 
-export const initialHtml = ({header,contractItem, valueHtml , installments, clauseHtmlProps, signatureHtmlProps}: OneHtmlProps) => {
+export const initialHtml = ({ header, contractItem, valueHtml, installments, clauseHtmlProps, signatureHtmlProps }: OneHtmlProps) => {
     // ----------- header
     const address = `${header.street} ${header.number} - CEP ${header.cep} na cidade de ${header.city}-${header.state}`;
 
@@ -114,7 +114,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
 
     const total = contractItem.reduce((s, it) => s + it.valor, 0);
 
-    
+
     // ----------- installments
     const row = installments
         .map(
@@ -134,23 +134,31 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         style: 'currency',
         currency: 'BRL',
     }).format(totalInstallments);
-        
+
     // -------- clauseHtmlProps
-        const birthdayBoy = clauseHtmlProps.birthday.map((it: any) => {
-            return `
+    const birthdayBoy = clauseHtmlProps.birthday.map((it: any) => {
+        return `
                 <p>
-                    <span style="font-size:12px;">${it.nomeAniversariante} ${it.idadeNoEvento} anos</span>
+                    <span style="font-size:12px;">${it.nomeAniversariante} ${it.idade} anos</span>
                 </p>
             `
-        }).join('');
-    
-         const themaParty = clauseHtmlProps.temas.map((it: any) => {
-            return `
+    }).join('');
+
+    const themaParty = clauseHtmlProps.temas.map((it: any) => {
+        return `
                 <p>
                     <span style="font-size:12px;">${it.descricao} </span>
                 </p>
             `
-        }).join('');
+    }).join('');
+
+    const getCurrentDate = () => {
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const year = now.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
     return `
     <div style="width:100%">
@@ -212,8 +220,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                 </td>
                 <td>
                     <span><strong>${formatBr(
-                    total
-                    )}</strong></span>
+        total
+    )}</strong></span>
                 </td>
                 </tr>
             </tbody>
@@ -222,8 +230,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         <p>
             <span style="font-size:12px;"><strong>Valores</strong>:</span>
         </p>
-        <figure class="table" style="width:100%;">
-            <table style="width:100%; table-layout:fixed;">
+        <figure>
+            <table>
                 <tbody>
                     <tr>
                         <td>
@@ -231,8 +239,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         </td>
                         <td>
                             <span style="font-size:12px;">${formatBr(
-                            valueHtml.addition
-                            )}</span>
+        valueHtml.addition
+    )}</span>
                         </td>
                     </tr>
                     <tr>
@@ -241,8 +249,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         </td>
                         <td>
                             <span style="font-size:12px;">${formatBr(
-                            valueHtml.discount
-                            )}</span>
+        valueHtml.discount
+    )}</span>
                         </td>
                     </tr>
                     <tr>
@@ -251,8 +259,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         </td>
                         <td>
                             <span style="font-size:12px;">${formatBr(
-                            valueHtml.valor
-                            )}</span>
+        valueHtml.valor
+    )}</span>
                         </td>
                     </tr>
                     <tr>
@@ -261,8 +269,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         </td>
                         <td>
                             <span style="font-size:12px;">${formatBr(
-                            valueHtml.amountAlreadyPaid
-                            )}</span>
+        valueHtml.amountAlreadyPaid
+    )}</span>
                         </td>
                     </tr>
                     <tr>
@@ -271,8 +279,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         </td>
                         <td>
                             <span style="font-size:12px;">${formatBr(
-                            valueHtml.amountToPay
-                            )}</span>
+        valueHtml.amountToPay
+    )}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -290,10 +298,10 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             ${themaParty}
         </p>
         <p style="text-align:justify;">
-            <span><strong>2.&nbsp;DOS VALORES E PAGAMENTO -</strong> Pelos serviços prestados a CONTRATANTE pagará a CONTRATADA o valor de R$ ${formatBr( total)}, que deverá ser quitado conforme cronograma de pagamento abaixo:&nbsp;</span>
+            <span><strong>2.&nbsp;DOS VALORES E PAGAMENTO -</strong> Pelos serviços prestados a CONTRATANTE pagará a CONTRATADA o valor de R$ ${formatBr(total)}, que deverá ser quitado conforme cronograma de pagamento abaixo:&nbsp;</span>
         </p>
-        <figure class="table" style="width:100%;">
-            <table >
+        <figure>
+            <table>
                 <thead>
                     <tr>
                         <td>
@@ -317,11 +325,11 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                     ${row}
                     <tr>
                     <td colspan="4">
-                        <span style="font-size:12px;"><strong>Total</strong></span>
-                    </td>
-                    <td>
-                        <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
-                    </td>
+                            <span style="font-size:12px;"><strong>Total</strong></span>
+                        </td>
+                        <td>
+                            <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -416,7 +424,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>15.1.&nbsp;&nbsp;&nbsp;&nbsp;Realizada a rescisão unilateral a pedido da CONTRATANTE e respeitado o prazo de notificação acima, a CONTRATADA fará a retenção de 30% (trinta por cento) do valor quitado a título de indenização por perdas e danos, e o saldo será depositado na conta indicada pelo CONTRATANTE no prazo de 90 (noventa) dias.</span>
         </p>
         <p style="text-align:justify;">
-            <span>15.2.&nbsp;&nbsp;&nbsp;&nbsp;Negada a rescisão unilateral pela CONTRATADA, e a CONTRATANTE não comparecer no dia, local e hora do evento, não serão devidos nenhum valor a CONTRATANTE &nbsp;a título de devolução ou reembolso.</span>
+            <span>15.2.&nbsp;&nbsp;&nbsp;&nbsp;Negada a rescisão unilateral pela CONTRATADA, e a CONTRATANTE não comparecer no dia, local e hora do evento, não serão devidos nenhum valor a CONTRATANTE;a título de devolução ou reembolso.</span>
         </p>
         <p style="text-align:justify;">
             <span><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;EXCLUI-SE DO PRESENTE CONTRATO -</strong> não estão incluídos toalhas de mesa, balões, &nbsp;flores &nbsp;naturais, &nbsp;doce &nbsp;personalizado, &nbsp;papelaria personalizada e esculturas os itens mencionados são vendidos como adicionais. Caso queira uma decoração nova que não consta em nossa lista, consultar valor que pode variar de R$ 250,00 à R$ 2.500,00 dependendo do tema.</span>
@@ -468,7 +476,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>&nbsp;</span>
         </p>
         <p>
-            <span><strong>Jundiaí, 14/07/2025.</strong></span>
+            <span><strong>Jundiaí, ${getCurrentDate()}.</strong></span>
         </p>
         <p style="text-align:justify;">
             <span>&nbsp;</span>
@@ -476,36 +484,18 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         <p style="text-align:justify;">
             <span>&nbsp;</span>
         </p>
-        <figure class="table" style="float:left;width:500px;">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span style="font-size:12px;"><strong>__________________________________________</strong></span>
-                        </td>
-                        <td>
-                            <span style="font-size:12px;"><strong>&nbsp;________________________________________</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span style="font-size:12px;"><strong>CONTRATANTE</strong></span>
-                        </td>
-                        <td>
-                            <span style="font-size:12px;"><strong>CONTRATADA</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span style="font-size:12px;"><strong>${signatureHtmlProps.name}</strong></span>
-                        </td>
-                        <td>
-                            <span style="font-size:12px;"><strong>KARIN PATRICIA ARAUJO ALECRIM</strong></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </figure>
+
+                    <p>
+                        <strong style="font-size:12px;">__________________________________________</strong><br>
+                        <p style="font-size:8px; white-space: nowrap; word-spacing: normal;"> ${signatureHtmlProps.name}</p>
+                        <p style="font-size:8px; white-space: nowrap; word-spacing: normal;"> Contratante</p>
+                    </p>
+                    <p>
+                        <strong style="font-size:12px;">__________________________________________</strong><br>
+                        <p style="font-size:8px;">KARIN &nbsp PATRICIA &nbsp ARAUJO &nbsp ALECRIM</p>
+                        <p style="font-size:8px; white-space: nowrap; word-spacing: normal;"> Contratada</p>
+                    </p>
+
     </div>
   `;
 }
