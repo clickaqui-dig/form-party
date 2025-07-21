@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { format, parseISO } from "date-fns";
 import { formatBr } from "./utils/formatBr";
+import { ptBR } from "date-fns/locale";
 
 interface OneHtmlProps {
-    header : HeaderHtmlProps;
-    contractItem : ContractItemHtmlProps[];
-    valueHtml : ValuesHtmlProps;
-    installments : Installments[];
-    clauseHtmlProps : ClauseHtmlProps;
-    signatureHtmlProps : SignatureHtmlProps;
+    header: HeaderHtmlProps;
+    contractItem: ContractItemHtmlProps[];
+    valueHtml: ValuesHtmlProps;
+    installments: Installments[];
+    clauseHtmlProps: ClauseHtmlProps;
+    signatureHtmlProps: SignatureHtmlProps;
 }
 
 interface HeaderHtmlProps {
@@ -49,7 +51,7 @@ interface Installments {
 interface ClauseHtmlProps {
     birthday: any[];
     installments: Installments[]
-    temas : any[];
+    temas: any[];
 }
 
 interface SignatureHtmlProps {
@@ -87,7 +89,7 @@ const formatBrl = (v: number) =>
 
 const numCss = 'font-size:12px; white-space:nowrap; display:block; text-align:right;';
 
-export const initialHtml = ({header,contractItem, valueHtml , installments, clauseHtmlProps, signatureHtmlProps}: OneHtmlProps) => {
+export const initialHtml = ({ header, contractItem, valueHtml, installments, clauseHtmlProps, signatureHtmlProps }: OneHtmlProps) => {
     // ----------- header
     const address = `${header.street} ${header.number} - CEP ${header.cep} na cidade de ${header.city}-${header.state}`;
 
@@ -137,10 +139,10 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
     }).format(totalInstallments);
 
     // -------- clauseHtmlProps
-        const birthdayBoy = clauseHtmlProps.birthday.map((it: any) => {
-            return `
+    const birthdayBoy = clauseHtmlProps.birthday.map((it: any) => {
+        return `
                 <p>
-                    <span style="font-size:12px;">${it.nomeAniversariante} ${it.idadeNoEvento} anos</span>
+                    <span style="font-size:12px;">${it.nomeAniversariante} ${it.idade} anos</span>
                 </p>
             `
         }).join('');
@@ -151,7 +153,15 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                     <span style="font-size:12px;">${it.descricao} </span>
                 </p>
             `
-        }).join('');
+    }).join('');
+
+    const getCurrentDate = () => {
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const year = now.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
 
     return `
     <div style="width:100%">
@@ -212,8 +222,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                 </td>
                 <td>
                     <span><strong>${formatBr(
-                    total
-                    )}</strong></span>
+        total
+    )}</strong></span>
                 </td>
                 </tr>
             </tbody>
@@ -288,7 +298,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             ${themaParty}
         </p>
         <p style="text-align:justify;">
-            <span><strong>2.&nbsp;DOS VALORES E PAGAMENTO -</strong> Pelos serviços prestados a CONTRATANTE pagará a CONTRATADA o valor de R$ ${formatBr( total)}, que deverá ser quitado conforme cronograma de pagamento abaixo:&nbsp;</span>
+            <span><strong>2.&nbsp;DOS VALORES E PAGAMENTO -</strong> Pelos serviços prestados a CONTRATANTE pagará a CONTRATADA o valor de R$ ${formatBr(total)}, que deverá ser quitado conforme cronograma de pagamento abaixo:&nbsp;</span>
         </p>
         <table style="width:100%; border-collapse:collapse;">
                 <thead>
@@ -414,7 +424,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>15.1.&nbsp;&nbsp;&nbsp;&nbsp;Realizada a rescisão unilateral a pedido da CONTRATANTE e respeitado o prazo de notificação acima, a CONTRATADA fará a retenção de 30% (trinta por cento) do valor quitado a título de indenização por perdas e danos, e o saldo será depositado na conta indicada pelo CONTRATANTE no prazo de 90 (noventa) dias.</span>
         </p>
         <p style="text-align:justify;">
-            <span>15.2.&nbsp;&nbsp;&nbsp;&nbsp;Negada a rescisão unilateral pela CONTRATADA, e a CONTRATANTE não comparecer no dia, local e hora do evento, não serão devidos nenhum valor a CONTRATANTE &nbsp;a título de devolução ou reembolso.</span>
+            <span>15.2.&nbsp;&nbsp;&nbsp;&nbsp;Negada a rescisão unilateral pela CONTRATADA, e a CONTRATANTE não comparecer no dia, local e hora do evento, não serão devidos nenhum valor a CONTRATANTE;a título de devolução ou reembolso.</span>
         </p>
         <p style="text-align:justify;">
             <span><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;EXCLUI-SE DO PRESENTE CONTRATO -</strong> não estão incluídos toalhas de mesa, balões, &nbsp;flores &nbsp;naturais, &nbsp;doce &nbsp;personalizado, &nbsp;papelaria personalizada e esculturas os itens mencionados são vendidos como adicionais. Caso queira uma decoração nova que não consta em nossa lista, consultar valor que pode variar de R$ 250,00 à R$ 2.500,00 dependendo do tema.</span>
@@ -469,7 +479,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         </p>
 
         <p>
-            <span><strong>Jundiaí, 14/07/2025.</strong></span>
+            <span><strong>Jundiaí, ${getCurrentDate()}.</strong></span>
         </p>
 
 

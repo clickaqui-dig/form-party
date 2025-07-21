@@ -6,8 +6,15 @@ import { useCallback, useEffect, useState } from "react";
 import jsPDF from 'jspdf';
 import { useFormikContext } from "formik";
 import { sendMessageWhatsapp } from "@/services/whatsapp/whatsappApi";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { toast } from "react-toastify";
 
 const marginX = 20;
+
+const formatDate = (value: string) => {
+  return format(parseISO(value), 'dd/MM/yyyy', { locale: ptBR })
+}
 
 function useLogo() {
     const [logo, setLogo] = useState<string | null>(null);
@@ -30,10 +37,15 @@ interface OptionsEditComponentProps {
 
 export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps) => {
     const [editor] = useLexicalComposerContext();
+  const [dateTime, setDateTime] = useState('');
     const logo = useLogo();
     const { values } = useFormikContext<any>();
 
     const handleExport = useCallback(async () => {
+        if(!dateTime){
+          toast.warn('Informe a data do documento!');
+        }
+
         const html = await editor.getEditorState().read(() =>
             $generateHtmlFromNodes(editor, null)
         );
@@ -85,7 +97,6 @@ export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps)
                 </table>
             </div>
             `;
-        console.log(newHtml)
         await doc.html(newHtml, {
             margin: [70, 30, 30, 50],
             autoPaging: 'text',
@@ -117,14 +128,14 @@ export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps)
             doc.text(`Página ${i} `, width / 2, height - 10, {
                 align: 'center'
             });
-            doc.text(new Date().toLocaleDateString('pt-BR'),
+            doc.text(formatDate(dateTime),
                 width - marginX,
                 height - 8,
                 { align: 'right' })
         }
 
         doc.save(`Contrato_${id}_${nameDoc.trim()}.pdf`);
-    }, [editor, id, logo, nameDoc]);
+    }, [editor, id, logo, nameDoc,dateTime, values]);
 
     const handleSendWhatsapp = () => {
         sendMessageWhatsapp(values);
@@ -139,6 +150,8 @@ export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps)
                     </Label>
                     <input
                         type="date"
+                        value={dateTime}
+                        onChange={(e) => setDateTime(e.target.value)}
                         className="dark:text-white w-full px-3 py-2 border rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
                     />
                 </div>
