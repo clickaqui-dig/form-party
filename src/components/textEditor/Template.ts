@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { formatBr } from "./utils/formatBr";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 interface OneHtmlProps {
     header : HeaderHtmlProps;
     contractItem : ContractItemHtmlProps[];
@@ -85,6 +85,7 @@ const formatBrl = (v: number) =>
         minimumFractionDigits: 2,
     }).format(v);
 
+const numCss = 'font-size:12px; white-space:nowrap; display:block; text-align:right;';
 
 export const initialHtml = ({header,contractItem, valueHtml , installments, clauseHtmlProps, signatureHtmlProps}: OneHtmlProps) => {
     // ----------- header
@@ -114,7 +115,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
 
     const total = contractItem.reduce((s, it) => s + it.valor, 0);
 
-    
+
     // ----------- installments
     const row = installments
         .map(
@@ -124,7 +125,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <td><span style="font-size:12px;">${brDate(p.dataPagamento)}</span></td>
             <td><span style="font-size:12px;">${p.meioPagamento}</span></td>
             <td><span style="font-size:12px;">${p.recebido ? 'Sim' : 'Não'}</span></td>
-            <td><span style="font-size:12px;">${p.valor}</span></td>
+            <td style="text-align:right;"><span style="${numCss}">${p.valor}</span></td>
           </tr>`
         )
         .join('');
@@ -134,7 +135,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         style: 'currency',
         currency: 'BRL',
     }).format(totalInstallments);
-        
+
     // -------- clauseHtmlProps
         const birthdayBoy = clauseHtmlProps.birthday.map((it: any) => {
             return `
@@ -143,7 +144,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                 </p>
             `
         }).join('');
-    
+
          const themaParty = clauseHtmlProps.temas.map((it: any) => {
             return `
                 <p>
@@ -174,16 +175,16 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>&nbsp;</span>
         </p>
         <p style="text-align:center">
-            <span><strong>CONDIÇÕES GERAIS</strong></span>  
+            <span><strong>CONDIÇÕES GERAIS</strong></span>
         </p>
         <p style="text-align:justify;">
             <span>&nbsp;</span>
         </p>
         <p>
             <span>
-                <strong>1.&nbsp;&nbsp;OBJETO -</strong> O Presente contrato destina-se à prestação de serviços 
-                de buffet pela CONTRATADA e em sua sede, reservando os referidos serviços para o 
-                <strong>dia ${dateSpan}</strong>,bem como demais serviços descritos na planilha abaixo, 
+                <strong>1.&nbsp;&nbsp;OBJETO -</strong> O Presente contrato destina-se à prestação de serviços
+                de buffet pela CONTRATADA e em sua sede, reservando os referidos serviços para o
+                <strong>dia ${dateSpan}</strong>,bem como demais serviços descritos na planilha abaixo,
                 em favor do(a) <strong>CONTRATANTE</strong>.&nbsp;
             </span>
             <br>
@@ -191,19 +192,18 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         <p>
             <span><strong>Itens do contrato</strong>:</span><br>
         </p>
-        <figure>
-            <table>
+        <table style="width:100%; border-collapse:collapse;">
             <thead>
                 <tr>
                     <td>
                         <span><strong>Descricao</strong></span>
-                    </td>                
+                    </td>
                     <td>
                         <span><strong>Valor</strong></span>
                     </td>
                 </tr>
             </thead>
-    
+
             <tbody>
                 ${linhas}
                 <tr>
@@ -218,19 +218,17 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                 </tr>
             </tbody>
             </table>
-        </figure>
         <p>
             <span style="font-size:12px;"><strong>Valores</strong>:</span>
         </p>
-        <figure class="table" style="width:100%;">
-            <table style="width:100%; table-layout:fixed;">
+            <table style="width:100%; border-collapse:collapse;">
                 <tbody>
                     <tr>
                         <td>
                             <span style="font-size:12px;"><strong>NO Acréscimo</strong></span>
                         </td>
-                        <td>
-                            <span style="font-size:12px;">${formatBr(
+                        <td style="text-align:right;">
+                            <span style="${numCss}">${formatBr(
                             valueHtml.addition
                             )}</span>
                         </td>
@@ -239,8 +237,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         <td>
                             <span style="font-size:12px;"><strong>Desconto</strong></span>
                         </td>
-                        <td>
-                            <span style="font-size:12px;">${formatBr(
+                        <td style="text-align:right;">
+                            <span style="${numCss}">${formatBr(
                             valueHtml.discount
                             )}</span>
                         </td>
@@ -249,8 +247,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         <td>
                             <span style="font-size:12px;"><strong>Total</strong></span>
                         </td>
-                        <td>
-                            <span style="font-size:12px;">${formatBr(
+                        <td style="text-align:right;">
+                            <span style="${numCss}">${formatBr(
                             valueHtml.valor
                             )}</span>
                         </td>
@@ -259,8 +257,8 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         <td>
                             <span style="font-size:12px;"><strong>Valor já pago</strong></span>
                         </td>
-                        <td>
-                            <span style="font-size:12px;">${formatBr(
+                        <td style="text-align:right;">
+                            <span style="${numCss}">${formatBr(
                             valueHtml.amountAlreadyPaid
                             )}</span>
                         </td>
@@ -269,15 +267,15 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                         <td>
                             <span style="font-size:12px;"><strong>Valor a pagar</strong></span>
                         </td>
-                        <td>
-                            <span style="font-size:12px;">${formatBr(
+                        <td style="text-align:right;">
+                            <span style="${numCss}">${formatBr(
                             valueHtml.amountToPay
                             )}</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-        </figure>
+
         <p>
             CHAVE PIX: CNPJ 31774785000183
         </p>
@@ -292,8 +290,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         <p style="text-align:justify;">
             <span><strong>2.&nbsp;DOS VALORES E PAGAMENTO -</strong> Pelos serviços prestados a CONTRATANTE pagará a CONTRATADA o valor de R$ ${formatBr( total)}, que deverá ser quitado conforme cronograma de pagamento abaixo:&nbsp;</span>
         </p>
-        <figure class="table" style="width:100%;">
-            <table >
+        <table style="width:100%; border-collapse:collapse;">
                 <thead>
                     <tr>
                         <td>
@@ -306,9 +303,9 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                             <span><strong>Meio pagamento</strong></span>
                         </td>
                         <td>
-                            <span><strong>Pago?</span>
+                            <span><strong>Pago?</strong></span>
                         </td>
-                        <td>
+                        <td style="text-align:right;">
                             <span><strong>Valor</strong></span>
                         </td>
                     </tr>
@@ -319,13 +316,12 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                     <td colspan="4">
                         <span style="font-size:12px;"><strong>Total</strong></span>
                     </td>
-                    <td>
-                        <span style="font-size:12px;"><strong>${totalFmt}</strong></span>
+                    <td style="text-align:right;">
+                        <span style="${numCss}"><strong>${totalFmt}</strong></span>
                     </td>
                     </tr>
                 </tbody>
             </table>
-        </figure>
         <p style="text-align:justify;">
             <span>2.1.&nbsp;&nbsp;&nbsp;&nbsp;O pagamento poderá ser realizado por meio de cartão de crédito em até 4X, salvo promoção realizada pela CONTRATADA por determinado, ou transferência bancária para a conta da CONTRATADA conforme convencionado no contrato e aqui descrito: CHAVE PIX: CNPJ 31774785000183.</span>
         </p>
@@ -363,6 +359,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
                 </p>
             </li>
         </ul>
+
         <p style="text-align:justify;">
             <span>Parágrafo único: Caso o pagamento não seja efetuado concomitante ao término da festa, haverá um acréscimo de 10% no valor total de todos os excedentes.</span>
         </p>
@@ -378,7 +375,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         </p>
         <p style="text-align:justify;">
             <span><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;INADIMPLEMENTO -</strong> O(A) CONTRATANTE deverá efetuar o pagamento na forma e condições estabelecidas na clausula 2, sendo que, em caso de inadimplemento, deverá incidir sobre o valor do presente instrumento, multa pecuniária de 10% (dez por cento) juros mora de 1% (um por cento) ao mês, correção monetária e honorários advocaticios de 15% (quinze por cento) para as cobranças extrajudiciais, servindo o presente como título executivo extrajudicial.</span>
-        </p>    
+        </p>
         <p style="text-align:justify;">
             <span><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;DEVOLUÇÃO -</strong> Todos os utensílios, enfeites das mesas e outros objetos fornecidos, bem como moveis, brinquedos e demais itens das dependencias da CONTRATADA, deverão ser devolvidos em perfeito estado de conservação, sob pena de o(a) CONTRATANTE arcar com os respectivos valores de reposição.</span>
         </p>
@@ -412,6 +409,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>a)&nbsp;&nbsp;&nbsp;&nbsp;o(a) CONTRATANTE deverá notificar por escrito a sua desistência no prazo antecedente de 60 (sessenta) dias para a data do evento;</span><br>
             <span>b)&nbsp;&nbsp;&nbsp;&nbsp;não serão aceitas as notificações de rescisão unilateral após o prazo mencionado na alínea <i><u>a</u></i>, salvo as exceções prevista na cláusula 13;</span>
         </p>
+
         <p style="text-align:justify;">
             <span>15.1.&nbsp;&nbsp;&nbsp;&nbsp;Realizada a rescisão unilateral a pedido da CONTRATANTE e respeitado o prazo de notificação acima, a CONTRATADA fará a retenção de 30% (trinta por cento) do valor quitado a título de indenização por perdas e danos, e o saldo será depositado na conta indicada pelo CONTRATANTE no prazo de 90 (noventa) dias.</span>
         </p>
@@ -431,6 +429,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>- Convites para Pai, mãe e aniversariantes em qualquer cardápio;&nbsp;</span><br>
             <span>- 15 (quinze) crianças de 1 a 8 anos nos CARDÁPIOS FESTA DO BARULHO E DIVERSÃO.</span>
         </p>
+
         <p style="text-align:justify;">
             <span>Parágrafo único: <strong><u>As crianças menores de 6 anos devem estar acompanhados de 1 adulto responsável (PAI OU MÃE).</u></strong></span>
         </p>
@@ -452,6 +451,7 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
         <p style="text-align:justify;">
             <span>22.2.&nbsp;&nbsp;&nbsp;&nbsp;A CONTRATADA não se responsabiliza por danos, furtos ou outras ocorrências relacionadas com quaisquer veículos estacionados na via pública, bem assim por objetos, roupas e sapatos deixados no interior do estabelecimento.</span>
         </p>
+
         <p style="text-align:justify;">
             <span>22.3 O CONTRATADO solicita a permissão de uso das imagens para a divulgação de seu trabalho em seu site, redes sociais e meios de comunicação por tempo indeterminado.</span>
         </p>
@@ -462,50 +462,17 @@ export const initialHtml = ({header,contractItem, valueHtml , installments, clau
             <span>22.4 <strong>O ingresso do (a) ANIVERSARIANTE, PAI, MÃE E IRMÃOS somente será liberado 15( quinze) MINUTOS ANTES &nbsp;do início da festa e os demais convidados SOMENTE NO HORÁRIO DA FESTA. Antes &nbsp;disso a porta de entrada permanecerá trancada e os funcionários estarão preparando o local para a realização do evento.</strong></span>
         </p>
         <p style="text-align:justify;">
-            <span><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;DA ASSINATURA DIGITAL - </strong>As partes, inclusive suas testemunhas, reconhecem a forma de contratação/assinatura por meios eletrônicos, digitais e informáticos como válida e plenamente eficaz, constituindo título executivo extrajudicial para todos os fins de direito, ainda que seja estabelecida com assinatura eletrônica ou certificação fora dos padrões ICPBRASIL, conforme disposto pelo art. 10 da Medida Provisória nº 2.200/2001 em vigor no Brasil.</span>
+            <span>
+            <strong>23.&nbsp;DA ASSINATURA DIGITAL - </strong>
+            As partes, inclusive suas testemunhas, reconhecem a forma de contratação/assinatura por meios eletrônicos, digitais e informáticos como válida e plenamente eficaz, constituindo título executivo extrajudicial para todos os fins de direito, ainda que seja estabelecida com assinatura eletrônica ou certificação fora dos padrões ICPBRASIL, conforme disposto pelo art. 10 da Medida Provisória nº 2.200/2001 em vigor no Brasil.
+            </span>
         </p>
-        <p style="text-align:justify;">
-            <span>&nbsp;</span>
-        </p>
+
         <p>
             <span><strong>Jundiaí, 14/07/2025.</strong></span>
         </p>
-        <p style="text-align:justify;">
-            <span>&nbsp;</span>
-        </p>
-        <p style="text-align:justify;">
-            <span>&nbsp;</span>
-        </p>
-        <figure class="table" style="float:left;width:500px;">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span style="font-size:12px;"><strong>__________________________________________</strong></span>
-                        </td>
-                        <td>
-                            <span style="font-size:12px;"><strong>&nbsp;________________________________________</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span style="font-size:12px;"><strong>CONTRATANTE</strong></span>
-                        </td>
-                        <td>
-                            <span style="font-size:12px;"><strong>CONTRATADA</strong></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span style="font-size:12px;"><strong>${signatureHtmlProps.name}</strong></span>
-                        </td>
-                        <td>
-                            <span style="font-size:12px;"><strong>KARIN PATRICIA ARAUJO ALECRIM</strong></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </figure>
+
+
     </div>
   `;
 }

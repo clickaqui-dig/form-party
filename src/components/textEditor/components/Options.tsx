@@ -45,8 +45,47 @@ export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps)
         const newHtml = `
             <div style="width:${PAGE_PX.w}px;box-sizing:border-box;">
                 ${html}
+                <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                <tr>
+                    <td>
+                     <span><strong>__________________________________</strong></span>
+                    </td>
+                    <td>
+                    <span><strong>__________________________________</strong></span>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                    <span style="font-size:14px;">
+                    <strong>CONTRATANTE</strong>
+                    </span>
+                    </td>
+                    <td>
+                    <span style="font-size:14px;">
+                    <strong>CONTRATADA</strong>
+                    </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <span style="font-size:14px;">
+                    <strong>${values.nomeCliente.toString()}</strong>
+                    </span>
+                    </td>
+                    <td>
+                    <span style="font-size:14px;">
+                    <strong>KARIN PATRICIA ARAUJO ALECRIM</strong>
+                    </span>
+                    </td>
+                </tr>
+                </tbody>
+                </table>
             </div>
             `;
+        console.log(newHtml)
         await doc.html(newHtml, {
             margin: [70, 30, 30, 50],
             autoPaging: 'text',
