@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { format, parseISO } from "date-fns";
 import { formatBr } from "./utils/formatBr";
-import { ptBR } from "date-fns/locale";
 
 interface OneHtmlProps {
     header: HeaderHtmlProps;
@@ -89,7 +87,7 @@ const formatBrl = (v: number) =>
 
 const numCss = 'font-size:12px; white-space:nowrap; display:block; text-align:right;';
 
-export const initialHtml = ({ header, contractItem, valueHtml, installments, clauseHtmlProps, signatureHtmlProps }: OneHtmlProps) => {
+export const initialHtml = ({ header, contractItem, valueHtml, installments, clauseHtmlProps }: OneHtmlProps) => {
     // ----------- header
     const address = `${header.street} ${header.number} - CEP ${header.cep} na cidade de ${header.city}-${header.state}`;
 

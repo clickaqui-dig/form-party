@@ -89,7 +89,7 @@ export const OptionsEditComponent = ({ id, nameDoc }: OptionsEditComponentProps)
                     </td>
                     <td>
                     <span style="font-size:14px;">
-                    <strong>KARIN PATRICIA ARAUJO ALECRIM</strong>
+                    <strong>KARIN &nbsp PATRICIA &nbsp ARAUJO &nbsp ALECRIM</strong>
                     </span>
                     </td>
                 </tr>

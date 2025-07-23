@@ -10,7 +10,7 @@ import { FC, useState } from "react";
 interface PaymentModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onAddItem: (item: { id: number, valor: number; meioPagamento: string, dataPagamento: string, recebido: boolean, observacoes: string }) => void;
+    onAddItem: (item: { id: number | null, valor: number; meioPagamento: string, dataPagamento: string, recebido: boolean, observacoes: string }) => void;
   }
 
 export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, onAddItem }) => {
@@ -42,7 +42,7 @@ export const PaymentsContractModal: FC<PaymentModalProps> = ({ isOpen, onClose, 
     const handleSubmit = (e: any) => {
         e.preventDefault();
         onAddItem({
-            id: Date.now(),
+            id: null,
             valor: unmaskCurrency(formData.valor),
             meioPagamento: formData.meioPagamento,
             dataPagamento: formData.dataPagamento,

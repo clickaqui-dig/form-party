@@ -14,7 +14,7 @@ import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 interface PaymentItem {
-    id: number;
+    id: number | null;
     valor: number;
     meioPagamento: string,
     dataPagamento: string,
@@ -55,7 +55,6 @@ export const PaymentsContract = () => {
 
     const handleAddPaymentItem = (newItem: PaymentItem) => {
         const newEntry = {
-            ...paymentsItems,
             id: newItem.id,
             valor: newItem.valor,
             meioPagamento: newItem.meioPagamento,
@@ -76,7 +75,7 @@ export const PaymentsContract = () => {
         }
     }
 
-    const handleSelectPayments = (id: number) => {
+    const handleSelectPayments = (id: any) => {
         setSelectedPayments((prev: any) =>
             prev.includes(id)
                 ? prev.filter((selectedId: any) => selectedId !== id)
@@ -259,7 +258,7 @@ export const PaymentsContract = () => {
                         <tfoot className="bg-gray-50 dark:bg-gray-700">
                             <tr>
                                 <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
-                                    Total: {maskCurrencyFromUnits(totalValue)}
+                                    Total: {maskCurrency(totalValue)}
                                 </td>
                             </tr>
                         </tfoot>

@@ -2,13 +2,23 @@
 import api from '@/config/apiConfig';
 import { Payments } from "@/models/Payments";
 
-export const postPayments = async (id: number, body: Payments[]): Promise<boolean> => {
-    try {
-        await api.post(`/pagamento/${id}`, body);
+export interface ResponsePayments {
+    id: number;
+    valor: number
+    meioPagamento: string
+    dataPagamento: string
+    recebido: boolean
+    observacoes: string
+    contratoId: number
+}
 
-        return true;
+export const postPayments = async (id: number, body: Payments[]): Promise<ResponsePayments[]> => {
+    try {
+        const payments : ResponsePayments[] = await api.post(`/pagamento/${id}`, body);
+
+        return payments;
     } catch (error: any) {
         console.log("Error ao cadasatrar pagamento: ", error);
-        return false;
+        return [];
     }
 } 
