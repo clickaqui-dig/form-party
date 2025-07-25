@@ -3,13 +3,13 @@
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { Formik } from "formik";
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { getContractById } from "@/services/contract/getContractById";
 import FormContract from "@/components/form/contract";
 import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
-import { postPayments } from "@/services/payments/postPayments";
+import { postPayments, ResponsePayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
 import { mapContractFormToRequest } from "@/models/Contract";
 
@@ -72,15 +72,16 @@ export default function PageEditCustomer() {
     const params = useParams();
     const id = params.id;
     const [contract, setInitialValues] = useState<any>(initialValues);
+    const router = useRouter();
 
     useEffect(() => {
         if (id) {
-            fetchCustomer(Number(id));
+            fetchContract(Number(id));
         }
 
     }, [id]);
 
-    const fetchCustomer = async (id: number) => {
+    const fetchContract = async (id: number) => {
         try {
             const response = await getContractById({ id });
             if (response) {
@@ -95,6 +96,7 @@ export default function PageEditCustomer() {
 
                 const mapPayments = response.pagamentos === undefined ? [] : response.pagamentos.map((item: any) => {
                     return {
+                        id: item.id,
                         valor: Number(item.valor).toFixed(2),
                         meioPagamento: validationTypePayments(item.meioPagamento),
                         dataPagamento: item.dataPagamento,
@@ -151,6 +153,7 @@ export default function PageEditCustomer() {
 
                 const mapPayments = values.pagamentos.map((item: any) => {
                     return {
+                        id: item.id < 0 ? null : item.id,
                         valor: unmaskCurrency(item.valor),
                         meioPagamento: validationTypePayments(item.meioPagamento),
                         dataPagamento: item.dataPagamento,
@@ -160,12 +163,13 @@ export default function PageEditCustomer() {
                     }
                 })
 
-                let responsePayments = false;
+                let responsePayments : ResponsePayments[] = [];
 
                 if (responsePutContract) {
-                    responsePayments = await postPayments(Number(id), mapPayments)
+                    responsePayments = await postPayments(Number(id), mapPayments);
                     if (responsePayments) {
                         toast.success("Contrato editado com sucesso !")
+                        router.push(`/edit-contract/${id}`);
                     } else {
                         toast.error("Erro ao cadsaatrar pagamento");
                     }
@@ -175,7 +179,6 @@ export default function PageEditCustomer() {
             }
         } catch (error: any) {
             console.log(error);
-            
             const messageErro = error ? error.response.data.error : 'Algo inesperado aconteceu em nosso sistema.'
             toast.error(messageErro);
         }

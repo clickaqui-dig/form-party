@@ -101,7 +101,7 @@ To learn more about pro version features and pricing, visit our [pricing page](h
 
 ### Version 2.0.1 - [February 27, 2025]
 
-#### Update Overview
+#### Update Overview 
 
 - Upgraded to Tailwind CSS v4 for better performance and efficiency.
 - Updated class usage to match the latest syntax and features.
