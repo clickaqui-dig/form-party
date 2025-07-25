@@ -5,7 +5,7 @@ import { Form, Formik, FormikHelpers } from "formik";
 import { FC, useState } from "react";
 import { FormItemContract } from "../../formItemContract";
 import { toast } from "react-toastify";
-import { postItemContract } from "@/services/item-contract/postItemContract";
+// import { postItemContract } from "@/services/item-contract/postItemContract";
 import { validationSchemaItemContract } from "../../validation";
 
 interface ItemContractModalProps {
@@ -28,15 +28,15 @@ export const ItemContractModal: FC<ItemContractModalProps> = ({ isOpen, onClose 
     formikHelpers: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      const response = await postItemContract(values)
+      // const response = await postItemContract(values)
 
-      if (response) {
-        toast.success("Item cadastrado com sucesso !")
-        formikHelpers.resetForm();
-        setLastResetAt(Date.now());
-      } else {
-        toast.error("Error ao item, revise o formulario.")
-      }
+      // if (response) {
+      //   toast.success("Item cadastrado com sucesso !")
+      //   formikHelpers.resetForm();
+      //   setLastResetAt(Date.now());
+      // } else {
+      //   toast.error("Error ao item, revise o formulario.")
+      // }
 
     } catch (error: any) {
       toast.error(error.message);

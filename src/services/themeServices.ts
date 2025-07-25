@@ -6,16 +6,17 @@ const CONCURRENCY = 3;
 
 type ThemePage = PaginatedResponse<Theme>;
 
-export async function fetchThemes(  descricao: string,
-    page: number = 0,
-    size: number = 10): Promise<PaginatedResponse<Theme>> {
+export async function fetchThemes(
+  descricao: string,
+  page: number = 0,
+  size: number = 10): Promise<PaginatedResponse<Theme>> {
   const { data } = await api.get<ThemePage>('/tema', {
     params: { descricao, page, size }
   });
   return {
     content: data.content,
     page,
-    total: data.total,
+    totalElements: data.totalElements,
     limit: 10,
     last: data.last
   };
@@ -39,11 +40,11 @@ export async function uploadThemeImages(
 
     const uploadOne = async (img: ImageFile, index: number) => {
       if (!img.file) return;
-  
+
       const fd = new FormData();
       fd.append('file', img.file);
       if (img.descricao) fd.append('descricao', img.descricao);
-  
+
       await api.post(`/tema/${themeId}/uploadImage`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e) => {
@@ -54,7 +55,7 @@ export async function uploadThemeImages(
         },
       });
     };
-  
+
     for (let i = 0; i < images.length; i += CONCURRENCY) {
       const slice = images.slice(i, i + CONCURRENCY);
       await Promise.all(slice.map((img, k) => uploadOne(img, i + k)));

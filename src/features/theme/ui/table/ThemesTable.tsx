@@ -23,13 +23,12 @@ export const ThemesTable: FC<ThemeTableProps> = ({ handleOpenModal, handleSelect
         setSearchTerm,
         handlePageChange,
         refresh,
-        reset,
     } = usePaginatedSearch<Theme>(getThemes);
 
-    useEffect(() => {
-        refresh();
-    }, [isOpenModal, refresh])
-    
+  useEffect(() => {
+    refresh();
+  }, [isOpenModal, refresh]);
+
     return (
         <DefaultTable
             title="Temas"

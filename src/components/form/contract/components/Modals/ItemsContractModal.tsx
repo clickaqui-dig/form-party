@@ -2,8 +2,7 @@
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { Modal } from "@/components/ui/modal";
-import { getItemContract } from "@/services/item-contract/getItemContract";
-import { postItemContract } from "@/services/item-contract/postItemContract";
+import { getItemContract, postItemContract } from "@/services/itemContractServices";
 import { maskCurrencyWithLimit } from "@/utils/masks/limityValue";
 import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
@@ -35,8 +34,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(false);
     const autocompleteRef = useRef<HTMLDivElement>(null);
-    const fetchIdRef = useRef(0);
-    const pageSize = 10;
+
 
     // Debounced fetch for autocomplete com paginação
     const fetchItemContract = debounce(async (query: string, pageNum: number = 0, reset: boolean = true) => {
@@ -152,7 +150,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
             onClose();
         } else {
             const response = await postItemContract({ descricao: formData.descricao, valor: unmaskCurrency(formData.valor) })
-           
+
             if (response) {
                 const { data } = response;
                 onAddItem({
@@ -161,9 +159,9 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
                     valor: data.valor
                 });
             }
-        
+
         }
-      
+
         setFormData({
             id: 0,
             descricao: '',

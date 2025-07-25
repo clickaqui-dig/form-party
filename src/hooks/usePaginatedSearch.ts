@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 export interface PaginatedResponse<T> {
   content: T[];
   page: number;
-  total: number;
+  totalElements: number;
   limit: number;
   last: boolean;
 }
@@ -28,7 +28,8 @@ export function usePaginatedSearch<T>(
 
         setItems(res.content);
         setCurrentPage(res.page);
-        setTotalPages(Math.ceil(res.total / res.limit));
+        const total = Math.ceil(res.totalElements / 10)
+        setTotalPages(total);
       } catch (err) {
         console.error(err);
       } finally {
