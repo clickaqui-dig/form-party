@@ -22,7 +22,7 @@ export const ItemContractFields: FC = () => {
 
   useEffect(() => {
     if(values.valor != 0) {
-      const maskedValue = maskCurrencyFromUnits(values.valor);
+      const maskedValue = maskCurrency(values.valor);
       setCurrency(maskedValue);
     }
   }, [values])
