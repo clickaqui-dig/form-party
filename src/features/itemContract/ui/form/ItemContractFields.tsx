@@ -5,6 +5,7 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
+import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 export const ItemContractFields: FC = () => {
   const { values, errors, setFieldValue } = useFormikContext<{descricao: string, valor: number}>();
@@ -12,7 +13,7 @@ export const ItemContractFields: FC = () => {
 
   const handleChangeCurrency = (value: any) => {
 
-      const maskedValue = maskCurrency(value);
+      const maskedValue = maskCurrencyFromUnits(value);
       setCurrency(maskedValue);
 
       const naturalValue = unmaskCurrency(maskedValue);
@@ -21,7 +22,7 @@ export const ItemContractFields: FC = () => {
 
   useEffect(() => {
     if(values.valor != 0) {
-      const maskedValue = maskCurrency(values.valor);
+      const maskedValue = maskCurrencyFromUnits(values.valor);
       setCurrency(maskedValue);
     }
   }, [values])
