@@ -13,7 +13,6 @@ export const getItemContract = async (
     const { data } = await api.get<ItemContractPage>(`/item-contrato`, {
       params: { descricao, page, size }
     });
-    console.log(data)
     return {
       content: data.content,
       page,

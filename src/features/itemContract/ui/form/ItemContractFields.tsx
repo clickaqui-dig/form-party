@@ -1,31 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Field, FieldProps, useFormikContext } from "formik";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { maskCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
 import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
+export const formatCurrency = (value: number | null | undefined): string => {
+  if (value === null || value === undefined || Number.isNaN(value)) return "R$ 0,00";
+
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+};
+
+const parseCurrency = (value: string): number => {
+  if (!value) return 0;
+
+  const numeric = value
+    .replace(/\s/g, "")
+    .replace(/[R$]/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+
+  const num = parseFloat(numeric);
+  return Number.isNaN(num) ? 0 : num;
+};
+
 export const ItemContractFields: FC = () => {
-  const { values, errors, setFieldValue } = useFormikContext<{descricao: string, valor: number}>();
-  const [currency, setCurrency] = useState('R$ 0,00');
+  const { values, errors, setFieldValue } = useFormikContext<{ descricao: string; valor: number }>();
 
-  const handleChangeCurrency = (value: any) => {
+  const [currency, setCurrency] = useState(() => formatCurrency(values.valor));
 
-      const maskedValue = maskCurrencyFromUnits(value);
-      setCurrency(maskedValue);
-
-      const naturalValue = unmaskCurrency(maskedValue);
-      setFieldValue('valor', naturalValue);
-  };
+  const handleChangeCurrency = useCallback(
+    (raw: string) => {
+      setCurrency(raw);
+      setFieldValue("valor", parseCurrency(raw));
+    },
+    [setFieldValue]
+  );
 
   useEffect(() => {
-    if(values.valor != 0) {
-      const maskedValue = maskCurrency(values.valor);
-      setCurrency(maskedValue);
-    }
-  }, [values])
+    setCurrency(formatCurrency(values.valor));
+  }, [values.valor]);
 
   return (
   <div className="space-y-6">
@@ -51,14 +72,14 @@ export const ItemContractFields: FC = () => {
             </Label>
             <Field id="valor" name="valor">
                 {({ field }: FieldProps) => (
-                    <Input
-                        {...field}
-                        type="text"
-                        value={currency}
-                        onChange={(e) => {
-                            handleChangeCurrency(e.target.value)
-                        }}
-                    />
+                  <Input
+                    id="valor"
+                    name="valor"
+                    type="text"
+                    value={currency}
+                    onChange={(e) => handleChangeCurrency(e.target.value)}
+                    onBlur={() => setCurrency(formatCurrency(values.valor))} // prettify after editing
+                  />
                 )}
             </Field>
             {errors.valor && (
