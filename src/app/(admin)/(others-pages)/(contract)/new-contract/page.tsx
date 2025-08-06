@@ -9,6 +9,8 @@ import FormContract from "@/components/form/contract";
 import { validationSchemaContract } from "@/components/form/contract/validation";
 import { toast } from "react-toastify";
 import { mapContractFormToRequest } from "@/models/Contract";
+import Cookies from 'js-cookie';
+
 
 const initialValues = {
   idContrato: 0,
@@ -33,6 +35,7 @@ const initialValues = {
 
 export default function FormElements() {
   const router = useRouter();
+  const roleUser = Cookies.get('roleUser');
 
   const handleSubmit = async (
     values: typeof initialValues
@@ -81,6 +84,7 @@ export default function FormElements() {
                 onClick={() => handleValidateAndSubmit()}
                 type="button"
                 className="btn btn-success flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                disabled={roleUser !== 'ADMIN'}
               >
                 Salvar
               </button>

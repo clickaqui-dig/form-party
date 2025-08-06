@@ -12,7 +12,7 @@ interface ItemContractProps {
     onClose: () => void;
 }
 
-const initialValues = {
+const initialValues: ItemContract = {
     id: 0,
     descricao: "",
     valor: 0,
@@ -28,12 +28,12 @@ export const ItemContractForm: FC<ItemContractProps> = ({ isEdit, data, onClose 
   },[isEdit, data])
 
   const handleSubmit = async (
-    values: typeof initialValues,
-    helpers: FormikHelpers<any>,
+    values: ItemContract,
+    helpers: FormikHelpers<ItemContract>,
   ) => {
     const [operation, successMsg, errorMsg] = isEdit
       ? [
-          () => putItemContract(values.id!, values),
+          () => putItemContract(Number(values.id), values),
           'Item atualizado com sucesso!',
           'Erro ao atualizar, revise o formulário.',
         ]

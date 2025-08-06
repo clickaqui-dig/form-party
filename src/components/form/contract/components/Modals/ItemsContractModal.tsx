@@ -35,6 +35,8 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
     const [hasMore, setHasMore] = useState<boolean>(false);
     const autocompleteRef = useRef<HTMLDivElement>(null);
 
+    const fetchIdRef = useRef(0);
+    const pageSize = 10;
 
     // Debounced fetch for autocomplete com paginação
     const fetchItemContract = debounce(async (query: string, pageNum: number = 0, reset: boolean = true) => {
@@ -48,7 +50,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
         const currentFetchId = ++fetchIdRef.current;
         try {
             const response = await getItemContract(query, pageNum, pageSize);
-            if (fetchIdRef.current !== currentFetchId) return; // Despreza resposta antiga
+            if (fetchIdRef.current !== currentFetchId) return;
             if (response && response.content) {
                 if (reset) {
                     setSuggestions(response.content);
@@ -56,7 +58,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
                     setSuggestions((prev: any) => [...prev, ...response.content]);
                 }
                 setHasMore(!response.last);
-                setPage(response.number + 1);
+                setPage(Number(response.number) + 1);
             } else {
                 setSuggestions([]);
                 setHasMore(false);
@@ -99,7 +101,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
 
         setFormData((prevState: any) => ({
             ...prevState,
-            id: null,
+            id: 0, // Corrigido para manter o tipo number
             valor: maskedValue
         }))
     };
@@ -109,7 +111,7 @@ export const ItemsContractModal: FC<ContractModalProps> = ({ isOpen, onClose, on
         setInputValue(value);
         setFormData((prevState: any) => ({
             ...prevState,
-            id: null,
+            id: 0, // Corrigido para manter o tipo number
             descricao: value
         }));
         setPage(0);

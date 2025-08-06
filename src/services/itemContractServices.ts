@@ -2,6 +2,7 @@
 import api from '@/config/apiConfig';
 import { ItemContract } from '@/features/itemContract/types';
 import { PaginatedResponse } from '@/hooks/usePaginatedSearch';
+import { number } from 'yup';
 
 type ItemContractPage = PaginatedResponse<ItemContract>;
 
@@ -18,7 +19,8 @@ export const getItemContract = async (
       page,
       totalElements: data.totalElements,
       limit: 10,
-      last: data.last
+      last: data.last,
+      number: data.number
     };
 };
 
@@ -36,7 +38,7 @@ export const getItemContractById = async (
 
 export const postItemContract = async (body: ItemContract): Promise<any> => {
     try {
-        const res =   await api.post(`/item-contrato`, body);
+        const res = await api.post(`/item-contrato`, body);
         return res;
     } catch (error) {
         console.log("Error ao criar Item: ", error);

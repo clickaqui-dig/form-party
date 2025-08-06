@@ -11,39 +11,8 @@ import { toast } from "react-toastify";
 import { putContractById } from "@/services/contract/putContractById";
 import { postPayments, ResponsePayments } from "@/services/payments/postPayments";
 import { unmaskCurrency, validationTypePayments } from "@/utils/masks/unMaskCurrency";
-import { mapContractFormToRequest } from "@/models/Contract";
-
-// const initialValues = {
-//     idContrato: 0,
-//     situacao: "",
-//     cliente:0,
-//     nomeCliente: "",
-//     celularCliente: "",
-//     emailCliente: "",
-//     documento: "",
-//     cep: "",
-//     endereco: "",
-//     numero: "",
-//     cidade: "",
-//     uf: "",
-//     status: false,
-//     valorRecebido: 0,
-//     valorPendente: 0,
-//     valorTotal: 0,
-//     tipoDoContrato: "",
-//     dataHoraInicial: "",
-//     dataHoraFinal: "",
-//     duracao: 0,
-//     quantidadeConvidados: 0,
-//     observacoes: "",
-//     aniversariantes: [],
-//     itensContrato: [],
-//     tipoPagemento: [],
-//     pagamentos: [],
-//     desconto: 0,
-//     acrescimo: 0,
-//     temas: []
-// }
+import { mapContractFormToRequest } from "@/models/Contract"
+import Cookies from 'js-cookie';
 
 const initialValues = {
   idContrato: 0,
@@ -73,6 +42,7 @@ export default function PageEditCustomer() {
     const id = params.id;
     const [contract, setInitialValues] = useState<any>(initialValues);
     const router = useRouter();
+    const roleUser = Cookies.get('roleUser');
 
     useEffect(() => {
         if (id) {
@@ -196,8 +166,9 @@ export default function PageEditCustomer() {
                             <button
                                 onClick={() => handleSubmit()}
                                 type="button"
-                                disabled={!(isValid && dirty)}
+                                disabled={!(isValid && dirty) || roleUser !== 'ADMIN'}
                                 className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                                
                             >
                                 Salvar
                             </button>

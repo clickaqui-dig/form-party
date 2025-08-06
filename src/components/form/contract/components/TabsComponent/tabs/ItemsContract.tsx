@@ -3,6 +3,7 @@ import { useFormikContext } from "formik";
 import { useEffect, useMemo, useState } from "react"
 import { ItemsContractModal } from "../../Modals/ItemsContractModal";
 import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
+import Cookies from 'js-cookie';
 
 interface ContractItem {
     id: number;
@@ -19,7 +20,8 @@ export const ItemsContract = () => {
     const [contractItems, setContractItems] = useState<ContractItem[]>([]);
     const [selectedItemContract, setSelectedItemContract] = useState<TypeSelectItemContract[]>([]);
     const [isModalOpen, setModalOpen] = useState(false);
-    const { values, setFieldValue} = useFormikContext<any>();
+    const { values, setFieldValue } = useFormikContext<any>();
+    const roleUser = Cookies.get('roleUser');
 
     useEffect(() => {
         setContractItems(values.itensContrato);
@@ -42,7 +44,7 @@ export const ItemsContract = () => {
         setFieldValue('itensContrato', updatedItems);
 
         setModalOpen(false);
-      };
+    };
 
     const handleRemoveItemContract = () => {
         if (selectedItemContract.length === 0) return;
@@ -53,7 +55,7 @@ export const ItemsContract = () => {
         setContractItems(updatedItems);
         setFieldValue('itensContrato', updatedItems);
 
-      };
+    };
 
     const handleSelectItemContract = (id: number, index: number) => {
         if (!handleFindItem(index)) {
@@ -62,7 +64,7 @@ export const ItemsContract = () => {
             setSelectedItemContract((prev) => prev.filter((selectedId) => selectedId.index !== index))
         }
     };
-    
+
     const handleFindItem = (index: number) => {
         const existItem = selectedItemContract.find((item) => item.index === index)
         return existItem ? true : false;
@@ -89,6 +91,7 @@ export const ItemsContract = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                                     Descrição
                                 </th>
+
                                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
                                     Valor (R$)
                                 </th>
@@ -108,9 +111,11 @@ export const ItemsContract = () => {
                                         <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80">
                                             {item.descricao}
                                         </td>
-                                        <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80 text-right">
-                                            {maskCurrencyFromUnits(item.valor)}
-                                        </td>
+                                        {roleUser === 'ADMIN' && (
+                                            <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300/80 text-right">
+                                                {maskCurrencyFromUnits(item.valor)}
+                                            </td>
+                                        )}
                                     </tr>
                                 ))
 
@@ -124,9 +129,11 @@ export const ItemsContract = () => {
                         </tbody>
                         <tfoot className="bg-gray-50 dark:bg-gray-700">
                             <tr>
-                                <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
-                                    Total: {maskCurrencyFromUnits(valorTotal)}
-                                </td>
+                                {roleUser === 'ADMIN' && (
+                                    <td className="px-6 py-4 text-sm font-medium text-right dark:text-white" colSpan={6}>
+                                        Total: {maskCurrencyFromUnits(valorTotal)}
+                                    </td>
+                                )}
                             </tr>
                         </tfoot>
                     </table>
@@ -134,6 +141,6 @@ export const ItemsContract = () => {
             </div>
             <ItemsContractModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddItem={handleAddContractItem} />
         </>
-       
+
     )
 }

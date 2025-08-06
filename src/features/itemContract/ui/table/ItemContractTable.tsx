@@ -5,6 +5,7 @@ import { ItemContractRows } from "./ItemContractTableRows";
 import { ItemContract } from "../../types";
 import { usePaginatedSearch } from "@/hooks/usePaginatedSearch";
 import { getItemContract } from "@/services/itemContractServices";
+import Cookies from 'js-cookie';
 
 interface ItemContractTableProps {
     handleOpenModal: () => void;
@@ -22,6 +23,7 @@ export const ItemContractTable: FC<ItemContractTableProps> = ({ handleOpenModal,
       handlePageChange,
       refresh,
   } = usePaginatedSearch<ItemContract>(getItemContract);
+  const roleUser = Cookies.get('roleUser');
 
   useEffect(() => {
     refresh();
@@ -40,7 +42,7 @@ export const ItemContractTable: FC<ItemContractTableProps> = ({ handleOpenModal,
       handleSearch={setSearchTerm}
       handleAction={handleOpenModal}
       handleChangePage={handlePageChange}
-      buttonIsDisabled={false}
+      buttonIsDisabled={roleUser !== 'ADMIN'}
     >
       <ItemContractHeader/>
       <ItemContractRows itemsContract={itemsContract} actionFunction={handleSelect} />

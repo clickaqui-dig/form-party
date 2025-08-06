@@ -1,6 +1,6 @@
 'use client';
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import React from "react";
+import React, { use, useEffect, useMemo } from "react";
 import FormCustomer from "@/components/form/customer";
 import { Formik, Form } from "formik";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -9,6 +9,7 @@ import { postCustomer } from "@/services/customer/postCustomer";
 import { useRouter } from "next/navigation";
 import { mapFormToCustomer } from "@/models/Customer";
 import { toast } from "react-toastify";
+import Cookies from 'js-cookie';
 
 const initialValues = {
   id: 0,
@@ -29,6 +30,8 @@ const initialValues = {
 
 export default function PageNewCustomer() {
   const router = useRouter();
+  const roleUser = Cookies.get('roleUser');
+
   
   const handleSubmit = async (values: typeof initialValues) => {
     try {
@@ -48,7 +51,7 @@ export default function PageNewCustomer() {
   
   return (
     <div>
-      <PageBreadcrumb pageTitle="Novo Cliente" />
+      <PageBreadcrumb pageTitle="Novo Cliente"  />
       <Formik 
         initialValues={initialValues} 
         onSubmit={handleSubmit} 
@@ -76,6 +79,7 @@ export default function PageNewCustomer() {
                     onClick={handleValidateAndSubmit}
                     type="button"
                     className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                    disabled={roleUser !== 'ADMIN'}
                   >
                     Salvar
                   </button>

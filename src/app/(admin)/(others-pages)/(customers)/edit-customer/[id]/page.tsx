@@ -10,9 +10,9 @@ import { putCustomer } from "@/services/customer/putCustomer";
 import { maskCEP, maskPhone } from "@/utils/masks";
 import { Formik } from "formik";
 import { useParams, useRouter } from "next/navigation"
-
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "react-toastify";
+import Cookies from 'js-cookie';
 
 const initialValues = {
     id: 0,
@@ -37,6 +37,7 @@ export default function PageEditCustomer() {
     const params = useParams();
     const id = params.id;
     const [customer, setCustomer] = useState<CustomerForm>(initialValues);
+    const roleUser = Cookies.get('roleUser');
 
     const fetchCustomer = useCallback(
         async (customerId: number) => {
@@ -96,7 +97,7 @@ export default function PageEditCustomer() {
                             <FormCustomer />
                             <button
                                 type="button"
-                                disabled={!isValid}
+                                disabled={!isValid || roleUser !== 'ADMIN'}
                                 onClick={() => handleSubmit()}
                                 className="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
                             >

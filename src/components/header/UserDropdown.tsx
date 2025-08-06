@@ -36,7 +36,7 @@ export default function UserDropdown() {
         />
         {/* </span> */}
 
-        <span className="block mr-1 font-medium text-theme-sm">Admin</span>
+        <span className="block mr-1 font-medium text-theme-sm">{Cookies.get('roleUser')}</span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
@@ -64,14 +64,14 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Admin
+            {Cookies.get('roleUser')}
           </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
+          {/* <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             admin@admin.com
-          </span>
+          </span> */}
         </div>
 
-        <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+        {/* <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -98,7 +98,7 @@ export default function UserDropdown() {
               Edit profile
             </DropdownItem>
           </li>
-          {/* <li>
+          <li>
             <DropdownItem
               onItemClick={closeDropdown}
               tag="a"
@@ -122,9 +122,9 @@ export default function UserDropdown() {
               </svg>
               Account settings
             </DropdownItem>
-          </li> */}
+          </li>
 
-        </ul>
+        </ul> */}
         <Link
           href="/signin"
           onClick={handleSignin}

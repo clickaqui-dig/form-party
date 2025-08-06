@@ -14,6 +14,9 @@ import { putSituationById } from "@/services/contract/putUpdateSituation";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CustomerModal } from "../Modals/CustomerModal";
+import Cookies from 'js-cookie';
+    const roleUser = Cookies.get('roleUser');
+
 
 const optionsContract = [
     { value: "ANIVERSARIO", label: "Aniversário" },
@@ -23,6 +26,7 @@ export const InfoComponent = () => {
     const { setFieldValue, values, errors, setFieldError } = useFormikContext<ContractForm>();
     const [clientSuggestions, setClientSuggestions] = useState<any[]>([]);
     const [isModalOpen, setModalOpen] = useState(false);
+    const roleUser = Cookies.get('roleUser');
 
     const conflictContract = useConflict(values);
     const router = useRouter();
@@ -65,15 +69,15 @@ export const InfoComponent = () => {
 
     const handleCancelContract = async () => {
         try {
-            await putSituationById(values.idContrato,'CANCELADO')
+            await putSituationById(values.idContrato, 'CANCELADO')
             router.push('/search-contract');
         } catch (error: any) {
             toast.error("Erro ao cancelar contrato.");
             console.error(error);
 
         }
-       
-        setFieldValue('situacao','CANCELADO')
+
+        setFieldValue('situacao', 'CANCELADO')
     }
 
     const handleChangeQuery = (e: any) => {
@@ -161,30 +165,35 @@ export const InfoComponent = () => {
                     <Label htmlFor="situation">Situação</Label>
                     <Label>{values.situacao}</Label>
                 </div>
-                <div>
-                    <Label htmlFor="valorRecebido">Valor Recebido</Label>
-                    <Label>{valueRecept}</Label>
-                </div>
-                <div>
-                    <Label htmlFor="valorPendente">Valor Pendente</Label>
-                    <Label>{valuePending}</Label>
-                </div>
-                <div>
-                    <Label htmlFor="valorTotal">Valor Total</Label>
-                    <Label>{valueTotal}</Label>
-                </div>
-                <div>
-                    <button
-                        type="button"
-                        className="btn btn-danger flex w-full justify-center rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 sm:w-auto disabled:bg-gray-300 disabled:cursor-not-allowed "
-                        disabled={values.idContrato === 0 || values.situacao === 'Cancelado' ? true : false}
-                        onClick={() => {
-                            handleCancelContract();
-                        }}
-                    >
-                        Cancelar contrato
-                    </button>
-                </div>
+                {roleUser === 'ADMIN' && (
+                    <>
+                        <div>
+                            <Label htmlFor="valorRecebido">Valor Recebido</Label>
+                            <Label>{valueRecept}</Label>
+                        </div>
+                        <div>
+                            <Label htmlFor="valorPendente">Valor Pendente</Label>
+                            <Label>{valuePending}</Label>
+                        </div>
+                        <div>
+                            <Label htmlFor="valorTotal">Valor Total</Label>
+                            <Label>{valueTotal}</Label>
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                className="btn btn-danger flex w-full justify-center rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 sm:w-auto disabled:bg-gray-300 disabled:cursor-not-allowed "
+                                disabled={values.idContrato === 0 || values.situacao === 'Cancelado' ? true : false}
+                                onClick={() => {
+                                    handleCancelContract();
+                                }}
+                            >
+                                Cancelar contrato
+                            </button>
+                        </div>
+                    </>
+                )}
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -378,7 +387,7 @@ export const InfoComponent = () => {
                     )}
                 </div>
             </div>
-            <CustomerModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />            
+            <CustomerModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
         </>
     )
 }

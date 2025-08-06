@@ -5,11 +5,14 @@ import { useFormikContext } from "formik";
 import { PaymentsContract } from "./tabs/PaymentsContract";
 import { ItemsContract } from "./tabs/ItemsContract";
 import { WriteContract } from "./tabs/WriteContract";
+import Cookies from 'js-cookie';
+
 
 
 export const TabsComponent = () => {
     const [activeTab, setActiveTab] = useState("itensContrato");
     const { values, setFieldValue } = useFormikContext<any>();
+    const roleUser = Cookies.get('roleUser');
 
     return (
         <ComponentCard title="Contratos e Pagamentos">
@@ -28,7 +31,7 @@ export const TabsComponent = () => {
                         ? "border-b-2 border-green-600 text-green-600 dark:text-green-400 font-semibold"
                         : " text-gray-600 hover:text-green-600 dark:text-gray-200"
                         }`}
-                    disabled={!values.id ? true : false}
+                    disabled={!values.id || roleUser !== 'ADMIN' ? true : false}
                     onClick={() => {
                         if (values.id) {
                             setActiveTab("pagamentos")
@@ -42,7 +45,7 @@ export const TabsComponent = () => {
                         ? "border-b-2 border-green-600 text-green-600 dark:text-green-400 font-semibold"
                         : "text-gray-600 hover:text-green-600 dark:text-gray-200 "
                         }`}
-                    disabled={!values.id ? true : false}
+                    disabled={!values.id || roleUser !== 'ADMIN'? true : false}
                     onClick={() => {
                         if (values.id) {
                             setActiveTab("contrato")

@@ -7,6 +7,7 @@ import { ThemesTableRows } from "./ThemesTableRows";
 import { Theme } from "../../types";
 import { usePaginatedSearch } from "@/hooks/usePaginatedSearch";
 import { fetchThemes as getThemes } from "@/services/themeServices";
+import Cookies from 'js-cookie';
 
 interface ThemeTableProps {
     handleOpenModal: () => void;
@@ -24,6 +25,7 @@ export const ThemesTable: FC<ThemeTableProps> = ({ handleOpenModal, handleSelect
         handlePageChange,
         refresh,
     } = usePaginatedSearch<Theme>(getThemes);
+    const roleUser = Cookies.get('roleUser');
 
   useEffect(() => {
     refresh();
@@ -42,7 +44,7 @@ export const ThemesTable: FC<ThemeTableProps> = ({ handleOpenModal, handleSelect
             handleSearch={setSearchTerm}
             handleAction={handleOpenModal}
             handleChangePage={handlePageChange}
-            buttonIsDisabled={false}
+            buttonIsDisabled={roleUser !== 'ADMIN'}
         >
             <ThemesTableHeader />
             <ThemesTableRows themes={themes} actionFunction={handleSelect} />
