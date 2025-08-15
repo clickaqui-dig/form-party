@@ -25,15 +25,17 @@ export const ItemContractRows = ({
           <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
             {item.descricao}
           </TableCell>
-          <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-            {maskCurrencyFromUnits(item.valor)}
-          </TableCell>
-          {roleUser === 'ADMIN' && (
+          {roleUser === 'ADMIN' && (<>
+            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+              {maskCurrencyFromUnits(item.valor)}
+            </TableCell>
+
             <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-40 flex justify-stretch gap-4">
               <Link href={``} onClick={() => actionFunction(item)} >
                 <PencilIcon className="fill-gray-500 dark:fill-gray-400 hover:text-violet-600 text-[20px]" />
               </Link>
             </TableCell>
+          </>
           )}
         </TableRow>
       ))}

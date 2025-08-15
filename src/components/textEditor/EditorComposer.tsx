@@ -47,8 +47,13 @@ export default function EditorComposer() {
       };
 
       const installments = values.pagamentos;
-
-      const clauseHtmlProps = { birthday: values.aniversariantes, installments: values.pagamentos, temas: values.temas };
+      const clauseHtmlProps = { 
+        birthday: values.aniversariantes, 
+        installments: values.pagamentos, 
+        temas: values.temas, 
+        paymentMethod: values.formaPagamento, 
+        paymentTerms: values.condicoesPagamento, 
+        obs: values.observacoes};
 
       const signatureHtmlProps = { name: values.nomeCliente };
 
