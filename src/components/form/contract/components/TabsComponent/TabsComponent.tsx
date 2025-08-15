@@ -65,6 +65,8 @@ export const TabsComponent = () => {
                     <ItemsContract />
                 )}
 
+                
+
                 {activeTab === "pagamentos" && (
                     <PaymentsContract />
                 )}
