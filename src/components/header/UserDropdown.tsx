@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import Cookies from 'js-cookie';
 
 export default function UserDropdown() {

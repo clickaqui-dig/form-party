@@ -15,8 +15,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CustomerModal } from "../Modals/CustomerModal";
 import Cookies from 'js-cookie';
-    const roleUser = Cookies.get('roleUser');
-
 
 const optionsContract = [
     { value: "ANIVERSARIO", label: "Aniversário" },

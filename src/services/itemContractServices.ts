@@ -2,7 +2,6 @@
 import api from '@/config/apiConfig';
 import { ItemContract } from '@/features/itemContract/types';
 import { PaginatedResponse } from '@/hooks/usePaginatedSearch';
-import { number } from 'yup';
 
 type ItemContractPage = PaginatedResponse<ItemContract>;
 

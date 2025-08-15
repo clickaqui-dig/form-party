@@ -1,11 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Field, FieldProps, useFormikContext } from "formik";
 import { FC, useCallback, useEffect, useState } from "react";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { maskCurrency } from "@/utils/masks/maskCurrency";
-import { unmaskCurrency } from "@/utils/masks/unMaskCurrency";
-import { maskCurrencyFromUnits } from "@/utils/masks/maskCurrencyFromUnits";
 
 export const formatCurrency = (value: number | null | undefined): string => {
   if (value === null || value === undefined || Number.isNaN(value)) return "R$ 0,00";
@@ -71,7 +67,7 @@ export const ItemContractFields: FC = () => {
                 Valor (R$) <span className="text-red-500">*</span>
             </Label>
             <Field id="valor" name="valor">
-                {({ field }: FieldProps) => (
+                {() => (
                   <Input
                     id="valor"
                     name="valor"

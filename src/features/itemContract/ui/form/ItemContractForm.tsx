@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Formik, FormikHelpers } from "formik";
 import { FC, useEffect, useState } from "react"
 import { ItemContract } from "../../types";
