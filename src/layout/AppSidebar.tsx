@@ -9,7 +9,9 @@ import {
   ChevronDownIcon,
   HorizontaLDots,
   UserCircleIcon,
-  DocsIcon
+  DocsIcon,
+  CheckLineIcon,
+  TaskIcon
 } from "../icons/index";
 
 type NavItem = {
@@ -44,14 +46,20 @@ const navItems: NavItem[] = [
     ]
   },
   {
-    icon: <DocsIcon />,
-    name: "Controle",
+    icon: <TaskIcon />,
+    name: "Controle de Festa",
     subItems: [
       { name: "Festa", path: "/party-control", pro: false, },
-      { name: "Pós Festa", path: "/post-party", pro: false },
       { name: "Oficina", path: "/workshop", pro: false },
       { name: "Cardápio", path: "/menu", pro: false },
       { name: "Bebida", path: "/drink", pro: false },
+    ]
+  },
+  {
+    icon: <CheckLineIcon />,
+    name: "Controle Pós Festa",
+    subItems: [
+      { name: "Pós Festa", path: "/post-party", pro: false },
       { name: "Cozinha", path: "/kitchen", pro: false },
       { name: "Extras", path: "/extra", pro: false },
       { name: "Bar", path: "/bar", pro: false },
